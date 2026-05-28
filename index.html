@@ -1,224 +1,1304 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Voynich Manuscript — 120-Minute Lesson</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
+  :root {
+    --navy: #0f1e38;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f7f2e8;
+    --cream-dark: #ede4d0;
+    --ink: #1a1410;
+    --muted: #5a4e3e;
+    --correct: #2d6a4f;
+    --correct-bg: #d8f3dc;
+    --wrong: #7d1a1a;
+    --wrong-bg: #ffe0e0;
+    --selected-bg: #fff3cd;
+    --selected: #7a5c00;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans); }
-  .wrap { padding: 1.5rem 0; max-width: 660px; }
-  .header { margin-bottom: 1.5rem; }
-  .badge { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: var(--border-radius-md); background: var(--color-background-info); color: var(--color-text-info); margin-bottom: 10px; }
-  h2 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
-  .subtitle { font-size: 14px; color: var(--color-text-secondary); }
-  .video-link { display: flex; align-items: center; gap: 8px; margin: 1rem 0 1.5rem; padding: 10px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); text-decoration: none; color: var(--color-text-primary); font-size: 14px; }
-  .video-link i { color: var(--color-text-info); font-size: 20px; }
-  .video-link span { flex: 1; }
-  .video-link .ext { color: var(--color-text-tertiary); font-size: 12px; }
-  .progress-bar { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
-  .progress-fill { height: 100%; background: #378ADD; border-radius: 2px; transition: width 0.4s; }
-  .progress-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 0.5rem; }
-  .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin: 1.5rem 0 0.75rem; }
-  .q-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
-  .q-card.correct { border-color: #1D9E75; background: #E1F5EE; }
-  .q-card.wrong { border-color: #D85A30; background: #FAECE7; }
-  .q-num { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 6px; }
-  .q-text { font-size: 15px; color: var(--color-text-primary); margin-bottom: 12px; line-height: 1.5; }
-  .options { display: flex; flex-direction: column; gap: 6px; }
-  .opt { display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); cursor: pointer; font-size: 14px; color: var(--color-text-primary); background: var(--color-background-secondary); transition: background 0.15s, border-color 0.15s; user-select: none; }
-  .opt:hover { border-color: var(--color-border-secondary); background: var(--color-background-primary); }
-  .opt.selected { border-color: #378ADD; background: #E6F1FB; color: #0C447C; }
-  .opt.correct-ans { border-color: #1D9E75; background: #E1F5EE; color: #085041; }
-  .opt.wrong-ans { border-color: #D85A30; background: #FAECE7; color: #712B13; }
-  .opt-letter { font-size: 12px; font-weight: 500; min-width: 18px; padding-top: 1px; }
-  .feedback { font-size: 13px; margin-top: 10px; padding: 8px 10px; border-radius: var(--border-radius-md); }
-  .feedback.correct { background: #9FE1CB; color: #04342C; }
-  .feedback.wrong { background: #F5C4B3; color: #4A1B0C; }
-  .open-q { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; width: 100%; min-height: 80px; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); resize: vertical; }
-  .btn-row { display: flex; gap: 10px; margin-top: 1.5rem; }
-  button.primary { padding: 8px 20px; font-size: 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
-  button.primary:hover { background: var(--color-background-secondary); }
-  button.submit { background: #185FA5; color: #E6F1FB; border: none; padding: 10px 24px; font-size: 14px; border-radius: var(--border-radius-md); cursor: pointer; font-weight: 500; }
-  button.submit:hover { background: #0C447C; }
-  button.submit:disabled { opacity: 0.5; cursor: default; }
-  .score-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-top: 1.5rem; display: none; }
-  .score-num { font-size: 32px; font-weight: 500; color: var(--color-text-primary); }
-  .score-sub { font-size: 14px; color: var(--color-text-secondary); margin-top: 4px; }
-  hr { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    color: var(--cream);
+    text-align: center;
+    padding: 3.5rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 40px,
+      rgba(201,168,76,0.04) 40px, rgba(201,168,76,0.04) 41px
+    );
+  }
+  .header-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .site-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+    position: relative;
+  }
+  .header-sub {
+    font-style: italic;
+    color: var(--gold-light);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    font-size: 0.82rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.65);
+  }
+  .header-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .gold-rule {
+    width: 80px; height: 2px;
+    background: var(--gold);
+    margin: 1.5rem auto;
+    opacity: 0.7;
+  }
+
+  /* ── NAV ── */
+  .lesson-nav {
+    background: var(--navy);
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .lesson-nav ul {
+    list-style: none;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .lesson-nav ul::-webkit-scrollbar { display: none; }
+  .lesson-nav li a {
+    display: block;
+    padding: 0.75rem 1.2rem;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .lesson-nav li a:hover {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ── SECTIONS ── */
+  .lesson-section {
+    padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+  }
+  .section-badge {
+    flex-shrink: 0;
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+    margin-top: 0.4rem;
+  }
+  .section-header-text {}
+  .section-time {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .section-header h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  /* ── PROSE ── */
+  p { margin-bottom: 1rem; }
+  p:last-child { margin-bottom: 0; }
+  strong { font-weight: 600; color: var(--navy); }
+  em { font-style: italic; }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-left: 3px solid var(--gold);
+    background: #fff;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .callout-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .callout p { font-size: 0.95rem; }
+  .callout.navy { border-left-color: var(--navy); }
+  .callout.navy .callout-title { color: var(--navy); }
+
+  /* ── TIMELINE ── */
+  .timeline { margin: 1.5rem 0; }
+  .tl-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    align-items: flex-start;
+  }
+  .tl-date {
+    flex-shrink: 0;
+    width: 90px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--gold);
+    font-weight: 600;
+    padding-top: 0.15rem;
+    letter-spacing: 0.05em;
+  }
+  .tl-dot {
+    flex-shrink: 0;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-top: 0.5rem;
+    position: relative;
+  }
+  .tl-dot::after {
+    content: '';
+    position: absolute;
+    left: 4px; top: 10px;
+    width: 2px; height: 36px;
+    background: var(--cream-dark);
+  }
+  .tl-item:last-child .tl-dot::after { display: none; }
+  .tl-content { flex: 1; }
+  .tl-content strong { display: block; margin-bottom: 0.2rem; }
+  .tl-content p { font-size: 0.9rem; color: var(--muted); margin: 0; }
+
+  /* ── GRID FACTS ── */
+  .fact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .fact-card {
+    background: #fff;
+    border: 1px solid var(--cream-dark);
+    border-top: 3px solid var(--gold);
+    padding: 1rem;
+    border-radius: 3px;
+  }
+  .fact-card .label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .fact-card .value {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 1.5rem 0;
+    background: #fff;
+  }
+  .comp-table th {
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+  }
+  .comp-table td {
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid var(--cream-dark);
+    vertical-align: top;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr:nth-child(even) td { background: var(--cream); }
+  .verdict { font-weight: 600; }
+  .verdict.refuted { color: var(--wrong); }
+  .verdict.unresolved { color: #7a5c00; }
+
+  /* ── ACTIVITY BLOCKS ── */
+  .activity {
+    background: var(--navy);
+    color: var(--cream);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .activity-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .activity-icon {
+    width: 32px; height: 32px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    color: var(--navy);
+    font-weight: 700;
+    font-family: 'Cinzel', serif;
+    flex-shrink: 0;
+  }
+  .activity h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .activity p, .activity li { font-size: 0.92rem; line-height: 1.7; }
+  .activity ol, .activity ul { padding-left: 1.4rem; margin-top: 0.5rem; }
+  .activity li { margin-bottom: 0.4rem; }
+
+  /* ── QUIZ ── */
+  .quiz-section { margin: 2rem 0; }
+  .quiz-intro {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .quiz-intro::before, .quiz-intro::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--cream-dark);
+  }
+
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--cream-dark);
+    border-radius: 4px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s;
+  }
+  .q-card.correct { border-color: var(--correct); background: var(--correct-bg); }
+  .q-card.wrong { border-color: var(--wrong); background: var(--wrong-bg); }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+  .q-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .q-level {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .q-level.recall { background: #e8f4fd; color: #1a5276; }
+  .q-level.analysis { background: #fef9e7; color: #7d6608; }
+  .q-level.critical { background: #fdedec; color: #7b241c; }
+
+  .q-text {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .q-source {
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+  .options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--cream-dark);
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    background: var(--cream);
+    transition: background 0.15s, border-color 0.15s;
+    line-height: 1.5;
+  }
+  .opt:hover:not(.disabled) { border-color: var(--gold); background: #fff; }
+  .opt.selected { border-color: var(--selected); background: var(--selected-bg); }
+  .opt.correct-ans { border-color: var(--correct); background: var(--correct-bg); }
+  .opt.wrong-ans { border-color: var(--wrong); background: var(--wrong-bg); }
+  .opt.disabled { cursor: default; }
+  .opt-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: var(--muted);
+    min-width: 16px;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+  .feedback {
+    margin-top: 0.8rem;
+    font-size: 0.88rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 3px;
+    display: none;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #b7e4c7; color: #1b4332; }
+  .feedback.wrong { background: #f5c6cb; color: #721c24; }
+
+  /* open questions */
+  .open-q-block { margin-bottom: 1.2rem; }
+  .open-q-block label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  .open-q-block .q-source { margin-bottom: 0.5rem; }
+  textarea.open-q {
+    width: 100%;
+    min-height: 90px;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--cream-dark);
+    border-radius: 3px;
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    background: var(--cream);
+    resize: vertical;
+    line-height: 1.6;
+  }
+  textarea.open-q:focus { outline: 2px solid var(--gold); border-color: transparent; }
+
+  /* buttons */
+  .btn-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .btn {
+    padding: 0.6rem 1.4rem;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--navy);
+    color: var(--gold);
+  }
+  .btn-primary:hover { background: #1a3260; }
+  .btn-primary:disabled { opacity: 0.5; cursor: default; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--navy);
+    border: 1px solid var(--cream-dark);
+  }
+  .btn-ghost:hover { background: var(--cream-dark); }
+
+  /* score */
+  .score-card {
+    background: var(--navy);
+    color: var(--cream);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.5rem;
+    display: none;
+  }
+  .score-card.show { display: block; }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    display: block;
+  }
+  .score-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+
+  /* progress */
+  .progress-wrap { margin-bottom: 1.5rem; }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--cream-dark);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s;
+  }
+
+  /* ── SOURCES BOX ── */
+  .sources {
+    background: var(--navy);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.82rem;
+    padding: 1.5rem;
+    border-radius: 4px;
+    margin: 2rem 0;
+  }
+  .sources-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .sources ol { padding-left: 1.2rem; }
+  .sources li { margin-bottom: 0.4rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    border-top: 1px solid var(--cream-dark);
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    .fact-grid { grid-template-columns: 1fr 1fr; }
+    .tl-date { width: 70px; }
+  }
 </style>
+</head>
+<body>
 
-<div class="wrap">
-  <h2 sr-only hidden>Listening exercise: The world's most mysterious book</h2>
-  <div class="header">
-    <span class="badge">Listening exercise</span>
-    <h2>The world's most mysterious book</h2>
-    <p class="subtitle">TED-Ed · Stephen Bax · 4:43 min</p>
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header class="site-header">
+  <p class="header-eyebrow">English for Academic Purposes · History &amp; Mystery</p>
+  <h1>The Voynich Manuscript</h1>
+  <p class="header-sub">The most mysterious book in the world</p>
+  <div class="gold-rule"></div>
+  <div class="header-meta">
+    <span>⏱ 120 minutes</span>
+    <span>📺 Video + Reading + Discussion</span>
+    <span>🔎 3 primary sources</span>
+    <span>✏️ 3-tier assessment</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ NAV -->
+<nav class="lesson-nav">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#warmup">Warm-up</a></li>
+    <li><a href="#listening">Listening</a></li>
+    <li><a href="#reading">Reading</a></li>
+    <li><a href="#deep-dive">Deep Dive</a></li>
+    <li><a href="#discussion">Discussion</a></li>
+    <li><a href="#assessment">Assessment</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+
+<!-- ═══════════════════════════════════════════════════════ OVERVIEW -->
+<section class="lesson-section" id="overview">
+  <div class="section-header">
+    <span class="section-badge">Plan</span>
+    <div class="section-header-text">
+      <span class="section-time">Overview</span>
+      <h2>Lesson Structure &amp; Objectives</h2>
+    </div>
   </div>
 
-  <a class="video-link" href="https://www.youtube.com/watch?v=8NS4CbBJQ84" target="_blank">
-    <i class="ti ti-player-play" aria-hidden="true"></i>
-    <span>Watch the video before answering</span>
-    <i class="ti ti-external-link" aria-hidden="true"></i>
-  </a>
+  <p>This lesson traces the Voynich Manuscript across three layers of investigation — a popular video, a declassified NSA report by Brigadier Tiltman, and a comprehensive scholarly monograph by M.E. D'Imperio. Students will practise <strong>academic listening, close reading, critical thinking, and evidence-based discussion</strong>.</p>
 
-  <div class="progress-label" id="prog-label">0 of 8 answered</div>
-  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-
-  <div class="section-label">Part A — Multiple choice</div>
-
-  <div id="questions"></div>
-
-  <hr>
-  <div class="section-label">Part B — Short answer</div>
-
-  <div class="q-card">
-    <p class="q-num">Question 7</p>
-    <p class="q-text">Why is it difficult for scholars to decode the Voynich manuscript? Give <strong>two</strong> reasons mentioned in the video.</p>
-    <textarea class="open-q" id="open1" placeholder="Write your answer here…"></textarea>
+  <div class="fact-grid">
+    <div class="fact-card"><span class="label">Total Time</span><span class="value">120 min</span></div>
+    <div class="fact-card"><span class="label">Level</span><span class="value">B2 – C1</span></div>
+    <div class="fact-card"><span class="label">Sources</span><span class="value">3 (video + 2 texts)</span></div>
+    <div class="fact-card"><span class="label">Questions</span><span class="value">26 total</span></div>
   </div>
 
-  <div class="q-card">
-    <p class="q-num">Question 8</p>
-    <p class="q-text">Stephen Bax takes a different approach from other researchers. In your own words, describe his method and what he has managed to identify so far.</p>
-    <textarea class="open-q" id="open2" placeholder="Write your answer here…"></textarea>
+  <div class="callout">
+    <span class="callout-title">Learning Objectives</span>
+    <p>By the end of the lesson, students will be able to: (1) summarise the known history of the manuscript; (2) compare and evaluate proposed decipherment theories; (3) distinguish between fact, inference, and speculation in academic texts; (4) use hedging language to express degrees of certainty.</p>
   </div>
 
-  <div class="btn-row">
-    <button class="submit" id="submit-btn" onclick="submitAll()">Check my answers ↗</button>
-    <button class="primary" onclick="resetAll()">Reset</button>
+  <table class="comp-table">
+    <thead><tr><th>Phase</th><th>Time</th><th>Activity</th><th>Skill</th></tr></thead>
+    <tbody>
+      <tr><td>1 — Warm-up</td><td>10 min</td><td>Prior knowledge activation</td><td>Speaking</td></tr>
+      <tr><td>2 — Listening</td><td>20 min</td><td>TED-Ed video + comprehension quiz</td><td>Listening</td></tr>
+      <tr><td>3 — Reading A</td><td>20 min</td><td>Tiltman (NSA, 1967) — close reading</td><td>Reading</td></tr>
+      <tr><td>4 — Deep Dive</td><td>25 min</td><td>D'Imperio (NSA, 1978) — analysis tasks</td><td>Reading / Critical thinking</td></tr>
+      <tr><td>5 — Discussion</td><td>20 min</td><td>Connecting the sources, debate</td><td>Speaking / Writing</td></tr>
+      <tr><td>6 — Assessment</td><td>25 min</td><td>Three-tier quiz + open questions</td><td>All skills</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ WARM-UP -->
+<section class="lesson-section" id="warmup">
+  <div class="section-header">
+    <span class="section-badge">Phase 1</span>
+    <div class="section-header-text">
+      <span class="section-time">0:00 – 0:10 · 10 minutes</span>
+      <h2>Warm-up: What Do You Already Know?</h2>
+    </div>
   </div>
 
-  <div class="score-card" id="score-card">
-    <p class="score-sub">Your score (Part A)</p>
-    <p class="score-num" id="score-num">—</p>
-    <p class="score-sub" id="score-msg"></p>
+  <p>Before watching or reading anything, activate prior knowledge with these pair-discussion prompts. Students have <strong>5 minutes to discuss</strong>, then share with the group.</p>
+
+  <div class="activity">
+    <div class="activity-header">
+      <div class="activity-icon">💬</div>
+      <h3>Pair Discussion Prompts</h3>
+    </div>
+    <ol>
+      <li>Have you ever encountered a message, symbol, or text you could not understand? What did it feel like? What did you do?</li>
+      <li>What makes a code or cipher hard to break? Think of as many reasons as you can.</li>
+      <li>If a book were found that nobody could read, what are the <em>three most likely</em> explanations? Rank them.</li>
+      <li>Who do you think would be best qualified to decode an unknown script — a linguist, a mathematician, a historian, or an AI? Justify your answer.</li>
+    </ol>
   </div>
-</div>
+
+  <div class="callout navy">
+    <span class="callout-title">Key Vocabulary — Pre-teach</span>
+    <p>Before watching, clarify these terms: <strong>cipher</strong> (a system of secret writing), <strong>manuscript</strong> (a handwritten book), <strong>carbon dating</strong> (measuring age via radioactive decay), <strong>cryptographer</strong> (someone who studies codes), <strong>vellum</strong> (parchment made from animal skin), <strong>herbal</strong> (a book describing plants and their uses), <strong>universal language</strong> (a constructed language meant for all people).</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ LISTENING -->
+<section class="lesson-section" id="listening">
+  <div class="section-header">
+    <span class="section-badge">Phase 2</span>
+    <div class="section-header-text">
+      <span class="section-time">0:10 – 0:30 · 20 minutes</span>
+      <h2>Listening: TED-Ed Video</h2>
+    </div>
+  </div>
+
+  <p>Watch the 4:43 TED-Ed video by Stephen Bax. Answer the comprehension questions below <em>while</em> watching, then compare answers with a partner.</p>
+
+  <div class="callout">
+    <span class="callout-title">Watch</span>
+    <p><a href="https://www.youtube.com/watch?v=8NS4CbBJQ84" target="_blank" style="color: var(--navy); font-weight:600;">▶ The world's most mysterious book — Stephen Bax (TED-Ed, 4:43)</a></p>
+  </div>
+
+  <div class="quiz-section" id="listening-quiz">
+    <div class="quiz-intro">Listening Comprehension · 8 Questions</div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progress</span><span id="l-prog-text">0 of 8</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="l-prog-fill" style="width:0%"></div></div>
+    </div>
+    <div id="listening-questions"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="l-submit" onclick="submitQuiz('l')">Check Answers</button>
+      <button class="btn btn-ghost" onclick="resetQuiz('l')">Reset</button>
+    </div>
+    <div class="score-card" id="l-score">
+      <span class="score-num" id="l-score-num"></span>
+      <span class="score-label" id="l-score-msg"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ READING A -->
+<section class="lesson-section" id="reading">
+  <div class="section-header">
+    <span class="section-badge">Phase 3</span>
+    <div class="section-header-text">
+      <span class="section-time">0:30 – 0:50 · 20 minutes</span>
+      <h2>Reading A: Tiltman's NSA Report (1967)</h2>
+    </div>
+  </div>
+
+  <p>Brigadier John H. Tiltman was one of Britain's greatest codebreakers and spent over 25 years studying the Voynich Manuscript. His paper was declassified by the NSA in 2002 under the Freedom of Information Act. Read the summary below, then answer the questions.</p>
+
+  <div class="callout">
+    <span class="callout-title">Reading Summary — Tiltman (1967)</span>
+    <p>Tiltman identifies three published "solutions", all rejected by scholars. The first, by <strong>William Newbold</strong> (1921), claimed Roger Bacon wrote the manuscript and had possessed a telescope and microscope centuries before their supposed invention. Newbold's method — converting script strokes into Greek shorthand — was demolished by Professor John Manly, who showed the process was too subjective to yield a single, verifiable plain text. The second, by <strong>Feely</strong> (1943), produced medieval Latin that specialists rejected as inauthentic. The third, by <strong>Leonell Strong</strong> (1946), identified the author as Anthony Askham and produced medieval English equally unacceptable to scholars.</p>
+    <p style="margin-top:0.75rem;">Tiltman's own analysis of 17 symbols led him to key observations: paragraphs almost always begin with specific symbols; there is no punctuation; some symbol groups behave as if they have inflectional (grammatical) endings; simple substitution of single symbols for letters is impossible because "languages simply do not behave this way." His tentative conclusion is that the text may represent a primitive synthetic <strong>universal language</strong> — a philosophical classification of ideas — similar to systems developed by Bishop Wilkins (1667) and Cave Beck (1657).</p>
+  </div>
+
+  <div class="quiz-section" id="reading-quiz">
+    <div class="quiz-intro">Reading Comprehension · 7 Questions</div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progress</span><span id="r-prog-text">0 of 7</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="r-prog-fill" style="width:0%"></div></div>
+    </div>
+    <div id="reading-questions"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="r-submit" onclick="submitQuiz('r')">Check Answers</button>
+      <button class="btn btn-ghost" onclick="resetQuiz('r')">Reset</button>
+    </div>
+    <div class="score-card" id="r-score">
+      <span class="score-num" id="r-score-num"></span>
+      <span class="score-label" id="r-score-msg"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ DEEP DIVE -->
+<section class="lesson-section" id="deep-dive">
+  <div class="section-header">
+    <span class="section-badge">Phase 4</span>
+    <div class="section-header-text">
+      <span class="section-time">0:50 – 1:15 · 25 minutes</span>
+      <h2>Deep Dive: D'Imperio's Monograph (1978)</h2>
+    </div>
+  </div>
+
+  <p>Mary D'Imperio's <em>The Voynich Manuscript: An Elegant Enigma</em> (NSA, 1978) is the most comprehensive scholarly study ever produced. Tiltman himself wrote the foreword, praising it as "far more comprehensive and more scholarly" than his own paper. Read the following thematic extracts, then complete the analysis tasks.</p>
+
+  <div class="callout">
+    <span class="callout-title">Extract A — On the Question of Authenticity</span>
+    <p>D'Imperio surveys scholarly opinion on whether the manuscript is genuine. Most researchers — including Tiltman, Panofsky, Elizabeth Friedman, and Carter — concluded it is not a hoax or a lunatic's doodlings, but rather "a homogeneous, creative work of a serious scholar who had something to convey." The only significant dissenter was Robert Brumbaugh, who argued it was a deliberate forgery designed to defraud Emperor Rudolph II. Even Brumbaugh, however, conceded there is likely an underlying text that may eventually be read.</p>
+  </div>
+
+  <div class="callout">
+    <span class="callout-title">Extract B — The Known History (a chain of evidence)</span>
+    <p>D'Imperio reconstructs a documented chain: the manuscript was at Rudolph II's court before 1608; it passed to Jacobus de Tepenecz (director of Rudolph's botanical gardens and alchemical laboratory) between 1608 and his death in 1622; then to an unknown person who bequeathed it to Joannus Marcus Marci; in 1665/6 Marci sent it to Athanasius Kircher in Rome. It disappeared from recorded history until Wilfrid Voynich found it at Villa Mondragone, Italy, in 1912. Voynich sold it; it passed through Hans P. Kraus (who valued it at $160,000), and was finally donated to Yale's Beinecke Library — where it remains today as MS 408.</p>
+  </div>
+
+  <div class="callout">
+    <span class="callout-title">Extract C — The Text Problem</span>
+    <p>D'Imperio identifies key textual phenomena that any theory must account for: (1) the script is internally consistent throughout — it follows rules; (2) there is no punctuation and spaces between "words" may not be reliable word boundaries; (3) certain symbol sequences repeat across the manuscript with characteristic frequencies, suggesting grammar; (4) the statistical distribution of symbols does not match simple substitution ciphers; (5) Captain Prescott Currier found evidence of at least two distinct "hands" (writers) and possibly two "languages" within the manuscript. This last point — if confirmed — rules out a hoax by a single person and strongly suggests a real collaborative text.</p>
+  </div>
+
+  <div class="activity">
+    <div class="activity-header">
+      <div class="activity-icon">✍</div>
+      <h3>Deep Dive Tasks — Work in pairs</h3>
+    </div>
+    <ol>
+      <li><strong>Fact vs. Inference vs. Speculation:</strong> Look at the five claims below. Classify each as a <em>confirmed fact</em>, an <em>inference</em> (a logical conclusion from evidence), or <em>speculation</em>. Be ready to justify your classification.
+        <ul style="margin-top:0.5rem; font-style:italic;">
+          <li>"The manuscript was written around 1420." — Fact / Inference / Speculation?</li>
+          <li>"Roger Bacon wrote the manuscript." — Fact / Inference / Speculation?</li>
+          <li>"The manuscript was in Rudolph II's court before 1608." — Fact / Inference / Speculation?</li>
+          <li>"The text contains meaningful content, not random nonsense." — Fact / Inference / Speculation?</li>
+          <li>"The manuscript may represent a universal language system." — Fact / Inference / Speculation?</li>
+        </ul>
+      </li>
+      <li style="margin-top:1rem;"><strong>Hedging Language:</strong> D'Imperio and Tiltman both use careful hedging. Find one example of hedging in each extract above (e.g. "may", "likely", "suggests"). Rewrite each sentence making it more certain, then discuss: does that make it more or less accurate?</li>
+      <li style="margin-top:1rem;"><strong>The Two-Hands Problem:</strong> If Captain Currier's finding that there are two writers is correct, what does that tell us about the manuscript? List three implications.</li>
+    </ol>
+  </div>
+
+  <!-- Decipherment comparison table -->
+  <p style="margin-top:1.5rem;">The table below synthesises all three sources on the major decipherment claims:</p>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Scholar</th>
+        <th>Year</th>
+        <th>Claimed author</th>
+        <th>Claimed language</th>
+        <th>Method</th>
+        <th>Verdict</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Newbold</td>
+        <td>1921</td>
+        <td>Roger Bacon</td>
+        <td>Latin (via Greek shorthand)</td>
+        <td>Microscopic strokes = letters</td>
+        <td><span class="verdict refuted">Refuted (Manly, 1931)</span></td>
+      </tr>
+      <tr>
+        <td>Feely</td>
+        <td>1943</td>
+        <td>Roger Bacon</td>
+        <td>Medieval Latin</td>
+        <td>Unmethodical substitution</td>
+        <td><span class="verdict refuted">Rejected by scholars</span></td>
+      </tr>
+      <tr>
+        <td>Strong</td>
+        <td>1946</td>
+        <td>Anthony Askham</td>
+        <td>Medieval English</td>
+        <td>Undisclosed key</td>
+        <td><span class="verdict refuted">Rejected; key never revealed</span></td>
+      </tr>
+      <tr>
+        <td>Brumbaugh</td>
+        <td>1974–76</td>
+        <td>Unknown forger</td>
+        <td>Deliberate nonsense + fragments</td>
+        <td>Numerical substitution</td>
+        <td><span class="verdict unresolved">Minority view; not accepted</span></td>
+      </tr>
+      <tr>
+        <td>Tiltman</td>
+        <td>1951–67</td>
+        <td>Unknown</td>
+        <td>Universal language?</td>
+        <td>Statistical symbol analysis</td>
+        <td><span class="verdict unresolved">Hypothesis only; respected</span></td>
+      </tr>
+      <tr>
+        <td>Bax (TED-Ed)</td>
+        <td>2014</td>
+        <td>Unknown</td>
+        <td>Real natural language</td>
+        <td>Proper nouns / plant names as anchors</td>
+        <td><span class="verdict unresolved">Partial; ~10 words proposed</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ DISCUSSION -->
+<section class="lesson-section" id="discussion">
+  <div class="section-header">
+    <span class="section-badge">Phase 5</span>
+    <div class="section-header-text">
+      <span class="section-time">1:15 – 1:35 · 20 minutes</span>
+      <h2>Discussion: Connecting the Sources</h2>
+    </div>
+  </div>
+
+  <p>The three sources we have used were produced 11 years apart — 1967 (Tiltman), 1978 (D'Imperio), and 2014 (Bax video) — yet they circle the same mystery. This phase asks students to reflect across all three.</p>
+
+  <div class="activity">
+    <div class="activity-header">
+      <div class="activity-icon">🗣</div>
+      <h3>Group Discussion — Choose 3 of the following</h3>
+    </div>
+    <ol>
+      <li><strong>The weight of consensus:</strong> Virtually every scholar agrees the manuscript is not a hoax. But does consensus make something true? What would it take to prove the manuscript is genuine versus a forgery?</li>
+      <li><strong>Who owns a mystery?</strong> The manuscript is a classified NSA document turned academic problem turned viral video. How does the audience (spies → scholars → YouTube viewers) change how the mystery is framed?</li>
+      <li><strong>The curse of past failure:</strong> D'Imperio notes that she "unwittingly retraced the steps of all her predecessors." Is there value in trying something that has already failed? Apply this to your own experience of learning.</li>
+      <li><strong>Bax vs. Tiltman:</strong> Bax (2014) uses proper nouns as anchors; Tiltman (1967) uses statistical symbol frequency. Which approach seems more scientifically rigorous? Which is more likely to eventually succeed?</li>
+      <li><strong>Your verdict:</strong> Based on all three sources, what do <em>you</em> believe the Voynich Manuscript is? Construct a position using evidence from at least two sources and hedging language.</li>
+    </ol>
+  </div>
+
+  <div class="callout">
+    <span class="callout-title">Language Focus — Expressing Uncertainty (C1)</span>
+    <p>Academic writing and speaking on unresolved questions requires precise hedging. Practise these patterns: <em>"The evidence suggests that…"</em> · <em>"It seems likely that…, although…"</em> · <em>"While X cannot be ruled out, the balance of evidence points to…"</em> · <em>"Tiltman's analysis indicates…, but this remains tentative"</em> · <em>"There is some reason to believe…"</em></p>
+  </div>
+
+  <div class="activity">
+    <div class="activity-header">
+      <div class="activity-icon">✍</div>
+      <h3>Writing Task (Optional — 150 words)</h3>
+    </div>
+    <p>Write a short paragraph responding to this question: <em>"After more than 600 years and dozens of failed attempts, is the Voynich Manuscript likely ever to be decoded? Should scholars continue trying?"</em> Use evidence from at least two of the sources studied today. Use hedging language appropriately.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ ASSESSMENT -->
+<section class="lesson-section" id="assessment">
+  <div class="section-header">
+    <span class="section-badge">Phase 6</span>
+    <div class="section-header-text">
+      <span class="section-time">1:35 – 2:00 · 25 minutes</span>
+      <h2>Assessment: Three-Tier Quiz</h2>
+    </div>
+  </div>
+
+  <p>This quiz covers all three sources. Questions are arranged in tiers: <span class="q-level recall" style="display:inline-block">Recall</span> (what the sources say), <span class="q-level analysis" style="display:inline-block">Analysis</span> (how and why), and <span class="q-level critical" style="display:inline-block">Critical</span> (evaluation across sources).</p>
+
+  <div class="quiz-section" id="assessment-quiz">
+    <div class="quiz-intro">Full Assessment · 11 Questions</div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progress</span><span id="a-prog-text">0 of 11</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="a-prog-fill" style="width:0%"></div></div>
+    </div>
+    <div id="assessment-questions"></div>
+
+    <!-- Open questions -->
+    <div class="quiz-intro" style="margin-top:2rem">Open Questions · Written Response</div>
+
+    <div class="open-q-block q-card">
+      <div class="q-meta"><span class="q-num">Question 12</span><span class="q-level critical">Critical</span></div>
+      <label class="q-text">D'Imperio writes that every scholar who has seriously studied the manuscript has concluded it is not a hoax. Tiltman agrees. Yet one researcher — Brumbaugh — dissents. Whose position do you find more convincing and why? Use specific evidence from the sources.</label>
+      <p class="q-source">Sources: Tiltman (1967) + D'Imperio (1978)</p>
+      <textarea class="open-q" placeholder="Write your answer here (aim for 80–120 words)…"></textarea>
+    </div>
+
+    <div class="open-q-block q-card">
+      <div class="q-meta"><span class="q-num">Question 13</span><span class="q-level analysis">Analysis</span></div>
+      <label class="q-text">The TED-Ed video presents Bax's approach (starting from proper nouns) as promising. Tiltman's approach (statistical symbol analysis) led to the "universal language" hypothesis. Explain in your own words how these two approaches differ, and what each assumes about the nature of the manuscript's text.</label>
+      <p class="q-source">Sources: TED-Ed video + Tiltman (1967)</p>
+      <textarea class="open-q" placeholder="Write your answer here (aim for 80–120 words)…"></textarea>
+    </div>
+
+    <div class="open-q-block q-card">
+      <div class="q-meta"><span class="q-num">Question 14</span><span class="q-critical">Critical</span><span class="q-level critical">Critical</span></div>
+      <label class="q-text">D'Imperio notes that Captain Currier found evidence of two different "hands" and possibly two "languages" in the manuscript. If confirmed, what are the implications? Discuss at least three consequences this would have for existing theories about the manuscript's authorship and purpose.</label>
+      <p class="q-source">Source: D'Imperio (1978)</p>
+      <textarea class="open-q" placeholder="Write your answer here (aim for 80–120 words)…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="a-submit" onclick="submitQuiz('a')">Check Answers</button>
+      <button class="btn btn-ghost" onclick="resetQuiz('a')">Reset</button>
+    </div>
+    <div class="score-card" id="a-score">
+      <span class="score-num" id="a-score-num"></span>
+      <span class="score-label" id="a-score-msg"></span>
+    </div>
+  </div>
+
+  <div class="sources">
+    <span class="sources-title">Primary Sources Used in This Lesson</span>
+    <ol>
+      <li>Bax, Stephen. "The world's most mysterious book." <em>TED-Ed</em>, 2014. <a href="https://www.youtube.com/watch?v=8NS4CbBJQ84" style="color:var(--gold-light)" target="_blank">youtube.com/watch?v=8NS4CbBJQ84</a></li>
+      <li>Tiltman, J.H. "The Voynich Manuscript: 'The Most Mysterious Manuscript in the World'." NSA internal paper, 1967. Declassified under FOIA, 2002. (DOCID: 631091)</li>
+      <li>D'Imperio, M.E. <em>The Voynich Manuscript: An Elegant Enigma</em>. National Security Agency / Central Security Service, 1978.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>Lesson design for academic English instruction · All primary sources are in the public domain or declassified government documents.</p>
+</footer>
 
 <script>
-const questions = [
-  {
-    text: "Where is the Voynich manuscript currently kept?",
-    opts: ["The British Library in London","Yale's Beinecke Rare Book and Manuscript Library","The Vatican Secret Archives","The Library of Congress"],
-    ans: 1,
-    feedback: "The manuscript is held at Yale's Beinecke Rare Book and Manuscript Library."
+// ═══════════════════════════════════ QUIZ DATA
+const quizzes = {
+
+  l: {
+    total: 8,
+    questions: [
+      {
+        text: "According to the video, where is the Voynich Manuscript currently held?",
+        level: "recall",
+        source: "TED-Ed video",
+        opts: ["The Vatican Secret Archives","Yale's Beinecke Rare Book and Manuscript Library","The British Library in London","The NSA headquarters in Maryland"],
+        ans: 1,
+        fb: "The manuscript is held at Yale's Beinecke Rare Book and Manuscript Library."
+      },
+      {
+        text: "Carbon dating placed the manuscript at around which date?",
+        level: "recall",
+        source: "TED-Ed video",
+        opts: ["Around 1280","Around 1350","Around 1420","Around 1510"],
+        ans: 2,
+        fb: "Carbon dating places the Voynich Manuscript at around 1420."
+      },
+      {
+        text: "How many pages does the video say the manuscript contains?",
+        level: "recall",
+        source: "TED-Ed video",
+        opts: ["120","180","240","300"],
+        ans: 2,
+        fb: "The video describes it as a 240-page tome."
+      },
+      {
+        text: "What are 'gallows characters' as described in the video?",
+        level: "recall",
+        source: "TED-Ed video",
+        opts: ["Drawings of medieval executions","Tall, distinctive letters in the manuscript's script","Code names used by its original owner","Symbols borrowed from Arabic numerals"],
+        ans: 1,
+        fb: "Gallows characters are the tall, distinctive letters found in the manuscript's unusual writing system."
+      },
+      {
+        text: "Which of the following is NOT mentioned in the video as a possible author?",
+        level: "recall",
+        source: "TED-Ed video",
+        opts: ["Roger Bacon","John Dee","Wilfrid Voynich himself","Leonardo da Vinci"],
+        ans: 3,
+        fb: "Leonardo da Vinci is not mentioned. The video names Roger Bacon, John Dee, and Voynich himself as proposed authors."
+      },
+      {
+        text: "Stephen Bax's decoding approach is best described as:",
+        level: "analysis",
+        source: "TED-Ed video",
+        opts: ["Running the full text through a statistical computer model","Starting with identifiable proper nouns such as plant and star names","Comparing the script to known medieval ciphers systematically","Hiring cryptographers to break the cipher using frequency analysis"],
+        ans: 1,
+        fb: "Bax uses recognisable proper nouns — particularly plant and star names — as anchors to begin decoding individual words, similar to how the Rosetta Stone was used."
+      },
+      {
+        text: "The video suggests that the script's 'gallows characters' appear at the beginning of words. What does this imply about the manuscript's text?",
+        level: "analysis",
+        source: "TED-Ed video",
+        opts: ["The text is completely random","The script follows consistent structural rules","The text is written in Latin","The manuscript is a deliberate hoax"],
+        ans: 1,
+        fb: "Regular positional patterns (like characters that appear at the start of words) indicate the script follows consistent internal rules — evidence it is not random."
+      },
+      {
+        text: "What does the video's mention of theories ranging from witches to Martians to medieval medicine tell us about the manuscript?",
+        level: "critical",
+        source: "TED-Ed video",
+        opts: ["Scholars are not serious about solving it","It is most likely a hoax","The absence of a decoded text creates a vacuum that speculation fills","The manuscript definitely has supernatural origins"],
+        ans: 2,
+        fb: "When reliable evidence is absent, speculation multiplies. The wild range of theories reflects not the manuscript's nature but the limits of what we currently know."
+      }
+    ]
   },
-  {
-    text: "Roughly how many pages does the Voynich manuscript contain?",
-    opts: ["120 pages","180 pages","240 pages","300 pages"],
-    ans: 2,
-    feedback: "The video describes it as a 240-page tome."
+
+  r: {
+    total: 7,
+    questions: [
+      {
+        text: "Tiltman identifies three published decipherment claims. Which of the following is NOT one of them?",
+        level: "recall",
+        source: "Tiltman (1967)",
+        opts: ["Newbold's Greek shorthand theory","Feely's medieval Latin solution","Strong's medieval English decipherment","Brumbaugh's numerical substitution theory"],
+        ans: 3,
+        fb: "Brumbaugh is discussed by D'Imperio (1978), not in Tiltman's main list of three published solutions. Newbold, Feely, and Strong are the three Tiltman analyses."
+      },
+      {
+        text: "Who demolished Newbold's decipherment, and on what grounds?",
+        level: "recall",
+        source: "Tiltman (1967)",
+        opts: ["John Dee — he showed the script was too old for Bacon","Professor John Manly — the method could not yield a single verifiable text","Wilfrid Voynich — he proved the manuscript was a forgery","Athanasius Kircher — he could not reproduce the results"],
+        ans: 1,
+        fb: "Professor John Manly of the University of Chicago showed that Newbold's method — converting microscopic pen strokes into Greek shorthand — was too subjective to ever produce one definitive reading."
+      },
+      {
+        text: "To how many symbols did Tiltman limit his preliminary analysis?",
+        level: "recall",
+        source: "Tiltman (1967)",
+        opts: ["10","17","26","34"],
+        ans: 1,
+        fb: "Tiltman deliberately limited his analysis to the 17 most commonly occurring symbols."
+      },
+      {
+        text: "Tiltman observed that paragraphs in the manuscript 'nearly always begin with D or H.' What does this suggest?",
+        level: "analysis",
+        source: "Tiltman (1967)",
+        opts: ["The manuscript is written in a Slavic language","Certain symbols have positional functions, like grammatical markers","The text is a random cipher with no underlying language","D and H are the first two letters of the author's name"],
+        ans: 1,
+        fb: "Positional consistency — certain symbols appearing systematically at the start of paragraphs — suggests they carry a structural or grammatical function, not random placement."
+      },
+      {
+        text: "Why does Tiltman conclude that the text 'cannot be the result of substituting single symbols for letters in the natural order'?",
+        level: "analysis",
+        source: "Tiltman (1967)",
+        opts: ["Because the symbols look too different from any known alphabet","Because languages do not behave in ways that match the statistical patterns he observed","Because Voynich bought the manuscript at a suspiciously low price","Because the illustrations are too accurate to be accompanied by code"],
+        ans: 1,
+        fb: "Tiltman's statistical analysis of symbol behaviour showed patterns inconsistent with simple letter substitution — the way symbols cluster and repeat does not match how natural languages work when encoded this way."
+      },
+      {
+        text: "What is a 'universal language' as Tiltman uses the term, and who developed historical examples?",
+        level: "recall",
+        source: "Tiltman (1967)",
+        opts: ["A language spoken globally, like English today","A constructed philosophical system assigning codes to all ideas, like those of Bishop Wilkins and Cave Beck","A language derived from Latin used across medieval Europe","An artificial language invented by Roger Bacon for secrecy"],
+        ans: 1,
+        fb: "A synthetic 'universal language' was a philosophical system that assigned codes to all ideas and concepts, intended to allow communication across linguistic barriers. Tiltman cites Bishop Wilkins (1667) and Cave Beck (1657) as historical examples."
+      },
+      {
+        text: "Tiltman's paper was written in 1967 and declassified in 2002. What does its classification as an NSA document tell us about how the manuscript was viewed?",
+        level: "critical",
+        source: "Tiltman (1967)",
+        opts: ["Intelligence agencies considered it a genuine threat to national security","The manuscript's potential as an unbroken code attracted the interest of professional codebreakers","It proves the manuscript contains secret government information","Tiltman was spying on Yale University"],
+        ans: 1,
+        fb: "The NSA's interest reflects the fact that unbroken codes — whatever their source — are the natural domain of cryptanalysis. Tiltman was one of history's greatest codebreakers, and the Voynich problem attracted him professionally."
+      }
+    ]
   },
-  {
-    text: "When was the manuscript carbon-dated to?",
-    opts: ["Around 1200","Around 1350","Around 1420","Around 1500"],
-    ans: 2,
-    feedback: "Carbon dating places it at around 1420."
-  },
-  {
-    text: "Which of the following is NOT one of the theories about who wrote the manuscript?",
-    opts: ["Roger Bacon","John Dee","Leonardo da Vinci","Wilfrid Voynich himself"],
-    ans: 2,
-    feedback: "Leonardo da Vinci is not mentioned. Roger Bacon, John Dee, and even Voynich himself are named as possible authors."
-  },
-  {
-    text: "What are 'gallows characters' in the context of this video?",
-    opts: ["Illustrations of medieval executions in the manuscript","Tall, distinctive letters in the manuscript's script","Code names used by the original owner","Symbols borrowed from the Hebrew alphabet"],
-    ans: 1,
-    feedback: "Gallows characters are the tall, distinctive letters found in the manuscript's unusual script."
-  },
-  {
-    text: "Stephen Bax's approach to decoding the manuscript is best described as:",
-    opts: ["Running the text through a supercomputer to find statistical patterns","Comparing it entirely with known medieval Latin texts","Starting with proper nouns and plant names to identify individual words","Hiring a team of cryptographers to break the cipher"],
-    ans: 2,
-    feedback: "Bax starts with identifiable proper nouns (like plant and star names) to anchor his decoding, similar to how the Rosetta Stone was used."
+
+  a: {
+    total: 11,
+    questions: [
+      {
+        text: "Which institution now holds the Voynich Manuscript, and what is its catalogue number?",
+        level: "recall",
+        source: "D'Imperio (1978)",
+        opts: ["NSA Fort Meade — classified file VMS-1","Yale's Beinecke Library — MS 408","The British Library — Add. MS 41623","The Vatican Library — Codex Voynich I"],
+        ans: 1,
+        fb: "The manuscript is held at Yale's Beinecke Rare Book Library, catalogued as MS 408."
+      },
+      {
+        text: "Who was Jacobus de Tepenecz and why is his connection to the manuscript significant?",
+        level: "recall",
+        source: "D'Imperio (1978) + Tiltman (1967)",
+        opts: ["He was the forger who created the manuscript","He was the director of Rudolph II's botanical gardens and alchemical laboratory; his erased signature on the first page provides a date anchor (after 1608)","He was the cryptographer who first decoded 12 words of the text","He was Wilfrid Voynich's research assistant"],
+        ans: 1,
+        fb: "De Tepenecz was director of Rudolph II's botanical gardens and alchemical laboratory. His name was found erased (but visible under UV light) on the first page. Since he only acquired the noble title 'de Tepenecz' after 1608, this places the manuscript firmly in that period."
+      },
+      {
+        text: "According to D'Imperio, what was the purchase price Rudolph II reportedly paid for the manuscript, and what is its approximate modern equivalent?",
+        level: "recall",
+        source: "D'Imperio (1978)",
+        opts: ["60 ducats — about $1,400 in 1921","600 ducats — about $14,000 in 1921","6,000 ducats — about $140,000 in 1921","Rudolph received it as a gift — no price paid"],
+        ans: 1,
+        fb: "Rudolph reportedly paid 600 ducats — equivalent to approximately $14,000 in 1921 according to John Manly."
+      },
+      {
+        text: "D'Imperio found evidence that Tiltman, Friedman, and Currier all reached 'similar conclusions' about the text. Which conclusion did all three share?",
+        level: "analysis",
+        source: "D'Imperio (1978)",
+        opts: ["The text is written in medieval Latin","Simple substitution cannot account for the text's statistical behaviour","Roger Bacon is the most likely author","The manuscript is certainly a hoax"],
+        ans: 1,
+        fb: "All three analysts — working independently — concluded that simple single-symbol substitution cannot explain the text's patterns. This repeated independent finding is significant."
+      },
+      {
+        text: "Captain Prescott Currier found evidence of at least two 'hands' and possibly two 'languages' in the manuscript. If correct, which theory does this most strongly challenge?",
+        level: "analysis",
+        source: "D'Imperio (1978)",
+        opts: ["The theory that the manuscript is a sophisticated medical encyclopaedia","Brumbaugh's theory that it was a forgery by a single person designed to fool Rudolph","Tiltman's universal language hypothesis","The theory that the text is written in medieval English"],
+        ans: 1,
+        fb: "If two writers and two languages are present, a single-person forgery becomes far less credible. A hoax by one person for one purpose would typically show more consistency."
+      },
+      {
+        text: "D'Imperio describes her own experience as 'unwittingly retracing the steps of all predecessors.' What methodological lesson does she draw from this?",
+        level: "analysis",
+        source: "D'Imperio (1978)",
+        opts: ["Future researchers should not study the manuscript","A comprehensive, systematic survey of all prior work is essential before beginning new research","The manuscript will never be decoded","Only NSA cryptographers should attempt to decode it"],
+        ans: 1,
+        fb: "D'Imperio's monograph is itself the answer to this problem — a comprehensive survey designed to ensure future researchers know what has been tried and why it failed, preventing redundant effort."
+      },
+      {
+        text: "What does Tiltman mean when he says some symbol groups may 'constitute some form of spelling' or represent the 'accidence of an inflected language'?",
+        level: "analysis",
+        source: "Tiltman (1967)",
+        opts: ["The script contains grammatical endings that change word forms, like verb conjugations or noun declensions","The manuscript was written by a person who had difficulty spelling","The text is written entirely in abbreviations","The symbols represent numbers, not letters"],
+        ans: 0,
+        fb: "'Accidence' refers to the part of grammar dealing with inflections — how words change form to show tense, number, case, etc. Tiltman suspected the repeating suffix-like groups might encode such grammatical information."
+      },
+      {
+        text: "All three published decipherments (Newbold, Feely, Strong) claimed the author was Roger Bacon or a medieval figure. What does this pattern reveal about the researchers?",
+        level: "critical",
+        source: "Tiltman (1967) + D'Imperio (1978)",
+        opts: ["Roger Bacon is definitely the author","Researchers may have been unconsciously influenced by the Marci letter's suggestion of Bacon, confirming a pre-existing bias","The text is definitively written in a medieval European language","NSA researchers were trying to protect Roger Bacon's reputation"],
+        ans: 1,
+        fb: "The Marci letter explicitly mentions Roger Bacon as a possible author. Researchers who started with this assumption then found (or believed they found) confirmation — a classic example of confirmation bias in research."
+      },
+      {
+        text: "What is the strongest argument AGAINST the manuscript being a hoax, based on all three sources?",
+        level: "critical",
+        source: "All three sources",
+        opts: ["The illustrations are too beautiful to be fake","The text is internally consistent, follows rule-governed patterns, and occupied skilled vellum work that would be wasteful for a fraud","Wilfrid Voynich was too honest to sell a forgery","No medieval forger could have invented so many plants"],
+        ans: 1,
+        fb: "Multiple scholars emphasise two points: (1) the text is internally consistent and follows grammatical-like rules throughout 240 pages — inconsistent with random nonsense; (2) the quality of the vellum and the sheer volume of work make a fraud economically irrational unless the deception were very carefully planned."
+      },
+      {
+        text: "Bax's approach (video) treats the manuscript as containing a real natural language. Tiltman's hypothesis suggests a constructed universal language. D'Imperio presents both possibilities without deciding. Which of the following statements best evaluates these three positions?",
+        level: "critical",
+        source: "All three sources",
+        opts: ["Bax is correct because he has decoded the most words","Tiltman is correct because he was a professional codebreaker","All three positions are consistent with the available evidence, and the data does not yet allow a definitive choice between a natural language and a constructed one","D'Imperio is wrong because she fails to take a position"],
+        ans: 2,
+        fb: "The available evidence — internal consistency of the text, unusual statistical distributions, possible multiple hands — is compatible with both a natural language encoded in cipher and a constructed universal language. Neither can be ruled out. D'Imperio's cautious neutrality reflects good scholarly practice."
+      },
+      {
+        text: "D'Imperio ends her monograph by calling for 'a comprehensive machine file of the text' and 'scientific hypothesis formation and testing.' In 2024, AI and computational tools have been applied to the manuscript. Based on the lesson content, which of these AI approaches seems most likely to succeed?",
+        level: "critical",
+        source: "D'Imperio (1978) + inference",
+        opts: ["Having an AI simply guess the meaning of random pages","Using AI to enforce a complete statistical profile of symbol distributions across all hands, then testing multiple hypothesis families simultaneously — natural language, universal language, shorthand","Having AI translate the text directly into English without a key","Using AI-generated images to reconstruct the botanical illustrations"],
+        ans: 1,
+        fb: "D'Imperio anticipated the need for exactly this: systematic, exhaustive statistical profiling followed by rigorous hypothesis testing. Modern AI tools — particularly large language models trained on historical scripts — are best applied in precisely this way, not as magic translators."
+      }
+    ]
   }
-];
+};
 
-let selected = new Array(questions.length).fill(null);
-let submitted = false;
+// ═══════════════════════════════════ STATE
+const state = {
+  l: { selected: {}, submitted: false },
+  r: { selected: {}, submitted: false },
+  a: { selected: {}, submitted: false }
+};
 
-function renderQuestions() {
-  const container = document.getElementById('questions');
-  container.innerHTML = '';
-  questions.forEach((q, qi) => {
-    const card = document.createElement('div');
-    card.className = 'q-card';
-    card.id = 'card-' + qi;
-    const letters = ['A','B','C','D'];
-    card.innerHTML = `<p class="q-num">Question ${qi+1}</p><p class="q-text">${q.text}</p><div class="options">${q.opts.map((o,oi)=>`<div class="opt" id="opt-${qi}-${oi}" onclick="choose(${qi},${oi})"><span class="opt-letter">${letters[oi]}</span><span>${o}</span></div>`).join('')}</div><div class="feedback" id="fb-${qi}" style="display:none"></div>`;
-    container.appendChild(card);
-  });
-}
-
-function choose(qi, oi) {
-  if (submitted) return;
-  selected[qi] = oi;
+// ═══════════════════════════════════ RENDER
+function renderQuiz(key) {
+  const quiz = quizzes[key];
+  const container = document.getElementById(key === 'l' ? 'listening-questions' : key === 'r' ? 'reading-questions' : 'assessment-questions');
   const letters = ['A','B','C','D'];
-  questions[qi].opts.forEach((_,i) => {
-    const el = document.getElementById('opt-'+qi+'-'+i);
-    el.className = 'opt' + (i===oi ? ' selected' : '');
-  });
-  updateProgress();
-}
-
-function updateProgress() {
-  const answered = selected.filter(v => v !== null).length + countOpenAnswered();
-  const total = questions.length + 2;
-  document.getElementById('prog-label').textContent = answered + ' of ' + total + ' answered';
-  document.getElementById('prog-fill').style.width = Math.round(answered/total*100) + '%';
-}
-
-function countOpenAnswered() {
-  let c = 0;
-  if (document.getElementById('open1').value.trim().length > 10) c++;
-  if (document.getElementById('open2').value.trim().length > 10) c++;
-  return c;
-}
-
-document.getElementById('open1').addEventListener('input', updateProgress);
-document.getElementById('open2').addEventListener('input', updateProgress);
-
-function submitAll() {
-  if (submitted) return;
-  submitted = true;
-  let score = 0;
-  questions.forEach((q, qi) => {
-    const card = document.getElementById('card-'+qi);
-    const fb = document.getElementById('fb-'+qi);
-    const s = selected[qi];
-    questions[qi].opts.forEach((_,i) => {
-      const el = document.getElementById('opt-'+qi+'-'+i);
-      el.classList.remove('selected');
-      if (i === q.ans) el.classList.add('correct-ans');
-      else if (i === s && s !== q.ans) el.classList.add('wrong-ans');
+  let html = '';
+  quiz.questions.forEach((q, qi) => {
+    html += `<div class="q-card" id="${key}-qcard-${qi}">
+      <div class="q-meta">
+        <span class="q-num">Question ${qi+1}</span>
+        <span class="q-level ${q.level}">${q.level.charAt(0).toUpperCase()+q.level.slice(1)}</span>
+      </div>
+      <p class="q-source">Source: ${q.source}</p>
+      <p class="q-text">${q.text}</p>
+      <div class="options">`;
+    q.opts.forEach((opt, oi) => {
+      html += `<div class="opt" id="${key}-opt-${qi}-${oi}" onclick="choose('${key}',${qi},${oi})">
+        <span class="opt-letter">${letters[oi]}</span><span>${opt}</span>
+      </div>`;
     });
-    if (s === q.ans) {
+    html += `</div>
+      <div class="feedback" id="${key}-fb-${qi}"></div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function choose(key, qi, oi) {
+  if (state[key].submitted) return;
+  state[key].selected[qi] = oi;
+  const q = quizzes[key].questions[qi];
+  q.opts.forEach((_, i) => {
+    const el = document.getElementById(`${key}-opt-${qi}-${i}`);
+    el.className = 'opt' + (i === oi ? ' selected' : '');
+  });
+  updateProgress(key);
+}
+
+function updateProgress(key) {
+  const quiz = quizzes[key];
+  const answered = Object.keys(state[key].selected).length;
+  const total = quiz.total;
+  const pct = Math.round(answered / total * 100);
+  document.getElementById(`${key}-prog-text`).textContent = `${answered} of ${total}`;
+  document.getElementById(`${key}-prog-fill`).style.width = pct + '%';
+}
+
+function submitQuiz(key) {
+  if (state[key].submitted) return;
+  state[key].submitted = true;
+  const quiz = quizzes[key];
+  let score = 0;
+  quiz.questions.forEach((q, qi) => {
+    const card = document.getElementById(`${key}-qcard-${qi}`);
+    const fb = document.getElementById(`${key}-fb-${qi}`);
+    const sel = state[key].selected[qi];
+    q.opts.forEach((_, oi) => {
+      const el = document.getElementById(`${key}-opt-${qi}-${oi}`);
+      el.classList.add('disabled');
+      el.classList.remove('selected');
+      if (oi === q.ans) el.classList.add('correct-ans');
+      else if (oi === sel && sel !== q.ans) el.classList.add('wrong-ans');
+    });
+    if (sel === q.ans) {
       score++;
       card.classList.add('correct');
-      fb.className = 'feedback correct';
-      fb.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i> Correct! ' + q.feedback;
+      fb.className = 'feedback show correct';
+      fb.textContent = '✓ ' + q.fb;
     } else {
       card.classList.add('wrong');
-      fb.className = 'feedback wrong';
-      fb.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i> ' + (s === null ? 'Not answered. ' : 'Not quite. ') + q.feedback;
+      fb.className = 'feedback show wrong';
+      fb.textContent = (sel === undefined ? 'Not answered. ' : 'Not quite. ') + q.fb;
     }
-    fb.style.display = 'block';
   });
-  const scoreCard = document.getElementById('score-card');
-  scoreCard.style.display = 'block';
-  document.getElementById('score-num').textContent = score + ' / ' + questions.length;
-  const msgs = ['Keep watching — try again!','Good effort — review the video!','Nice work!','Very good!','Excellent!','Perfect score!'];
-  document.getElementById('score-msg').textContent = msgs[Math.min(score, msgs.length-1)];
-  document.getElementById('submit-btn').disabled = true;
+  const sc = document.getElementById(`${key}-score`);
+  sc.classList.add('show');
+  document.getElementById(`${key}-score-num`).textContent = `${score} / ${quiz.total}`;
+  const msgs = ['Keep going — review the sources and try again!','Good effort!','Solid understanding!','Very strong!','Excellent work!','Perfect!'];
+  document.getElementById(`${key}-score-msg`).textContent = msgs[Math.min(score, msgs.length-1)];
+  document.getElementById(`${key}-submit`).disabled = true;
 }
 
-function resetAll() {
-  submitted = false;
-  selected = new Array(questions.length).fill(null);
-  renderQuestions();
-  document.getElementById('open1').value = '';
-  document.getElementById('open2').value = '';
-  document.getElementById('score-card').style.display = 'none';
-  document.getElementById('submit-btn').disabled = false;
-  updateProgress();
+function resetQuiz(key) {
+  state[key] = { selected: {}, submitted: false };
+  renderQuiz(key);
+  document.getElementById(`${key}-score`).classList.remove('show');
+  document.getElementById(`${key}-submit`).disabled = false;
+  updateProgress(key);
 }
 
-renderQuestions();
+// ═══════════════════════════════════ INIT
+renderQuiz('l');
+renderQuiz('r');
+renderQuiz('a');
 </script>
+</body>
+</html>
