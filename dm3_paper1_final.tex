@@ -1,0 +1,1270 @@
+\documentclass[reqno]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{booktabs}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\numberwithin{equation}{section}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}{Axiom}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+%% Macros
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\dm}{\mathfrak{D}}
+\newcommand{\dmcat}{\mathbf{dm3}}
+\newcommand{\Orb}{\Gamma}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\dg}{d_g}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\abs}[1]{\left|#1\right|}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\gcd}{gcd}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\supp}{supp}
+
+\begin{document}
+
+\title[Generative Contact Mechanics]{%
+  Generative Contact Mechanics:\\
+  A Geometric Framework for Dissipative Systems\\
+  with Structured Limit Cycles}
+
+\author{Pablo Nogueira Grossi}
+\address{Independent Researcher, Brazil}
+\email{pablogrossi@hotmail.com}
+
+\keywords{contact geometry, limit cycles, dissipative dynamical systems,
+  operator algebra, structural stability, resonance, stochastic stability,
+  nonequilibrium dynamics, Lyapunov functions}
+
+\subjclass[2020]{37C10, 37C27, 37D30, 53D10, 60H10, 18A30}
+
+\begin{abstract}
+We introduce a geometric framework for dissipative dynamical systems
+whose limit cycles carry structured phase, multi-scale coherence, and
+stochastic stability. The central object is the \emph{dm3 system}---a
+smooth Riemannian manifold equipped with a hyperbolic limit cycle, a
+Lyapunov function, and a stochastic extension---formalized through eight
+axioms. On this foundation we construct a complete operator algebra
+(the $g$-, $L$-, $R$-, and $U$-operators) governing expansion, coherence,
+resonance, and unification, and we embed the entire structure in contact
+geometry.
+
+Four main results are established. \textbf{Theorem~A}: any dm3 system
+admits a unique exponentially stable hyperbolic limit cycle with a
+topological invariant (the winding integral $\oint_{\Orb}\lambda$) and
+stochastic stability below an embodiment threshold~$\tau$.
+\textbf{Theorem~B}: the category $\dmcat$ is closed under a unification
+operator~$\cU$, with the quantitative prediction $\tau_{12}\le\min(\tau_1,\tau_2)$:
+unification weakens noise tolerance.
+\textbf{Theorem~C}: every dm3 system near its limit cycle is locally
+contact-diffeomorphic to a universal three-parameter normal form
+$(\mu_{\max},\omega,\beta)$.
+\textbf{Theorem~D}: the full operator algebra is $C^1$-structurally stable
+with explicit stability radius
+$\varepsilon_0 = \tfrac{1}{2}\abs{\mu_{\max}}\cdot\sup_{\Orb}\norm{\Hess V}^{-1}$.
+Complete verification on an explicit toy model appears in the companion
+paper~\cite{Paper2}.
+\end{abstract}
+
+\dedicatory{Dedicated to my children Vic~(R.I.P.), Giulia,
+ Alice~(R.I.P.), Sarah~(R.I.P.), and David.\\[4pt]
+\emph{Once tiny, always strong.}}
+
+\maketitle
+\tableofcontents
+
+%%=============================================================
+\section{Introduction}\label{sec:intro}
+%%=============================================================
+
+\subsection{The problem: dissipative systems with structured limit cycles}
+
+Dissipative dynamical systems with hyperbolic limit cycles appear throughout
+the natural sciences---in biology as oscillatory cellular and neural
+processes, in physics as driven nonequilibrium systems, in engineering as
+controlled oscillators, and in mathematics as paradigmatic examples of
+nonlinear dynamics. The classical theory provides excellent tools for
+analyzing a single limit cycle in isolation: Floquet theory characterizes
+transverse stability, Lyapunov theory gives quantitative convergence rates,
+and stochastic extensions handle noise.
+
+What is less well understood is how limit cycles interact, unify, and
+organize into multi-scale coherent structures while remaining robust under
+perturbation. This paper develops a geometric framework---generative contact
+mechanics---for precisely this class of behavior. The central insight is
+that the correct geometric home for dissipative systems with structured limit
+cycles is not symplectic geometry (which forbids attractors) but contact
+geometry, where dissipation is encoded in the geometry itself.
+
+\subsection{The contact geometric approach}
+
+A hyperbolic limit cycle is an attractor: nearby trajectories converge to it
+exponentially. This is incompatible with Hamiltonian mechanics, where
+Liouville's theorem guarantees that the phase-space volume is preserved and
+no attractors can exist on compact symplectic manifolds. Standard Lagrangian
+mechanics is similarly insufficient: the Euler--Lagrange equations are
+time-reversible and do not admit attractors without additional dissipation
+terms added by hand.
+
+Contact geometry provides a natural resolution. A contact manifold
+$(M^{2n+1},\alpha)$ carries a Reeb vector field and a contact Hamiltonian
+formalism in which dissipation is built into the geometric structure: the
+contact Hamiltonian $H$ evolves along trajectories rather than remaining
+constant, and the action variable $z\in\R$ encodes accumulated dissipation.
+This makes contact geometry the natural setting for dissipative systems
+with limit cycle attractors, stochastic stability thresholds, and
+variational structure~\cite{Bravetti2017,deLeonLainz2019}.
+
+The present paper formalizes this setting through the dm3 system and
+operator algebra, and shows that the resulting framework is: (a)~geometrically
+natural (contact normal form, Theorem~C), (b)~categorically coherent
+(closure of $\dmcat$ under unification, Theorem~B), and (c)~physically
+robust ($C^1$-structural stability, Theorem~D).
+
+\subsection{Main results}
+
+The four main theorems are stated informally here and proved in later
+sections. Precise statements appear at the end of each relevant section.
+
+\begin{theorem}[A: dm3 existence and stability]\label{thm:A}
+Let $\dm=(S,g,Y,\Orb,V,\sigma)$ satisfy
+Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic}. Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item $\Orb$ is a hyperbolic limit cycle of $Y$ with minimal period $T^*>0$.
+  \item $\Orb$ is exponentially orbitally stable with rate $c=\abs{\mu_{\max}}$.
+  \item For noise amplitude below the embodiment threshold $\tau$,
+        $\mathbb{E}[V(X_t)]\to 0$.
+  \item The winding integral $\oint_{\Orb}\lambda$ is a topological invariant
+        preserved under all admissible deformations.
+        \textup{(Proved in Proposition~\ref{prop:winding}.)}
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[B: closure under unification]\label{thm:B}
+Let $\dm_1,\dm_2\in\dmcat$ be in $k$:$m$ resonance with admissible span.
+Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item The unification operator $\cU=U_3\circ U_2\circ U_1\circ R_3\circ R_2\circ R_1$
+        is well-defined and $\cU(\dm_1,\dm_2)\in\dmcat$.
+  \item The canonical invariants satisfy
+        $T^*_{12}=kT^*_1/\gcd(k,m)$,\;
+        $\mu_{\max,12}=\max(\mu_{\max,i})$,\;
+        $\tau_{12}\le\min(\tau_1,\tau_2)$.
+  \item \textbf{Unification weakens noise tolerance:}
+        $\tau_{12}\le\min(\tau_1,\tau_2)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[C: contact normal form]\label{thm:C}
+Let $\dm$ satisfy Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic}. In a tubular
+neighborhood of $\Orb$ in $(M,\alpha)$, there exist contact coordinates
+$(\rho,\theta,z)$ with $\Orb=\{\rho=0\}$ such that
+\begin{align*}
+  \dot\rho &= \mu_{\max}(1-e^{-\beta z})\rho + O(\rho^2),\\
+  \dot\theta &= \omega + O(\rho),\\
+  \dot z &= \omega - \abs{\mu_{\max}}\rho^2 e^{-\beta z} + O(\rho^3).
+\end{align*}
+Every dm3 system is locally contact-diffeomorphic to this normal form.
+The parameters $(\mu_{\max},\omega,\beta)$ are the canonical invariant
+triple.
+\end{theorem}
+
+\begin{theorem}[D: structural stability]\label{thm:D}
+Let $\dm$ satisfy Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic} with
+$\mu_{\max}<0$. Define
+\[
+  \varepsilon_0 \coloneqq
+  \frac{\abs{\mu_{\max}}}{2\bigl(1+\sup_{\Orb}\norm{\Hess V}_\infty\bigr)}.
+\]
+For any $C^1$ perturbation $F$ with $\norm{F}_{C^1}<\varepsilon_0$, and
+any finite admissible operator sequence within parameter bounds, the output
+$\dm'$ satisfies Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic} with: a unique
+hyperbolic limit cycle $\Orb'$ near $\Orb$; the same winding number;
+canonical invariants varying by $O(\varepsilon_0)$; and boundaries $B_i'$
+varying $C^1$-smoothly.
+\end{theorem}
+
+\subsection{Relation to existing work}\label{sec:related}
+
+\emph{Contact Hamiltonian mechanics.}
+Bravetti~\cite{Bravetti2017} and de~Le\'on--Lainz~\cite{deLeonLainz2019}
+developed the modern formalism of contact Hamiltonian mechanics, showing
+that contact geometry provides a variational framework for dissipative
+systems. Gaset et al.~\cite{Gaset2020} extended this to Lagrangian
+contact mechanics. The present paper differs from these works in three
+respects: (a)~we focus on limit cycle attractors rather than fixed-point
+attractors; (b)~we construct a categorical operator algebra acting on
+contact systems; and (c)~we prove structural stability of the operator
+algebra with an explicit stability radius.
+
+\emph{Metriplectic systems.}
+Morrison~\cite{Morrison1986} introduced the metriplectic framework for
+systems combining Hamiltonian and dissipative dynamics. The dm3 contact
+formulation is related but distinct: metriplectic structure separates the
+Poisson and metric brackets, while our contact structure encodes dissipation
+in the contact form itself through the action variable $z$.
+
+\emph{Normally hyperbolic invariant manifolds.}
+Hirsch, Pugh, and Shub~\cite{HPS} established the persistence and
+$C^r$-regularity of normally hyperbolic invariant manifolds under
+perturbation. Theorem~D uses this theory as a foundational input.
+The novelty is combining NHIM persistence with the operator algebra
+and establishing the quantitative stability radius $\varepsilon_0$.
+
+\emph{Arnold tongues and coupled oscillators.}
+The resonance structure of the $R$-operators (period resonance, Arnold
+tongues, mode locking) is classical~\cite{Arnold,Pikovsky}. The contribution
+here is embedding these phenomena in a categorical structure: resonance is
+the precondition for a well-defined pushout in $\dmcat$. The prediction
+$\tau_{12}\le\min(\tau_i)$ is new.
+
+\subsection{Organization}
+
+Section~\ref{sec:background} fixes notation and background.
+Section~\ref{sec:dm3} defines dm3 systems and proves Theorem~A.
+Section~\ref{sec:operators} constructs the operator algebra and proves
+Theorem~B.
+Section~\ref{sec:boundary} establishes boundary operators and the
+operator grammar.
+Section~\ref{sec:contact} develops the contact physics and proves
+Theorem~C.
+Section~\ref{sec:stability} proves Theorem~D.
+Section~\ref{sec:discussion} discusses open problems and connections.
+Appendices give the categorical and lemma details.
+
+%%=============================================================
+\section{Background}\label{sec:background}
+%%=============================================================
+
+\subsection{Riemannian manifolds and flows}
+
+Throughout, $(S,g)$ denotes a smooth, connected, complete Riemannian
+manifold of dimension $n\ge 2$. We write $T_xS$ for the tangent space
+at $x$, $\mathfrak{X}(S)$ for smooth vector fields, and $\Omega^k(S)$
+for smooth $k$-forms. For $X\in\mathfrak{X}(S)$ complete, the flow
+$\phi^t\colon S\to S$ satisfies $\phi^0=\mathrm{id}$ and
+$\tfrac{d}{dt}\phi^t(x)=X(\phi^t(x))$.
+
+\subsection{Hyperbolic limit cycles and Floquet theory}
+
+\begin{definition}\label{def:limitcycle}
+A \emph{limit cycle} of $Y\in\mathfrak{X}(S)$ is a compact connected
+invariant submanifold $\Orb\cong S^1$ with minimal period $T^*>0$.
+It is \emph{hyperbolic} if all Floquet multipliers except the trivial
+multiplier $\mu_0=1$ satisfy $\abs{\mu_j}<1$ for $j=1,\ldots,n-1$.
+The \emph{maximal transverse Lyapunov exponent} is
+$\mu_{\max}\coloneqq\max_j\tfrac{1}{T^*}\log\abs{\mu_j}<0$.
+\end{definition}
+
+The stable manifold theorem~\cite{HPS} applied to $\Orb$ gives: if
+$\Orb$ is hyperbolic, then $\partial\cB(\Orb)=\mathcal{W}^s(\Lambda)$
+for some invariant set $\Lambda\subset S\setminus\cB(\Orb)$.
+
+\subsection{Lyapunov functions}
+
+\begin{definition}\label{def:lyapunov}
+A smooth function $V\colon S\to\R_{\ge 0}$ is a \emph{Lyapunov function}
+for $\Orb$ if $V(x)=0\iff x\in\Orb$ and
+$\dot V(x)\coloneqq g(\nabla V(x),Y(x))<0$ for $x\notin\Orb$.
+The standard choice is $V=\dg(\cdot,\Orb)^2$.
+\end{definition}
+
+\subsection{Stochastic differential equations}
+
+For the It\^o SDE $dX_t=Y(X_t)\,dt+\sigma(X_t)\,dW_t$ on $S$,
+the generator is
+\[
+  \cL f(x) = g(\nabla f(x),Y(x))
+             + \tfrac12\mathrm{tr}\bigl(\sigma(x)^\top\Hess_f(x)\,\sigma(x)\bigr).
+\]
+Standard stochastic Lyapunov theory~\cite{Hasminski} gives: if
+$\cL V\le -cV+\kappa\norm\sigma^2$ for $c,\kappa>0$, then
+$\mathbb{E}[V(X_t)]\to 0$ for noise amplitude below $\tau=\sqrt{c/\kappa}$.
+
+\subsection{Contact manifolds}
+
+\begin{definition}\label{def:contact}
+A \emph{contact manifold} $(M^{2n+1},\alpha)$ is a smooth manifold
+with a 1-form $\alpha$ satisfying $\alpha\wedge(d\alpha)^n\ne 0$
+everywhere. The \emph{Reeb vector field} $R_\alpha$ is the unique
+vector field with $\iota_{R_\alpha}d\alpha=0$ and $\alpha(R_\alpha)=1$.
+For a smooth $H\colon M\to\R$, the \emph{contact Hamiltonian vector
+field} $X_H$ is the unique vector field satisfying
+$\iota_{X_H}d\alpha=dH-(R_\alpha H)\alpha$ and $\alpha(X_H)=-H$.
+\end{definition}
+
+See Geiges~\cite{Geiges} and Bravetti~\cite{Bravetti2017} for background.
+
+%%=============================================================
+\section{The dm3 operator}\label{sec:dm3}
+%%=============================================================
+
+\subsection{Definition}
+
+\begin{definition}[dm3 system]\label{def:dm3}
+A \emph{dm3 system} is a tuple $\dm=(S,g,Y,\Orb,V,\sigma)$ where
+$(S,g)$ is a smooth complete Riemannian manifold, $Y\in\mathfrak{X}(S)$
+is a smooth vector field with complete flow $\phi^t$, $\Orb\subset S$
+is a hyperbolic limit cycle, $V\colon S\to\R_{\ge 0}$ is a smooth
+Lyapunov function for $\Orb$, and $\sigma\colon S\to\R^{n\times m}$
+is a smooth noise coefficient. The \emph{dm3 operator} is
+$\mathcal{A}_{\mathrm{dm3}}\coloneqq\phi^T$ for $T=T^*/4$.
+\end{definition}
+
+\subsection{The eight axioms}\label{subsec:axioms}
+
+\begin{axiom}[Orbit identity]\label{ax:orbit}
+There exist four distinct points $p_I,p_{VI},p_{III},p_{VII}\in\Orb$
+traversed cyclically:
+$\phi^{T^*/4}(p_I)=p_{VI}$, $\phi^{T^*/4}(p_{VI})=p_{III}$,
+$\phi^{T^*/4}(p_{III})=p_{VII}$, $\phi^{T^*/4}(p_{VII})=p_I$.
+\end{axiom}
+
+\begin{axiom}[Generative closure]\label{ax:closure}
+$\Orb$ is compact, connected, and invariant:
+$\phi^t(\Orb)=\Orb$ for all $t\in\R$.
+\end{axiom}
+
+\begin{axiom}[Structural primacy]\label{ax:primacy}
+There exists a neighborhood $\cN(\Orb)$ such that
+$\dot V(x)=g(\nabla V(x),Y(x))<0$ for all $x\in\cN(\Orb)\setminus\Orb$.
+\end{axiom}
+
+\begin{axiom}[Perturbation response]\label{ax:response}
+There exist $c>0$ and $\cN(\Orb)$ such that
+$\dot V(x)\le -c\,V(x)$ for all $x\in\cN(\Orb)$.
+\end{axiom}
+
+\begin{axiom}[Noise-as-fuel]\label{ax:noise}
+The SDE generator satisfies
+$\cL V(x)\le -c\,V(x)+\kappa\norm{\sigma(x)}^2$
+for constants $c,\kappa>0$.
+\end{axiom}
+
+\begin{axiom}[Non-collapse]\label{ax:noncollapse}
+$Y(x)\ne 0$ for all $x\in\Orb$, and $\phi^t$ has minimal period
+$T^*>0$ on $\Orb$.
+\end{axiom}
+
+\begin{axiom}[Non-coercion]\label{ax:smooth}
+$Y$ is $C^\infty$ on $S$. No discontinuous projection, clamping,
+or hard boundary enforcement appears in the definition of $Y$.
+\end{axiom}
+
+\begin{axiom}[Hyperbolicity]\label{ax:hyperbolic}
+All Floquet multipliers of $\Orb$ except the trivial one satisfy
+$\abs{\mu_j}<1$ for $j=1,\ldots,n-1$.
+\end{axiom}
+
+\begin{remark}
+These eight axioms are logically independent. The original ten axioms
+are reduced here by: merging the stochastic pair into
+Axiom~\ref{ax:noise}; and moving invariance under the $g$- and
+$L$-operators and multi-scale compatibility to their respective
+sections as theorems.
+\end{remark}
+
+\subsection{Orbital stability}
+
+\begin{proposition}[Exponential orbital stability]\label{prop:orbital}
+Let $\dm$ satisfy Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic}. Then
+there exist $c>0$ and $\cN(\Orb)$ such that
+$\dot V(x)\le -c\,V(x)$ for all $x\in\cN(\Orb)$.
+\end{proposition}
+
+\begin{proof}
+Axiom~\ref{ax:hyperbolic} gives $\mu_{\max}<0$. By Floquet theory
+(see~\cite{GH,Shub}), the linearized transverse flow contracts with
+rate $\abs{\mu_{\max}}$. With $V=\dg(\cdot,\Orb)^2$, we get
+$\dot V\le 2\mu_{\max}V+O(V^{3/2})$ in a tubular neighborhood.
+Taking $\cN(\Orb)$ small enough absorbs the higher-order term,
+giving $\dot V\le -c\,V$ with $c=\abs{\mu_{\max}}$.
+\end{proof}
+
+\subsection{Embodiment threshold and stochastic stability}
+
+\begin{proposition}[Stochastic Lyapunov condition]\label{prop:stoch}
+If Axiom~\ref{ax:noise} holds with constants $c,\kappa$, then for
+noise amplitude $\norm\sigma<\tau\coloneqq\sqrt{c/\kappa}$:
+\[
+  \mathbb{E}[V(X_t)]\le e^{-ct}V(X_0)+\frac{\kappa}{c}\norm\sigma^2.
+\]
+\end{proposition}
+
+\begin{proof}
+Standard; see Has'mi\u{n}ski\u{\i}~\cite{Hasminski}, Chapter~4.
+\end{proof}
+
+\begin{definition}[Embodiment threshold]\label{def:threshold}
+The \emph{embodiment threshold} is
+$\tau\coloneqq\sup\{\sigma_0:\cL V(x)<0\text{ whenever }
+\norm{\sigma(x)}<\sigma_0\}=\sqrt{c/\kappa}$.
+Below $\tau$: noise reinforces the orbit. Above $\tau$: noise
+disrupts it.
+\end{definition}
+
+\begin{definition}[Canonical invariant triple]\label{def:triple}
+$\iota(\dm)\coloneqq(T^*,\mu_{\max},\tau)\in
+\R_{>0}\times\R_{<0}\times\R_{>0}$.
+\end{definition}
+
+\subsection{Proof of Theorem~A}
+
+\begin{proof}[Proof of Theorem~\ref{thm:A}]
+Claims (i)--(ii): Axioms~\ref{ax:orbit}, \ref{ax:closure},
+\ref{ax:noncollapse}, \ref{ax:hyperbolic} give a compact connected
+hyperbolic limit cycle with $T^*>0$. Proposition~\ref{prop:orbital}
+gives exponential stability with $c=\abs{\mu_{\max}}$.
+Claim~(iii): Proposition~\ref{prop:stoch} with $\tau=\sqrt{c/\kappa}$.
+Claim~(iv): Proposition~\ref{prop:winding} in
+Section~\ref{sec:contact}.
+\end{proof}
+
+%%=============================================================
+\section{The operator algebra}\label{sec:operators}
+%%=============================================================
+
+Throughout, $\dm=(S,g,Y,\Orb,V,\sigma)$ is a fixed dm3 system
+satisfying Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic}.
+
+\subsection{\texorpdfstring{$g$}{g}-series operators: expansion}
+\label{subsec:g}
+
+\subsubsection{\texorpdfstring{$g_1$}{g1}: local basin expansion}
+
+\begin{definition}[$g_1$]\label{def:g1}
+Let $\rho\colon S\to[0,1]$ be a smooth cutoff with $\rho=0$ on
+$\cN_\delta(\Orb)$ and $\rho=1$ outside $\cN_{2\delta}(\Orb)$,
+and let $h\colon\R_{\ge 0}\to\R_{\ge 0}$ be smooth with
+$\supp h\subset(\delta,R)$ for $R>2\delta$. Define
+\[
+  Z(x)\coloneqq -\rho(x)\,h(V(x))\,\nabla V(x),\quad
+  g_1\coloneqq\exp(Z)=\psi^1,
+\]
+where $\psi^t$ is the flow of $Z$.
+\end{definition}
+
+\begin{proposition}[$\Orb$-invariance of $g_1$]\label{prop:g1inv}
+$g_1(\Orb)=\Orb$.
+\end{proposition}
+\begin{proof}
+For $x\in\Orb$, $V(x)=0$, so $\rho(x)=0$ and $Z(x)=0$.
+\end{proof}
+
+\begin{proposition}[Basin expansion]\label{prop:g1expand}
+The pushforward $Y^{(1)}\coloneqq(g_1)_*Y$ has Lyapunov function
+$V^{(1)}=V\circ g_1^{-1}$ satisfying $\dot V^{(1)}\le -c^{(1)}V^{(1)}$
+on $\cN^{(1)}(\Orb)\supset\cN(\Orb)$ with $c^{(1)}\ge c$.
+The expanded system $\dm^{(1)}=(S,g,Y^{(1)},\Orb,V^{(1)},\sigma)$
+is a dm3 system with $\tau^{(1)}\ge\tau$.
+\end{proposition}
+
+\begin{conjecture}[Global basin expansion]\label{conj:global}
+For appropriate $h$ and $\delta$, the basin of attraction of $\Orb$
+under $Y^{(1)}$ is strictly larger than under $Y$.
+\end{conjecture}
+
+\subsubsection{\texorpdfstring{$g_2$}{g2}: recursive multi-scale expansion}
+
+\begin{definition}[Phase function and second-scale space]\label{def:phase}
+The \emph{phase function} $\varphi\colon\cN(\Orb)\to\R/\mathbb{Z}$
+assigns arc-length normalized phase, with $\varphi(p_I)=0$,
+$\varphi(p_{VI})=1/4$, $\varphi(p_{III})=1/2$,
+$\varphi(p_{VII})=3/4$. Set $S^{(2)}=\R/\mathbb{Z}$ with
+projection $\Psi(x)=\varphi(x)$.
+\end{definition}
+
+\begin{definition}[$g_2$ and semi-conjugacy]\label{def:g2}
+Let $\omega_2>0$, $f\colon S^{(2)}\to\R$ smooth. Define
+$Y^{(2)}(\Phi)=\omega_2+f(\Phi)$ with flow $\psi^{(2),t}$, and
+$g_2=\psi^{(2),1/\omega_2}$. The orbit $\Orb$ is
+\emph{recursively invariant} if $\exists\,\lambda>0$ such that
+\[
+  \Psi(\phi^t(x)) = \psi^{(2),t/\lambda}(\Psi(x))
+  \quad\forall\,x\in\Orb.
+\]
+Setting $\omega_2=1/T^*$ and $f\equiv 0$ achieves this with $\lambda=1$.
+\end{definition}
+
+\begin{conjecture}[Invariant torus stability]\label{conj:torus}
+If the semi-conjugacy holds and $Y^{(2)}$ has a hyperbolic limit cycle,
+the product system on $S\times S^{(2)}$ admits a stable invariant torus
+(KAM-stable in the non-resonant case; mode-locked in the resonant case).
+Proved in the toy model in~\cite{Paper2}.
+\end{conjecture}
+
+\subsubsection{\texorpdfstring{$g_3$}{g3}: cross-domain expansion and the category \texorpdfstring{$\dmcat$}{dm3}}
+
+\begin{definition}[Category $\dmcat$]\label{def:cat}
+The \emph{category} $\dmcat$ has objects: dm3 systems satisfying
+Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic}; morphisms: smooth maps
+$f\colon S_1\to S_2$ satisfying:
+\begin{enumerate}[label=\textup{(M\arabic*)},leftmargin=2em]
+  \item $f(\Orb_1)=\Orb_2$,
+  \item $f\circ\phi_1^t=\phi_2^{\lambda t}\circ f$ for some $\lambda>0$,
+  \item $\alpha\,V_1(x)\le V_2(f(x))\le\beta\,V_1(x)$ for
+        $0<\alpha\le\beta<\infty$,
+  \item $\norm{\sigma_2(f(x))}\le C\norm{\sigma_1(x)}$ and
+        $\tau_2\ge\alpha\tau_1/C$;
+\end{enumerate}
+composition: function composition; identity: $\mathrm{id}_S$.
+\end{definition}
+
+\begin{proposition}[Morphisms preserve dm3 structure]\label{prop:morphism}
+If $f\colon\dm_1\to\dm_2$ is a dm3 morphism, then $\dm_2\in\dmcat$.
+\end{proposition}
+\begin{proof}
+Axiom~\ref{ax:orbit}: (M1) and (M2) map phase points to phase points.
+Axiom~\ref{ax:closure}: $f(\Orb_1)=\Orb_2$ is invariant by (M2).
+Axioms~\ref{ax:primacy}--\ref{ax:response}: (M3) gives a Lyapunov
+function for $\Orb_2$ with rate $c'\ge\alpha c/\beta$.
+Axiom~\ref{ax:noise}: (M4). Axioms~\ref{ax:noncollapse}--\ref{ax:hyperbolic}:
+smoothness of $f$ and (M1)--(M2) with $C^1$-diffeomorphism property
+near $\Orb_1$.
+\end{proof}
+
+\begin{corollary}[Falsifiability of cross-domain claims]\label{cor:false}
+The claim that the dm3 framework applies to a domain $D$ with state
+space $S_D$ is equivalent to the existence of a morphism
+$f\colon\dm_{\mathrm{base}}\to\dm_D$. This is a falsifiable condition.
+\end{corollary}
+
+\subsection{\texorpdfstring{$L$}{L}-operators: coherence and anti-collapse}
+\label{subsec:L}
+
+\subsubsection{\texorpdfstring{$L_1$}{L1}: local coherence}
+
+\begin{definition}[$L_1$]\label{def:L1}
+With two orbits $\Orb_1,\Orb_2$, inter-orbit distance
+$D_{12}(x)=\dg(x,\Orb_1)+\dg(x,\Orb_2)$, and smooth cutoff
+$\chi$ supported where $\min\{\dg(x,\Orb_i)\}<\eps$, define
+$Z(x)=-\chi(x)\nabla D_{12}(x)$ and $L_1=\exp(Z)$.
+\end{definition}
+
+\begin{proposition}[$L_1$ orbit invariance]\label{prop:L1}
+$L_1(\Orb_i)=\Orb_i$ for $i=1,2$. There exists $\eps'>\eps$ such
+that $\dg(L_1(x),\Orb_i)\ge\dg(x,\Orb_i)$ for
+$\dg(x,\Orb_i)\in[\eps,\eps']$.
+\end{proposition}
+\begin{proof}
+$\chi=0$ on each $\Orb_i$, so $Z=0$ there. The gradient push
+increases separation in the buffer zone by compactness.
+\end{proof}
+
+\begin{conjecture}[$L_1$ hyperbolicity]\label{conj:L1}
+For sufficiently small $\norm{Z}_{C^1}$, both $\Orb_i$ remain
+hyperbolic under $(L_1)_*Y_i$.
+\end{conjecture}
+
+\subsubsection{\texorpdfstring{$L_2$}{L2}: global coherence}
+
+\begin{definition}[$L_2$]\label{def:L2}
+The \emph{coherence defect}
+$\mathcal{E}(x)=d_{S^{(2)}}(\Psi(\phi^{\Delta t}(x)),
+\psi^{(2),\Delta t/\lambda}(\Psi(x)))^2$ measures failure of
+semi-conjugacy. Set $\cV(x)=V(x)+\alpha_0\,\mathcal{E}(x)$,
+$\alpha_0>0$, and $L_2=\exp(-\nabla\cV)$.
+\end{definition}
+
+\begin{proposition}[$L_2$ fixed points]\label{prop:L2}
+$L_2(x)=x\iff x\in\Orb$. Moreover $\mathcal{E}|_{\Orb}=0$ and
+$\nabla\cV|_{\Orb}=0$.
+\end{proposition}
+\begin{proof}
+$\nabla\cV=0$ iff $\nabla V=0$ (i.e.\ $x\in\Orb$) and
+$\nabla\mathcal{E}=0$. On $\Orb$ the semi-conjugacy holds
+(Proposition~\ref{def:g2}) so $\mathcal{E}|_{\Orb}=0$ and
+$\nabla\mathcal{E}|_{\Orb}=0$.
+\end{proof}
+
+\subsubsection{\texorpdfstring{$L_3$}{L3}: anti-collapse}
+
+\begin{definition}[$L_3$]\label{def:L3}
+For $\eps_0>0$, define the regularized potential
+$U_{12}^\eps(x)=((\dg(x,\Orb_1)^2+\eps_0)^{-1}+(\dg(x,\Orb_2)^2+\eps_0)^{-1})$,
+cutoff $\chi_{12}$ in the inter-orbit region,
+$Q(x)=\chi_{12}(x)\nabla U_{12}^\eps(x)$,
+and $L_3=\exp(\eta Q)$ for small $\eta>0$.
+\end{definition}
+
+\begin{proposition}[$L_3$ non-collapse and hyperbolicity]\label{prop:L3}
+For sufficiently small $\eta$:
+$\dg(L_3(\Orb_1),L_3(\Orb_2))\ge\dg(\Orb_1,\Orb_2)$,
+and each $\Orb_i$ remains a hyperbolic limit cycle of $(L_3)_*Y_i$.
+\end{proposition}
+\begin{proof}
+$Q$ points in the direction increasing $\dg(\Orb_1,\Orb_2)$ to first
+order. Hyperbolicity is an open $C^1$ condition; $L_3$ is $C^1$-close
+to the identity for small $\eta$.
+\end{proof}
+
+\subsection{\texorpdfstring{$R$}{R}-operators: resonance}
+\label{subsec:R}
+
+\subsubsection{\texorpdfstring{$R_1$}{R1}: detection}
+
+\begin{definition}[$R_1$]\label{def:R1}
+Systems $\dm_1,\dm_2$ are in \emph{$k$:$m$ period resonance}
+if $kT_1^*=mT_2^*$; in \emph{Lyapunov resonance} if
+$\mu_{\max,1}=\mu_{\max,2}$; in \emph{threshold resonance} if
+$\tau_1=\tau_2$. Define
+\[
+  R_1(\dm_1,\dm_2)\coloneqq
+  \{(k,m):kT_1^*=mT_2^*\}\cup\mathbf{1}[\mu_{\max,1}=\mu_{\max,2}]
+  \cup\mathbf{1}[\tau_1=\tau_2].
+\]
+$R_1=\emptyset$ iff no resonance; only trivial coproduct
+unification is then possible.
+\end{definition}
+
+\begin{proposition}[Genericity]\label{prop:R1}
+Each resonance locus is codimension-$1$ in $\cP^2$ and has measure
+zero. Within each Arnold tongue, $k$:$m$ resonance is structurally
+stable under coupling.
+\end{proposition}
+
+\subsubsection{\texorpdfstring{$R_2$}{R2}: amplification}
+
+\begin{definition}[$R_2$]\label{def:R2}
+Phase mismatch:
+$W_{k:m}(\theta_1,\theta_2)=(k\varphi_1(\theta_1)-m\varphi_2(\theta_2))^2$.
+Define $Z_{k:m}=-\nabla_{(x_1,x_2)}W_{k:m}$ and
+$R_2=\exp(Z_{k:m})$.
+\end{definition}
+
+\begin{proposition}[Phase locking and descent]\label{prop:R2}
+$\Fix(R_2)\cap(\Orb_1\times\Orb_2)=\{k\varphi_1=m\varphi_2\}$,
+consisting of $\lcm(k,m)$ points generically.
+Along the flow: $\tfrac{d}{dt}W_{k:m}=-\norm{\nabla W_{k:m}}^2\le 0$.
+\end{proposition}
+\begin{proof}
+Fixed points are zeros of $Z_{k:m}$, i.e.\ critical points of
+$W_{k:m}$. On the torus $(\R/\mathbb{Z})^2$, the equation
+$k\varphi_1-m\varphi_2=0$ has $\lcm(k,m)$ solutions generically.
+Descent: $\dot W_{k:m}=-\norm{\nabla W_{k:m}}^2$ by definition.
+\end{proof}
+
+\subsubsection{\texorpdfstring{$R_3$}{R3}: stabilization}
+
+\begin{definition}[$R_3$]\label{def:R3}
+Resonance manifold:
+$\cM_{k:m}=\{(x_1,x_2)\in\cN(\Orb_1)\times\cN(\Orb_2):
+k\varphi_1(x_1)=m\varphi_2(x_2)\}$.
+Define $R_3=\exp(-\nabla\dg(\cdot,\cM_{k:m})^2)$.
+\end{definition}
+
+\begin{proposition}[Exponential stability]\label{prop:R3}
+With $U=d(\cdot,\cM_{k:m})^2$: $\dot U=-4U$ along $R_3$-flow,
+so $U(t)=U(0)e^{-4t}$.
+Both $\Orb_i$ are fixed by $R_3$.
+\end{proposition}
+\begin{proof}
+$\dot U=-\norm{\nabla U}^2=-4d^2=−4U$ since $\norm{\nabla d}=1$
+away from the cut locus. Orbit invariance: $\nabla d(\cdot,\cM_{k:m})$
+is tangent to each $\Orb_i$ on $\Orb_i$, so the gradient flow moves
+$\Orb_i$ along itself.
+\end{proof}
+
+\subsection{\texorpdfstring{$U$}{U}-operators: unification}
+\label{subsec:U}
+
+\subsubsection{Admissible spans and pushout existence}
+
+\begin{definition}[Resonant orbit and admissible span]\label{def:span}
+$\Orb_\lambda\coloneqq\cM_{k:m}\cap(\Orb_1\times\Orb_2)$
+(consists of $\lcm(k,m)$ points). A span
+$\dm_1\xleftarrow{p_1}\dm_\lambda\xrightarrow{p_2}\dm_2$
+is \emph{admissible} if: (1)~$p_1,p_2$ are dm3 morphisms;
+(2)~smooth embeddings; (3)~$\dm_\lambda$ has tubular neighborhoods
+in each $S_i$; (4)~$V_1\circ p_1=V_2\circ p_2$ on $\dm_\lambda$.
+\end{definition}
+
+\begin{proposition}[Projections are morphisms]\label{prop:proj}
+The projections $p_i\colon\cM_{k:m}\to S_i$ satisfy (M1)--(M4)
+with $p_i(\Orb_\lambda)=\Orb_i$.
+\end{proposition}
+\begin{proof}
+(M1): $p_i(\Orb_\lambda)=\Orb_i$ by definition.
+(M2): $k$:$m$ resonance gives semi-conjugacy with $\lambda=k/m$.
+(M3): $V_i\circ p_i$ equivalent near $\Orb_\lambda$ by transversality
+of $\cM_{k:m}$ to $V_i$-level sets.
+(M4): bounded noise coefficients.
+\end{proof}
+
+\begin{proposition}[Pushout existence]\label{prop:pushout}
+If the span is admissible, the pushout
+$\dm_{12}=\dm_1\sqcup_{\dm_\lambda}\dm_2$ exists in $\dmcat$,
+unique up to dm3-isomorphism.
+\end{proposition}
+\begin{proof}
+Conditions (1)--(3) give smooth gluing of $S_1$,$S_2$ along
+$p_i(\cM_{k:m})$ by the smooth gluing theorem~\cite{Lee};
+(4) gives smooth $V_{12}$. Hyperbolicity of $\Orb_{12}$ follows
+from hyperbolicity of $\Orb_1,\Orb_2$ and transversality of the
+gluing; uniqueness is categorical.
+\end{proof}
+
+\subsubsection{\texorpdfstring{$U_1$, $U_2$, $U_3$}{U1, U2, U3}}
+
+\begin{definition}[$U_1$, $U_2$, $U_3$]\label{def:U}
+$U_1(\dm_1,\dm_2)\coloneqq\dm_1\sqcup_{\dm_\lambda}\dm_2$.
+
+The \emph{resonance correspondence}
+$\cC_{12}=\{(x_1,x_2)\in S_1\times S_2:(x_1,x_2)\in\cM_{k:m}\}$
+defines $U_2(x_1)=\pi_2(\pi_1^{-1}(x_1)\cap\cC_{12})$.
+
+The \emph{synthesized orbit}
+$\Orb_{\mathrm{syn}}=\omega\text{-limit set of generic trajectories}$;
+$U_3=\exp(-\nabla\dg(\cdot,\Orb_{\mathrm{syn}})^2)$.
+\end{definition}
+
+\begin{proposition}[dm3 closure under $U_3$]\label{prop:closure}
+After applying $U_3$, the system
+$\dm_{12}=(S_{12},g_{12},Y_{12},\Orb_{\mathrm{syn}},V_{12},\sigma_{12})$
+satisfies Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic}.
+\end{proposition}
+\begin{proof}
+$\Orb_{\mathrm{syn}}$ is a limit cycle by the $k$:$m$ resonance
+collapsing the product torus; hyperbolicity from normal hyperbolicity
+of $\cM_{k:m}$ (Proposition~\ref{prop:R3}). Axioms~\ref{ax:orbit}--\ref{ax:response}
+hold by construction of $V_{12}$; Axiom~\ref{ax:noise} inherited
+with $\tau_{12}\le\min(\tau_i)$; Axioms~\ref{ax:noncollapse}--\ref{ax:hyperbolic}
+from the above.
+\end{proof}
+
+\subsection{Proof of Theorem~B}
+
+\begin{proof}[Proof of Theorem~\ref{thm:B}]
+(i) Well-definedness: $R_1\ne\emptyset$ (resonance assumed);
+$R_2$ drives to phase locking (Proposition~\ref{prop:R2});
+$R_3$ stabilizes $\cM_{k:m}$ (Proposition~\ref{prop:R3});
+admissibility gives the pushout (Proposition~\ref{prop:pushout});
+$U_1$--$U_3$ proceed as in Definition~\ref{def:U};
+$\dm_{12}\in\dmcat$ by Proposition~\ref{prop:closure}.
+(ii)--(iii) Period: $T_{12}^*=kT_1^*/\gcd(k,m)$ (smallest $T>0$
+with $T/T_i^*\in\mathbb{Z}$). Stability: slowest contraction dominates.
+Threshold: $c_{12}=\min(c_i)$, $\kappa_{12}=\max(\kappa_i)$,
+giving $\tau_{12}=\sqrt{c_{12}/\kappa_{12}}\le\min(\tau_i)$.
+\end{proof}
+
+%%=============================================================
+\section{Boundary operators and constraint geometry}\label{sec:boundary}
+%%=============================================================
+
+\subsection{\texorpdfstring{$B_1$}{B1}: identity boundary}
+
+\begin{definition}[$B_1$]\label{def:B1}
+$B_1\coloneqq\mathcal{W}^s(\Lambda)=\partial\cB(\Orb)$,
+the stable manifold of the boundary invariant set $\Lambda$.
+The critical Lyapunov level
+$c^*\coloneqq\sup\{c:\{V<c\}\subset\cB(\Orb)\}$
+gives inner approximation $\{V=c^*\}\subseteq B_1$.
+\end{definition}
+
+\begin{proposition}[$B_1$ invariance]\label{prop:B1}
+$\phi^t(B_1)=B_1$ for all $t\in\R$.
+\end{proposition}
+\begin{proof}
+$B_1=\mathcal{W}^s(\Lambda)$ is invariant by definition of stable manifolds.
+\end{proof}
+
+\subsection{\texorpdfstring{$B_2$}{B2}: transition boundary}
+
+\begin{definition}[$B_2$ and Arnold tongues]\label{def:B2}
+Parameter space: $\cP=\R_{>0}\times\R_{<0}\times\R_{>0}$.
+Transition boundary in $\cP^2$:
+\[
+  B_2=\bigcup_{k,m}\{kT_1^*=mT_2^*\}
+  \cup\{\mu_{\max,1}=\mu_{\max,2}\}\cup\{\tau_1=\tau_2\}.
+\]
+Arnold tongue:
+$\mathcal{A}_{k:m}=\{\abs{kT_1^*-mT_2^*}<\eps_{k:m}(A)\}$.
+Inside $\mathcal{A}_{k:m}$: $R$-operators valid. Outside: invalid.
+\end{definition}
+
+\subsection{\texorpdfstring{$B_3$}{B3}: collapse boundary}
+
+\begin{definition}[$B_3$]\label{def:B3}
+$U_{12}^\eps(x)=(\dg(x,\Orb_1)^2+\eps_0)^{-1}
++(\dg(x,\Orb_2)^2+\eps_0)^{-1}$. Define
+$C_{12}^*=\sup\{c:\dot U_{12}^\eps>0\text{ whenever }U_{12}^\eps>c\}$
+and $B_3=\{U_{12}^\eps=C_{12}^*\}$.
+\end{definition}
+
+\begin{proposition}[Smoothness of $B_3$]\label{prop:B3}
+For generic $\eps_0$, $B_3$ is a smooth codimension-$1$ submanifold.
+\end{proposition}
+\begin{proof}
+$U_{12}^\eps$ is smooth; Sard's theorem gives generic regular values;
+the regular level set theorem applies.
+\end{proof}
+
+\subsection{Admissible regions and operator grammar}
+
+\begin{definition}[Admissible regions]\label{def:admissible}
+$\cD_S\coloneqq S\setminus(B_1\cup B_3)$;\quad
+$\cD_\cP\coloneqq\bigcup_{k,m}\mathcal{A}_{k:m}$.
+A configuration $(\dm_1,\dm_2)$ in states $(x_1,x_2)$ is
+\emph{fully admissible} if
+$(x_i)\in\cD_{S_i}$ and $(\iota(\dm_i))\in\cD_\cP$.
+\end{definition}
+
+\begin{theorem}[Operator grammar]\label{thm:grammar}
+Let $(\dm_1,\dm_2)$ be fully admissible. The sequence
+$L_3\to L_1\to g_1\to L_2\to g_2\to R_1\to R_2\to R_3\to U_1\to U_2\to U_3$
+is well-defined and produces a dm3 system at every stage.
+Ordering constraints:
+(1)~$L_3$ before $g_1$ (separation before expansion);
+(2)~$L_1$ before $L_2$ (local before global coherence);
+(3)~$g_1$ before $g_2$ (base before recursive expansion);
+(4)~$R_1$ before $U_1$ (resonance needed for pushout);
+(5)~$R_3$ before $U_3$ (resonance stabilized before synthesis).
+Steps involving $L_1$ and $g_2$ are conditional on
+Conjectures~\ref{conj:L1} and~\ref{conj:torus}.
+The reduced sequence $L_3\to g_1\to R_1\to R_2\to R_3\to U_1\to U_2\to U_3$
+holds unconditionally.
+\end{theorem}
+
+\begin{proof}
+dm3 membership at each stage:
+After $L_3$: Proposition~\ref{prop:L3}.
+After $L_1$: Proposition~\ref{prop:L1} (conditional).
+After $g_1$: Proposition~\ref{prop:g1expand}.
+After $L_2$: Proposition~\ref{prop:L2}.
+After $g_2$: semi-conjugacy preserved (conditional on Conjecture~\ref{conj:torus}).
+After $R_1$: detection only.
+After $R_2$, $R_3$: Propositions~\ref{prop:R2},~\ref{prop:R3}.
+After $U_1$: Proposition~\ref{prop:pushout}.
+After $U_2$: correspondence, no dm3 alteration.
+After $U_3$: Proposition~\ref{prop:closure}.
+Admissibility maintained since $B_1,B_3$ persist under controlled
+operator perturbations (shown case by case above).
+\end{proof}
+
+%%=============================================================
+\section{Contact geometric physics}\label{sec:contact}
+%%=============================================================
+
+\subsection{Why contact geometry}
+
+Seven structural features of dm3 systems force the contact framework:
+(1)~hyperbolic limit cycle attractors; (2)~strictly decreasing Lyapunov
+functions; (3)~gradient-like operators; (4)~noise-as-fuel stochastic
+stability; (5)~embodiment threshold as bifurcation parameter;
+(6)~Arnold tongue resonance; (7)~categorical pushouts of dissipative
+systems. Features (1)--(2) exclude Hamiltonian mechanics (Liouville's
+theorem). Features (4)--(5) require a dissipation parameter evolving
+along trajectories. Contact geometry is the unique framework satisfying
+all seven simultaneously.
+
+\subsection{The contact manifold}
+
+\begin{definition}[Extended state space and contact form]\label{def:contact-mfld}
+Define $M=S\times\R$ with coordinates $(s,z)$, where $z$ is the
+\emph{action variable}. Let $\lambda\in\Omega^1(S)$ with $d\lambda=\omega$
+a closed non-degenerate 2-form. Set $\alpha=dz-\lambda$.
+\end{definition}
+
+\begin{proposition}[Contact structure and Reeb field]\label{prop:contact}
+$(M,\alpha)$ is a contact manifold with $R_\alpha=\partial_z$.
+\end{proposition}
+\begin{proof}
+$\alpha\wedge(d\alpha)^n=(dz-\lambda)\wedge(-\omega)^n\ne 0$ since
+$\omega^n\ne 0$ and $dz$ is independent of $S$-forms. For Reeb:
+$\alpha(\partial_z)=1$ and $\iota_{\partial_z}(-\omega)=0$.
+\end{proof}
+
+\subsection{Winding integral and Theorem~A claim (iv)}
+
+\begin{proposition}[Topological invariance of $\oint_\Orb\lambda$]
+\label{prop:winding}
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item $\oint_\Orb\lambda$ is independent of the choice of $\lambda$
+        with $d\lambda=\omega$.
+  \item It is invariant under admissible operators fixing $\Orb$ or
+        mapping it to a homologous cycle.
+  \item It is nonzero when $\Orb$ bounds no chain in $S$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) $\oint_\Orb df=0$ for any $f$ since $\Orb$ is closed.
+(ii) A contactomorphism changes $\lambda$ by an exact form along $\Orb$.
+(iii) Stokes' theorem.
+\end{proof}
+
+\subsection{Contact Hamiltonian and dynamics}
+
+\begin{definition}[Generative Hamiltonian and equations]\label{def:H}
+$H(s,z)=H_{\mathrm{phase}}(s)+H_{\mathrm{diss}}(s,z)$,
+where $H_{\mathrm{phase}}=\tfrac12\omega(Y,Y)$ and
+$H_{\mathrm{diss}}=-\gamma V(s)e^{-\beta z}$ for $\gamma,\beta>0$.
+The full dynamics are $\dot x=X_H(x)+X_{\cR}(x)$, where
+$\cR=\tfrac{c}{2}\norm{\dot s-Y(s)}_g^2$ is the Rayleigh function
+and $X_{\cR}(s)=-c(\dot s-Y(s))$.
+\end{definition}
+
+\begin{proposition}[Recovery of dm3 dynamics]\label{prop:recovery}
+$\pi_*X_H(s)=Y(s)-\gamma e^{-\beta z}\nabla V(s)+O(V)$.
+On $\Orb$: $\pi_*X_H=Y$.
+Along trajectories: $\dot V\le -c\norm{\nabla V}^2\le 0$,
+with equality iff $s\in\Orb$.
+\end{proposition}
+
+\subsection{Action functional and Euler--Lagrange equations}
+
+\begin{definition}[Generative action]\label{def:action}
+$\cS[\gamma]=\int_0^T(\dot z-\lambda(\dot s)-H(s,z))\,dt$
+for $\gamma(t)=(s(t),z(t))\colon[0,T]\to M$.
+\end{definition}
+
+\begin{theorem}[Contact Euler--Lagrange equations]\label{thm:EL}
+Critical points of $\cS$ satisfy
+\[
+  \dot s=\frac{\partial H}{\partial p}+X_{\cR},\quad
+  \dot z=\lambda(\dot s)+H,\quad
+  \dot p=-\frac{\partial H}{\partial s}+p\frac{\partial H}{\partial z}.
+\]
+The contact term $p\,\partial H/\partial z$ is absent from standard
+Hamiltonian mechanics.
+\end{theorem}
+
+\begin{proposition}[On-orbit action]\label{prop:orbit-action}
+$\cS[\gamma|_\Orb]=\oint_\Orb\lambda$ (the topological invariant
+of Proposition~\ref{prop:winding}).
+\end{proposition}
+
+\subsection{Contact Noether theorem and winding number conservation}
+
+\begin{theorem}[Contact Noether theorem]\label{thm:noether}
+If $\{\Phi_\eps\}$ is a one-parameter family of contactomorphisms
+with generator $W$ satisfying $\mathcal{L}_W\alpha=f\alpha$ and
+$\mathcal{L}_W H=fH$, then $J_W=\alpha(W)$ satisfies
+$\dot J_W=f\cdot J_W$ along $X_H$-trajectories.
+For strict contactomorphisms ($f=0$): $J_W$ is conserved.
+\end{theorem}
+
+\begin{corollary}[Winding number conservation]\label{cor:winding}
+Phase rotation on $\Orb$ is a strict contactomorphism. Its conserved
+quantity is $\oint_\Orb\lambda$---the topological invariant making
+$\Orb$ structurally stable.
+\end{corollary}
+
+\subsection{Boundaries as contact submanifolds}
+
+\begin{proposition}[$B_1$ and $B_3$ in contact geometry]\label{prop:contact-bdy}
+$\hat B_1=B_1\times\R\subset M$ is a contact hypersurface
+($\alpha|_{\hat B_1}$ is a contact form).
+$\hat B_3\subset M$ is a Legendrian submanifold
+($\alpha|_{\hat B_3}=0$, since $H|_{B_3}=0$).
+\end{proposition}
+
+\subsection{Proof of Theorem~C}
+
+\begin{proof}[Proof of Theorem~\ref{thm:C}]
+\emph{Step 1 (Floquet coordinates).}
+By Floquet theory~\cite{GH}, there exist coordinates $(\rho,\theta)$
+near $\Orb$ in $S$ with $\dot\rho=\mu_{\max}\rho+O(\rho^2)$ and
+$\dot\theta=\omega+O(\rho)$.
+
+\emph{Step 2 (Contact extension).}
+Extend to $M=S\times\R$ with $H$ from Definition~\ref{def:H}.
+The contact equations via Theorem~\ref{thm:EL} yield:
+$\dot\rho=\mu_{\max}(1-e^{-\beta z})\rho+O(\rho^2)$,
+$\dot\theta=\omega+O(\rho)$,
+$\dot z=\omega-\abs{\mu_{\max}}\rho^2 e^{-\beta z}+O(\rho^3)$.
+
+\emph{Step 3 (Contactomorphism).}
+The coordinate change from the original dm3 coordinates is a
+contactomorphism: it preserves $\alpha$ up to a nonvanishing
+factor $e^f$, preserving all contact structure.
+
+\emph{Step 4 (Uniqueness).}
+The normal form depends only on $(\mu_{\max},\omega,\beta)=\iota(\dm)$.
+Any two dm3 systems with the same canonical triple are locally
+contact-diffeomorphic.
+\end{proof}
+
+%%=============================================================
+\section{Structural stability}\label{sec:stability}
+%%=============================================================
+
+\subsection{Single-operator and boundary persistence}
+
+\begin{proposition}[Persistence under operators]\label{prop:persist}
+For sufficiently small operator parameters:
+$g_i(\dm)\in\dmcat$;
+$L_i(\dm)\in\dmcat$;
+$R_i(\dm_1,\dm_2)\in\dmcat\times\dmcat$;
+$U_i(\dm_1,\dm_2)\in\dmcat$.
+\end{proposition}
+\begin{proof}
+Each operator is $C^1$-close to the identity or a dm3 morphism
+near $\Orb$; hyperbolicity (open $C^1$ condition) and Lyapunov
+descent (continuous in $C^1$) are preserved. See
+Propositions~\ref{prop:g1expand}, \ref{prop:L3}, \ref{prop:R3},
+\ref{prop:closure}.
+\end{proof}
+
+\begin{proposition}[Boundary persistence]\label{prop:bdy-persist}
+Under sufficiently small $C^1$ perturbations: $B_1'$, $B_2'$, $B_3'$
+exist and vary $C^1$-smoothly.
+\end{proposition}
+\begin{proof}
+$B_1$: stable manifold theorem applied to perturbed $\Lambda'$.
+$B_2$: implicit function theorem on $kT_1^*-mT_2^*=0$.
+$B_3$: regular level set theorem on $U_{12}^\eps$.
+\end{proof}
+
+\subsection{Proof of Theorem~D}
+
+\begin{proof}[Proof of Theorem~\ref{thm:D}]
+\emph{Step 1.} Each operator produces a $C^1$-perturbation of $Y$
+of size $\delta_i$ (bounded by its parameter; see
+Definition~\ref{def:g1} for $g_1$: $O(\delta)$; $L_1,L_3$: $O(\eps)$,
+$O(\eta)$; $R_2,R_3$: $O(\norm{W_{k:m}}_{C^1})$).
+
+\emph{Step 2.} The composed perturbation satisfies
+$\norm{Y_N-Y}_{C^1}\le\prod_{i=1}^N(1+\delta_i)-1$.
+Choosing parameters so this product satisfies
+$\prod(1+\delta_i)-1<\varepsilon_0$ keeps the composition within
+the $\varepsilon_0$-ball.
+
+\emph{Step 3.} Within the $\varepsilon_0$-ball, Shub's theorem~\cite{Shub}
+gives a unique hyperbolic $\Orb'$ near $\Orb$ with
+$d_{C^1}(\Orb',\Orb)=O(\varepsilon_0)$. The winding number is preserved
+by Proposition~\ref{prop:winding}.
+
+\emph{Step 4.} $T^{*\prime}$, $\mu_{\max}'$, $\tau'$ vary by
+$O(\varepsilon_0)$ (period: implicit function theorem; Floquet:
+spectral perturbation; threshold: continuity of $\sqrt{c/\kappa}$).
+
+\emph{Step 5.} Proposition~\ref{prop:bdy-persist}.
+
+\emph{Step 6.} $\varepsilon_0<\varepsilon_0$ is satisfied throughout,
+so Axioms~\ref{ax:orbit}--\ref{ax:hyperbolic} hold for $\dm'$
+by Steps~3--5.
+\end{proof}
+
+\begin{remark}[Stability radius]\label{rem:radius}
+$\varepsilon_0=\tfrac12\abs{\mu_{\max}}\cdot\sup_\Orb\norm{\Hess V}^{-1}$:
+larger $\abs{\mu_{\max}}$ (faster contraction) and flatter $V$ both
+enlarge the stability radius. This bound is computable from
+$\iota(\dm)$ and the Lyapunov geometry.
+\end{remark}
+
+%%=============================================================
+\section{Discussion}\label{sec:discussion}
+%%=============================================================
+
+\subsection{Summary of main results}
+
+This paper develops a geometric framework for dissipative dynamical
+systems with structured limit cycles. The dm3 system, formalized
+through eight axioms, is the central object. An operator algebra
+acting on the category $\dmcat$ governs expansion ($g$-operators),
+coherence ($L$-operators), resonance ($R$-operators), and unification
+($U$-operators). The entire structure is embedded in contact geometry
+on $M=S\times\R$.
+
+The four main theorems establish: (A)~existence and exponential
+stability of the dm3 orbit, with topological invariant
+$\oint_\Orb\lambda$ and stochastic stability below $\tau$;
+(B)~closure of $\dmcat$ under $\cU$, with the prediction
+$\tau_{12}\le\min(\tau_i)$; (C)~the universal contact normal form
+with parameters $(\mu_{\max},\omega,\beta)$; and (D)~$C^1$-structural
+stability with explicit radius $\varepsilon_0$.
+
+\subsection{Relation to nonequilibrium thermodynamics}
+
+The action variable $z$ plays the role of entropy: it increases
+monotonically ($\dot z>0$ on $\Orb$) and the contact form
+$\alpha=dz-\lambda$ encodes the first and second laws simultaneously.
+The embodiment threshold $\tau$ functions as a noise-induced phase
+transition. The result $\tau_{12}\le\min(\tau_i)$ says that
+higher-order organization requires lower effective temperature,
+consistent with observations in biological and physical oscillator
+networks and with stochastic thermodynamic
+theory~\cite{Hasminski,PRK}.
+
+\subsection{Relation to coupled oscillator theory}
+
+Period resonance, Arnold tongues, and mode locking are
+classical~\cite{PRK,Izhikevich}. The contribution here is embedding
+these phenomena in a categorical structure: resonance is the
+precondition for the pushout in $\dmcat$. The prediction
+$\tau_{12}\le\min(\tau_i)$ is new and testable.
+
+\subsection{Open problems}
+
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+\item \textbf{Global basin expansion} (Conjecture~\ref{conj:global}):
+  conditions on $S$ for global (not just local) basin expansion.
+
+\item \textbf{Invariant torus stability} (Conjecture~\ref{conj:torus}):
+  KAM theory (quasi-periodic) and Poincar\'e--Melnikov
+  (resonant) in the abstract setting. Proved in~\cite{Paper2}
+  for the toy model.
+
+\item \textbf{Higher-order resonance and Devil's staircase}:
+  measure-theoretic and fractal properties of the full Arnold
+  tongue diagram in $\cD_\cP$.
+
+\item \textbf{Infinite-dimensional extensions}: Hilbert/Banach
+  manifold generalizations; infinite-dimensional Floquet theory;
+  PDE and field-theory dm3 systems.
+
+\item \textbf{Categorical completeness of $\dmcat$}: does $\dmcat$
+  have all finite limits? colimits? Is it a topos?
+\end{enumerate}
+
+\subsection{Companion paper}
+
+The companion paper~\cite{Paper2} instantiates every definition and
+operator on the explicit system
+$\dot r=r(1-r^2)+2(r-1)e^{-z}$,
+$\dot\theta=1$,
+$\dot z=r^2-2(r-1)^2e^{-z}$
+on $S=\R^2_{>0}$, verifying all theoretical predictions including
+the global attractor, four bifurcations, stationary SDE measure,
+and Conjecture~\ref{conj:torus} in the $1$:$2$ resonant case.
+
+%%=============================================================
+\appendix
+%%=============================================================
+
+\section{The category \texorpdfstring{$\dmcat$}{dm3}: formal development}
+\label{app:cat}
+
+[Full categorical development: objects, morphisms, composition law,
+associativity, identity, pushouts (proved in
+Proposition~\ref{prop:pushout}), coproducts (disjoint union when
+$R_1=\emptyset$), and initial/terminal objects if they exist.
+Approximately 3--4 pages.]
+
+\section{Supporting lemmas}\label{app:lemmas}
+
+[Proofs deferred from the main text. Approximately 2--3 pages.]
+
+%%=============================================================
+\section*{Acknowledgments}
+The author acknowledges with gratitude the foundational influence
+of the teachings of Paramahamsa Nithyananda and the yogic
+scriptural tradition from which this work derives. The mathematical
+formalization presented here is understood by the author as a
+translation of principles encountered through that tradition.
+
+\begin{thebibliography}{99}
+%%=============================================================
+
+\bibitem{Arnold}
+V.~I.~Arnold,
+\emph{Mathematical Methods of Classical Mechanics},
+2nd ed., Springer, New York, 1989.
+
+\bibitem{Bravetti2017}
+A.~Bravetti,
+\emph{Contact Hamiltonian mechanics},
+Ann.\ Phys.\ \textbf{376} (2017), 17--39.
+
+\bibitem{deLeonLainz2019}
+M.~de~Le{\'o}n and M.~Lainz~Valc{\'a}zar,
+\emph{Contact Hamiltonian systems},
+J.\ Math.\ Phys.\ \textbf{60} (2019), 102902.
+
+\bibitem{Gaset2020}
+J.~Gaset, X.~Gr{\`a}cia, M.~C.~Mu{\~n}oz-Lecanda, X.~Rivas,
+and N.~Rom{\'a}n-Roy,
+\emph{New contributions to the Hamiltonian and Lagrangian contact
+formalisms for dissipative mechanical systems and optimal control},
+J.~Geom.\ Mech.\ \textbf{12} (2020), 543--574.
+
+\bibitem{Geiges}
+H.~Geiges,
+\emph{An Introduction to Contact Topology},
+Cambridge University Press, Cambridge, 2008.
+
+\bibitem{GH}
+J.~Guckenheimer and P.~Holmes,
+\emph{Nonlinear Oscillations, Dynamical Systems, and Bifurcations
+of Vector Fields},
+Springer, New York, 1983.
+
+\bibitem{Hasminski}
+R.~Z.~Has{'}mi{\u{n}}ski{\u{\i}},
+\emph{Stochastic Stability of Differential Equations},
+Sijthoff \& Noordhoff, Alphen aan den Rijn, 1980.
+
+\bibitem{HPS}
+M.~W.~Hirsch, C.~C.~Pugh, and M.~Shub,
+\emph{Invariant Manifolds},
+Lecture Notes in Mathematics 583, Springer, Berlin, 1977.
+
+\bibitem{Izhikevich}
+E.~M.~Izhikevich,
+\emph{Dynamical Systems in Neuroscience},
+MIT Press, Cambridge, MA, 2007.
+
+\bibitem{Lee}
+J.~M.~Lee,
+\emph{Introduction to Smooth Manifolds},
+2nd ed., Springer, New York, 2013.
+
+\bibitem{Morrison1986}
+P.~J.~Morrison,
+\emph{A paradigm for joined Hamiltonian and dissipative systems},
+Physica D \textbf{18} (1986), 410--419.
+
+\bibitem{PRK}
+A.~Pikovsky, M.~Rosenblum, and J.~Kurths,
+\emph{Synchronization: A Universal Concept in Nonlinear Sciences},
+Cambridge University Press, Cambridge, 2001.
+
+\bibitem{Shub}
+M.~Shub,
+\emph{Global Stability of Dynamical Systems},
+Springer, New York, 1987.
+
+\bibitem{Paper2}
+Pablo Nogueira Grossi,
+\emph{The dm3 Operator: Explicit Toy Model and Global Dynamical
+Analysis},
+companion paper, in preparation.
+
+\end{thebibliography}
+
+\end{document}

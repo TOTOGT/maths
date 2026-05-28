@@ -1,0 +1,869 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{booktabs}
+
+%% hyperref MUST come last; hidelinks removes all red boxes
+\usepackage[hidelinks]{hyperref}
+
+\geometry{margin=1.25in}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{invariant}{Invariant}[section]
+\newtheorem{normalform}{Normal Form}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+\title{\textbf{Principia Orthogona}\\[0.5em]
+\large Volume One: The Mathematics of Generative Transitions}
+
+%% \thanks must be INSIDE \author{}, not on a separate line
+\author{Pablo Nogueira Grossi\thanks{%
+  Academic Coordinator, UCEDA School (ESL), Elizabeth, NJ\@.
+  Newark, NJ, USA\@.
+  Email: \texttt{pablogrossi@hotmail.com}}}
+
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\emph{Dedicated to my children Vic~(R.I.P.), Giulia,
+  Alice~(R.I.P.), Sarah~(R.I.P.), and David.}\\[4pt]
+\emph{Once tiny, always strong.}
+\end{center}
+
+\vspace{1.5em}
+
+\tableofcontents
+\newpage
+
+%-----------------------------------------------------------------------
+\section*{Preface}
+%-----------------------------------------------------------------------
+
+This volume develops a unified mathematical framework for generative
+transitions: localized geometric events in which a trajectory undergoes
+compression, curvature intensification, loss of injectivity, and
+stabilization.
+
+The central object is the operator sequence
+\[
+C \;\rightarrow\; K \;\rightarrow\; F \;\rightarrow\; U,
+\]
+acting on trajectories in a Riemannian manifold.
+
+Several results are presented with proof sketches rather than complete
+proofs. These include the symplectic preservation across the fold, the
+classification theorem for admissible singularities, the existence and
+uniqueness of the unfolding map, and the stability of $\kappa^*$ under
+perturbations. Each can be completed with standard tools from
+differential geometry, singularity theory, and variational analysis;
+full proofs lie beyond the scope of this foundational volume.
+
+This volume does not claim that all physical, biological, cognitive,
+or economic systems instantiate this structure. It provides the
+mathematical substrate on which such questions can be posed rigorously.
+Cross-domain instantiation is the subject of Volume Three.
+
+This volume is the first in a three-part series. The subsequent
+papers---\emph{Generative Contact Mechanics: A Geometric Framework for
+Dissipative Systems with Structured Limit Cycles} and \emph{The dm3
+Operator: Explicit Toy Model and Global Dynamical Analysis}---develop
+the full contact-geometric realization of the generative transition
+theory introduced here.
+
+%-----------------------------------------------------------------------
+\section{Overview}
+%-----------------------------------------------------------------------
+
+Let $(X, g)$ be a smooth Riemannian manifold. A \emph{generative
+transition} is a localized event along a trajectory
+$\gamma : [0,T] \to X$ consisting of four sequential phases:
+compression, curvature induction, folding, and stabilization.
+
+The theory is organized around the composite operator
+\[
+\mathcal{G} = U \circ F \circ K \circ C : X \to X.
+\]
+
+The manifold $N = (M, \Phi, F, K, g)$ serves as the canonical
+instance, where $M$ is the geometric substrate, $\Phi$ the stability
+functional, $F$ the directional field, $K$ the constraint operator,
+and $g$ the generative operator.
+
+The generative flow on $M$ is governed by
+\[
+\frac{dx}{dt} = -\nabla \Phi(x) + F(x) + \eta(t),
+\]
+where $\eta(t)$ is a stochastic perturbation.
+
+%-----------------------------------------------------------------------
+\section{Minimal Mathematical Assumptions}
+%-----------------------------------------------------------------------
+
+The operator sequence is defined under the weakest assumptions
+necessary for the constructions of Section~\ref{sec:operators} to be
+well-posed.
+
+\begin{assumption}[Manifold Structure]\label{ass:manifold}
+The state space $X$ is a smooth, finite-dimensional Riemannian
+manifold, locally compact and second-countable.
+\end{assumption}
+
+\begin{assumption}[Trajectory Regularity]\label{ass:traj}
+A system trajectory $\gamma : [0,T] \to X$ is piecewise $C^2$,
+locally non-degenerate ($\|\dot\gamma(t)\| \neq 0$ a.e.), and has
+bounded curvature on compact intervals prior to folding events.
+\end{assumption}
+
+\begin{assumption}[Compression Feasibility]\label{ass:compress}
+There exists a lower-dimensional submanifold $X_C \subset X$ and a
+Lipschitz continuous projection $C : X \to X_C$ satisfying the
+non-collapse condition
+\[
+d\bigl(C(x_1), C(x_2)\bigr) \;\ge\; \delta\, d(x_1, x_2)
+\]
+for some $\delta > 0$ and all $x_1, x_2$ in a compact neighborhood.
+\end{assumption}
+
+\begin{remark}
+Assumption~\ref{ass:compress} is a bi-Lipschitz embedding condition
+on the compression map, ensuring distinct trajectories remain
+distinguishable after compression. This is stronger than mere Lipschitz
+continuity and should be understood as a lower bound on distance
+preservation.
+\end{remark}
+
+\begin{assumption}[Curvature Threshold]\label{ass:kappa}
+The critical curvature is defined intrinsically by the focal radius:
+\[
+\kappa^*(x) \;=\; \frac{1}{\operatorname{foc}(x)},
+\]
+where $\operatorname{foc}(x)$ is the distance from $x$ to the first
+focal point along the normal direction. In the presence of positive
+sectional curvature $K_{\mathrm{sec}}(x) > 0$, this is modified by
+the Rauch comparison theorem to
+\[
+\kappa^*(x) \;=\; \min\!\left(\|II_x\|,\;
+  \sqrt{K_{\mathrm{sec}}(x)}\right),
+\]
+where $\|II_x\|$ is the norm of the second fundamental form.
+For $K_{\mathrm{sec}}(x) \le 0$, we have $\kappa^*(x) = \|II_x\|$.
+\end{assumption}
+
+\begin{assumption}[Folding Well-Posedness]\label{ass:fold}
+The folding operator $F : X_C \to X_F$ satisfies: the Jacobian $dF$
+loses rank by exactly $1$ at fold points; the fold is local; and the
+fold produces a finite number of branches.
+\end{assumption}
+
+\begin{assumption}[Morse Stability Functional]\label{ass:morse}
+The stability functional $\Phi : X \to \mathbb{R}$ is $C^2$, bounded
+below on compact subsets, and \emph{Morse}: all critical points are
+non-degenerate, i.e., $\nabla^2\Phi(x^*) \succ 0$ at every local
+minimum~$x^*$.
+\end{assumption}
+
+%-----------------------------------------------------------------------
+\section{Operator Definitions}\label{sec:operators}
+%-----------------------------------------------------------------------
+
+\subsection{State Space}
+
+Let $X$ be as in Assumption~\ref{ass:manifold}. A system trajectory
+is a piecewise $C^2$ map $\gamma : [0,T] \to X$. The goal is to
+describe local transitions in $\gamma$ via the sequence
+$C \to K \to F \to U$.
+
+\subsection{Compression Operator \texorpdfstring{$C$}{C}}
+
+\begin{definition}[Compression]
+A \emph{compression operator} is a map $C : X \to X_C$ with
+$\dim(X_C) < \dim(X)$ satisfying Assumption~\ref{ass:compress}.
+\end{definition}
+
+$C$ reduces degrees of freedom while retaining essential local
+structure.
+
+\subsection{Curvature Operator \texorpdfstring{$K$}{K}}
+
+\begin{definition}[Curvature Operator]
+Given a compressed trajectory $\gamma_C : [0,T] \to X_C$, the
+curvature operator $K : X_C \to X_C$ modifies the tangent field by
+\[
+\frac{d}{ds}\bigl(K(\gamma_C)(s)\bigr)
+\;=\; \dot\gamma_C(s) + \alpha(s)\,n(s),
+\]
+where $n(s)$ is the unit normal and
+\[
+\alpha(s) \;=\; \lambda\,\bigl(\kappa^*(\gamma_C(s))
+  - \kappa(s)\bigr)_+, \quad \lambda > 0.
+\]
+\end{definition}
+
+$K$ is a curvature-inducing flow that drives curvature monotonically
+toward $\kappa^*$ but never beyond it. Consequently, $K$ alone does
+not trigger folding; the sequence is a \emph{hybrid dynamical system}
+with a switching condition at $\kappa^*$.
+
+\subsection{Folding Operator \texorpdfstring{$F$}{F}}
+
+\begin{definition}[Folding Map]
+Let $\gamma_K = K(\gamma_C)$. A \emph{fold} occurs at $s_0$ when
+$|\kappa_K(s_0)| = \kappa^*(\gamma_K(s_0))$. The folding operator
+$F : X_C \to X_F$ acts by
+\[
+F(\gamma_K(s)) \;=\; \gamma_K(s) - \beta(s)\,n(s),
+\]
+where
+\[
+\beta(s) \;=\;
+\begin{cases}
+0, & |\kappa_K(s)| < \kappa^*, \\
+\mu\bigl(|\kappa_K(s)| - \kappa^*\bigr), & |\kappa_K(s)| \ge \kappa^*.
+\end{cases}
+\]
+Here $\mu > 0$ controls fold depth.
+\end{definition}
+
+At a fold point $s_0$,
+$\operatorname{rank}(dF_{\gamma_K(s_0)}) = \dim(X_C) - 1$.
+
+\subsection{Unfolding Operator \texorpdfstring{$U$}{U}}
+
+\begin{definition}[Unfolding Map]
+The unfolding operator $U : X_F \to X$ is
+\[
+U(x_F) \;=\; \operatorname*{arg\,min}_{y \in \mathcal{N}(x_F)}
+  \Phi(y),
+\]
+where $\mathcal{N}(x_F)$ is a sufficiently small neighborhood of
+$x_F$ and $\Phi$ satisfies Assumption~\ref{ass:morse}.
+\end{definition}
+
+The unfolding process is realised by the gradient flow
+$\dot y = -\nabla\Phi(y)$, $y(0) = x_F$, which converges to a
+non-degenerate local minimum~$x^*$.
+
+\subsection{Compatibility of \texorpdfstring{$K$}{K} and
+\texorpdfstring{$F$}{F}}
+
+\begin{theorem}[Sequential Consistency]
+If $K$ is applied until curvature reaches $\kappa^*$, then $F$ is
+well-defined, produces a finite branch set, and induces a
+rank-deficient Jacobian at fold points.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+$K$ drives curvature monotonically to $\kappa^*$ via the gain field
+$\alpha(s)$. At $\kappa^*$, the term $\beta(s)$ becomes nonzero,
+introducing local non-injectivity. The normal direction collapses,
+reducing Jacobian rank by~$1$. Locality and the finite critical-point
+structure of $\kappa^*$ (via the Morse assumption on $\Phi$) imply
+finitely many branches.
+\end{proof}
+
+%-----------------------------------------------------------------------
+\section{Falsifiability Conditions}
+%-----------------------------------------------------------------------
+
+The framework is falsifiable at four levels.
+
+\paragraph{Compression.}
+If empirical data show expansion under $C$, or collapse of distinct
+trajectories, the model fails.
+
+\paragraph{Curvature.}
+If a fold occurs at curvature strictly below $\kappa^*$, or curvature
+exceeds $\kappa^*$ without folding, the model is falsified. ($\kappa^*$
+is computed independently via the focal radius, not post-hoc from fold
+observations.)
+
+\paragraph{Folding.}
+If empirical fold events do not correspond to Jacobian rank loss, or
+produce infinitely many branches, the model fails.
+
+\paragraph{Sequence order.}
+If transitions occur in a different order, or stabilization occurs
+without folding, the model is falsified.
+
+%-----------------------------------------------------------------------
+\section{Structural Theorems}
+%-----------------------------------------------------------------------
+
+\begin{theorem}[Existence and Well-Posedness]
+Under Assumptions~\ref{ass:manifold}--\ref{ass:morse}, the composite
+operator $\mathcal{G} = U \circ F \circ K \circ C$ is well-defined on
+any piecewise $C^2$ trajectory.
+\end{theorem}
+
+\begin{theorem}[Local Determination]
+The action of $\mathcal{G}$ on $\gamma$ is determined entirely by the
+local geometry of $\gamma$ in a neighborhood of the fold point.
+\end{theorem}
+
+\begin{theorem}[Non-Commutativity]
+The operators $C$, $K$, $F$, $U$ do not commute; the sequence is
+order-dependent.
+\end{theorem}
+
+\begin{theorem}[Irreducibility]
+No operator in the sequence $C \to K \to F \to U$ can be removed
+without altering the qualitative structure of the transition.
+\end{theorem}
+
+\begin{theorem}[Finite Branching]
+The branch set $B = \{F(\gamma_K(s_i)) :
+|\kappa_K(s_i)| = \kappa^*(\gamma_K(s_i))\}$ is finite.
+\end{theorem}
+
+\begin{remark}
+Finiteness follows from the Morse condition on $\Phi$
+(Assumption~\ref{ass:morse}), which prevents fourth-order degeneracies
+and ensures isolated critical points, together with the transversality
+of $\gamma$ to the fold locus (a generic condition to be assumed
+explicitly in applications).
+\end{remark}
+
+%-----------------------------------------------------------------------
+\section{Canonical Examples}
+%-----------------------------------------------------------------------
+
+\paragraph{Planar curve with curvature-driven flow.}
+The simplest nontrivial system: $\gamma : [0,T] \to \mathbb{R}^2$,
+with $C$ an orthogonal projection, $K$ the curvature-inducing flow,
+$F$ activated at $\kappa^*$, and $U$ gradient descent on a local
+$\Phi$.
+
+\paragraph{Elastic rod under compression.}
+An elastic rod minimising Euler--Bernoulli energy
+$E[\gamma] = \int \kappa(s)^2\,ds$. Axial loading provides $C$;
+buckling provides $K$; the critical load is $\kappa^*$; post-buckling
+configuration provides $U$. This is the cleanest physical realisation
+of the curvature threshold.
+
+\paragraph{Gradient flow on a double-well potential.}
+$\Phi(x) = (x^2 - 1)^2$. The unstable equilibrium at $x = 0$ is the
+fold point; gradient flow selects one of $x = \pm 1$. Illustrates
+finite branching and stability selection.
+
+\paragraph{Saddle-node bifurcation.}
+$\dot x = \mu - x^2$, $\dot y = -y$. Projection onto the slow
+manifold provides $C$; approach to the fold point provides $K$; loss
+of the slow manifold at $\mu = 0$ provides $F$; flow to the stable
+branch provides $U$.
+
+\paragraph{Plasma sheet and market manifolds (Volume Three).}
+Magnetic field-line reconnection and price-trajectory bifurcations are
+conjectured instantiations. Each requires domain-specific construction
+of $(X, g, \Phi)$ and empirical computation of $\kappa^*$. These are
+deferred to Volume Three.
+
+%-----------------------------------------------------------------------
+\section{Analytical Invariants}
+%-----------------------------------------------------------------------
+
+\begin{invariant}[Ambient Dimension]
+$\dim(X)$ is preserved by $\mathcal{G}$. No claim is made about the
+dimension of the image of a specific trajectory.
+\end{invariant}
+
+\begin{invariant}[Codimension of the Fold]
+$\operatorname{codim}(F(\gamma)) = 1$, following from the rank-loss
+condition.
+\end{invariant}
+
+\begin{invariant}[Critical Curvature Threshold]
+$\kappa^*(x)$ is a geometric property of the manifold, invariant under
+the operator sequence.
+\end{invariant}
+
+\begin{invariant}[Curvature Sign]
+$\operatorname{sgn}(\kappa(s))$ is preserved under $K$ and $F$; only
+magnitude changes.
+\end{invariant}
+
+\begin{invariant}[Injectivity Before Threshold]
+For all $s$ with $|\kappa(s)| < \kappa^*(s)$, the trajectory remains
+injective under $C$, $K$, $F$.
+\end{invariant}
+
+\begin{invariant}[Rank Deficiency at Fold]
+$\operatorname{rank}(dF) = \dim(X_C) - 1$ at every fold point.
+\end{invariant}
+
+\begin{invariant}[Energy Monotonicity under $U$]
+$\Phi(U(x)) \le \Phi(x)$, with strict inequality unless $x$ is
+already a local minimum.
+\end{invariant}
+
+\begin{remark}
+An energy-gap invariant $\Delta\Phi = \Phi(x_2) - \Phi(x_1)$ is
+preserved under $C$, $K$, $F$ only if $\Phi$ is constant along the
+fibers of each operator. This is not guaranteed in general and is not
+claimed as a universal invariant.
+\end{remark}
+
+%-----------------------------------------------------------------------
+\section{Normal Forms}
+%-----------------------------------------------------------------------
+
+Two transitions $\mathcal{G}_1$, $\mathcal{G}_2$ are equivalent if
+there exists a diffeomorphism $\psi : X \to X$ with
+$\mathcal{G}_2 = \psi \circ \mathcal{G}_1 \circ \psi^{-1}$.
+
+\begin{normalform}[Compression]
+$C_{\mathrm{NF}} = \pi_k : \mathbb{R}^n \to \mathbb{R}^k$, the
+standard coordinate projection.
+\end{normalform}
+
+\begin{normalform}[Curvature]
+$K_{\mathrm{NF}}(s) = (s,\, \alpha s^2)$, $\alpha > 0$. This
+produces curvature
+$\kappa(s) = 2\alpha(1 + 4\alpha^2 s^2)^{-3/2}$, which approximates
+$2\alpha$ near $s = 0$.
+\end{normalform}
+
+\begin{normalform}[Folding --- Whitney Fold]
+$F_{\mathrm{NF}}(u,v) = (u, v^2)$. This is the unique (up to
+diffeomorphism) normal form for a codimension-1 fold singularity.
+\end{normalform}
+
+\begin{normalform}[Unfolding]
+$U_{\mathrm{NF}}(x) = 0$, the canonical stabilization map arising
+from $\Phi_{\mathrm{NF}}(x) = x^2$.
+\end{normalform}
+
+%-----------------------------------------------------------------------
+\section{Singularity Classification}
+%-----------------------------------------------------------------------
+
+\subsection{Admissible Singularities}
+
+Given the constraints of rank-1 loss, finite branching, and the Morse
+condition on $\Phi$, the admissible singularities are precisely:
+
+\begin{enumerate}
+\item Fold $A_1$: $(u,v) \mapsto (u, v^2)$
+\item Cusp $A_2$: $(u,v) \mapsto (u, v^3 + uv)$
+\item Swallowtail $A_3$: $(u,v) \mapsto (u, v^4 + uv^2 + \beta v)$
+\end{enumerate}
+
+Higher $A_k$ ($k \ge 4$) require a $k$-parameter unfolding. The Morse
+condition on $\Phi$ restricts the unfolding to at most three
+parameters, excluding $A_4$ and above.
+
+\subsection{Classification Conditions}
+
+Let $\Delta(s) = \kappa(s) - \kappa^*(s)$.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Type & Conditions & Normal form \\
+\midrule
+$A_1$ (fold) & $\Delta(s_0)=0$, $\Delta'(s_0)\ne 0$ & $(u,v^2)$ \\
+$A_2$ (cusp) & $\Delta=\Delta'=0$, $\Delta''\ne 0$ & $(u,v^3+uv)$ \\
+$A_3$ (swallowtail) & $\Delta=\Delta'=\Delta''=0$, $\Delta'''\ne 0$
+  & $(u,v^4+uv^2+\beta v)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{theorem}[Classification of Generative Transitions]
+Every admissible generative transition $\mathcal{G} = U \circ F \circ
+K \circ C$ is $\mathcal{A}$-equivalent to exactly one of $A_1$,
+$A_2$, $A_3$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Rank loss is exactly $1$, restricting to the $A_k$ series. The Morse
+condition on $\Phi$ limits the unfolding to at most three parameters.
+Transversality of $\gamma$ to the fold locus (generic assumption)
+ensures isolated fold points. Thus $k \le 3$.
+\end{proof}
+
+\subsection{Bifurcation Stratification}
+
+Parameter space $\Theta \subset \mathbb{R}^p$, $p \le 3$, decomposes
+into:
+\begin{itemize}
+\item $\Theta_1$: generic fold region (codimension 0 in $\Theta$),
+\item $\Theta_2$: cusp stratum (codimension 1),
+\item $\Theta_3$: swallowtail stratum
+  (codimension 2; a single point when $p=3$).
+\end{itemize}
+
+%-----------------------------------------------------------------------
+\section{Metric Geometry of \texorpdfstring{$\kappa^*$}{kappa*}}
+\label{sec:metric}
+%-----------------------------------------------------------------------
+
+\subsection{Intrinsic Definition}
+
+\[
+\kappa^*(x) \;=\; \frac{1}{\operatorname{foc}(x)},
+\]
+where $\operatorname{foc}(x)$ is the focal radius. For a curve
+embedded in $(X,g)$, this equals $\|II_x\|$ (the norm of the second
+fundamental form) when $K_{\mathrm{sec}} \le 0$.
+
+\subsection{Sectional Curvature Correction}
+
+By the Rauch comparison theorem, for variable positive sectional
+curvature:
+\[
+\kappa^*(x) \;=\; \min\!\left(\|II_x\|,\;
+  \sqrt{K_{\mathrm{sec}}(x)}\right).
+\]
+Positive ambient curvature lowers the threshold for folding.
+
+\subsection{Computability}
+
+Given $\gamma$ in $(X,g)$:
+\begin{enumerate}
+\item Compute $\|II_x\|$ from the second fundamental form.
+\item Compute $K_{\mathrm{sec}}(x)$ from the curvature tensor.
+\item Apply the formula above.
+\end{enumerate}
+
+$\kappa^*$ is stable:
+$\delta\kappa^* = O(\delta g) + O(\delta II)
+  + O(\delta K_{\mathrm{sec}})$.
+
+%-----------------------------------------------------------------------
+\section{Variational Principles}
+%-----------------------------------------------------------------------
+
+Define the action functional
+\[
+\mathcal{S}[\gamma] \;=\; \int_0^T
+\Bigl(
+\tfrac{1}{2}\|P_\perp \dot\gamma\|^2
++ \tfrac{\lambda}{2}(\kappa^* - \kappa)_+^2
++ \mu\,\delta(|\kappa| - \kappa^*)
++ \Phi(\gamma)
+\Bigr)\,ds.
+\]
+
+Each term corresponds to one operator:
+\begin{itemize}
+\item $L_C = \tfrac{1}{2}\|P_\perp\dot\gamma\|^2$: minimise
+  orthogonal kinetic energy (compression).
+\item $L_K = \tfrac{\lambda}{2}(\kappa^*-\kappa)_+^2$: minimise
+  curvature deficit.
+\item $L_F = \mu\,\delta(|\kappa|-\kappa^*)$: singular activation
+  at threshold.
+\item $L_U = \Phi(\gamma)$: minimise stability potential.
+\end{itemize}
+
+The delta term places the framework in the class of
+\emph{free-discontinuity variational problems}
+(cf.\ Ambrosio--Tortorelli, Mumford--Shah, Francfort--Marigo).
+It produces the jump condition
+\[
+\left[\frac{\partial L}{\partial \dot\gamma}\right]_{s_0^-}^{s_0^+}
+= \mu\,n(s_0),
+\]
+which is the variational counterpart of the fold map.
+
+The full generative transition is therefore a
+\emph{piecewise-smooth extremal} of $\mathcal{S}$.
+
+%-----------------------------------------------------------------------
+\section{Hamiltonian Discontinuities and Symplectic Geometry}
+%-----------------------------------------------------------------------
+
+\subsection{Phase Space}
+
+The phase space is $T^*X$ with canonical coordinates $(\gamma, p)$
+and symplectic form $\omega = d\gamma \wedge dp$.
+
+\subsection{Smooth Flow}
+
+For $s \ne s_0$, the system obeys Hamilton's equations and the flow
+is symplectic: $\mathcal{F}_t^*\omega = \omega$.
+
+\subsection{Momentum Jump at the Fold}
+
+The delta Lagrangian produces the impulse
+\[
+p(s_0^+) - p(s_0^-) \;=\; \mu\,n(s_0).
+\]
+Configuration $\gamma$ is continuous; momentum $p$ has a jump.
+
+\subsection{The Fold as a Symplectic Map}
+
+Define the fold map in phase space:
+$\mathcal{F} : (\gamma, p) \mapsto (\gamma, p + \mu n)$.
+
+\begin{theorem}[Symplectic Preservation]
+$\mathcal{F}^*\omega = \omega$.
+\end{theorem}
+
+\begin{proof}
+$d\gamma \wedge d(p + \mu n) = d\gamma \wedge dp
+  + \mu\,d\gamma \wedge dn$.
+Since $n$ depends only on $\gamma$, the term
+$d\gamma \wedge dn = 0$.
+Hence $\mathcal{F}^*\omega = \omega$.
+\end{proof}
+
+\subsection{Canonical Transformation}
+
+The fold is generated by the distributional function
+$S(\gamma) = \mu\,\Theta(|\kappa(\gamma)| - \kappa^*)$, so that
+$p^+ = p^- + \partial S/\partial\gamma$.
+
+\subsection{Full Transition}
+
+Let $\Phi_t$ be the pre-fold Hamiltonian flow, $\mathcal{F}$ the fold
+map, $\Psi_t$ the post-fold flow. The consistency condition from
+Section~4 (basin structure) ensures the output of $\mathcal{F}$ lies
+in the domain of $\Psi_t$. Then
+\[
+\mathcal{H} = \Psi_t \circ \mathcal{F} \circ \Phi_t
+\]
+is a piecewise-smooth symplectic map: $\mathcal{H}^*\omega = \omega$.
+
+\subsection{Singularity Type and Momentum Structure}
+
+\begin{itemize}
+\item $A_1$ fold: single momentum jump.
+\item $A_2$ cusp: momentum jump with first-order tangency constraint.
+\item $A_3$ swallowtail: momentum jump with second-order tangency.
+\end{itemize}
+
+%-----------------------------------------------------------------------
+\section{Connection to Generative Contact Mechanics}
+\label{sec:connection}
+%-----------------------------------------------------------------------
+
+This section makes precise the relationship between the
+singularity-theoretic framework developed in this volume and the
+contact-geometric framework of \emph{Generative Contact Mechanics}
+(Paper~1) and \emph{The dm3 Operator: Explicit Toy Model}
+(Paper~2). We show that the operator sequence
+$C \to K \to F \to U$
+is the geometric precursor of the dm3 operator algebra, and that the
+curvature threshold $\kappa^*$ corresponds canonically to the
+embodiment threshold $\tau$.
+
+\subsection{From Trajectories to Limit Cycles}
+
+In this volume the central object is a trajectory
+$\gamma : [0,T] \to (X,g)$ undergoing a localized generative
+transition driven by curvature, injectivity loss, and stabilization.
+
+In GCM the central object is a hyperbolic limit cycle
+$\Gamma \subset S$ embedded in a dissipative dynamical system
+satisfying Axioms~1--8 of the dm3 framework.
+
+The conceptual shift is:
+\begin{itemize}[leftmargin=*]
+  \item \emph{Principia Orthogona}: analyzes single transitions
+        along trajectories.
+  \item \emph{GCM}: studies persistent post-transition attractors
+        and their algebraic interactions.
+\end{itemize}
+
+The mathematical link is that every admissible generative transition
+induces a locally attracting invariant set, and conversely, every
+dm3 limit cycle admits a neighborhood whose formation is governed by
+a fold-type transition.
+
+\subsection{Curvature Threshold vs.\ Embodiment Threshold}
+
+In this volume, folding is triggered when curvature reaches the
+intrinsic geometric threshold
+\[
+  \kappa^*(x) = \frac{1}{\operatorname{foc}(x)},
+\]
+corrected by sectional curvature via the Rauch comparison theorem
+(Section~\ref{sec:metric}).
+
+In GCM, stochastic stability is governed by the embodiment threshold
+\[
+  \tau = \sqrt{c/\kappa},
+\]
+defined by the stochastic Lyapunov condition
+$\mathcal{L}V \le -cV + \kappa\|\sigma\|^2$.
+
+\begin{proposition}[Threshold Correspondence]\label{prop:threshold}
+Let a generative transition produce a post-fold stabilized orbit
+$\Gamma$ with Lyapunov function $V = d_g(\cdot,\Gamma)^2$. Then
+the geometric condition $\kappa \uparrow \kappa^*$ is equivalent to
+the dynamical condition that transverse contraction becomes dominant
+over noise, yielding a finite embodiment threshold $\tau$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+As $\kappa \to \kappa^*$, the folding operator $F$ introduces
+rank-1 loss and the post-fold unfolding $U$ selects a stable branch.
+The resulting orbit $\Gamma$ has Floquet exponent
+$\mu_{\max} < 0$ (transverse contraction). By the stochastic
+Lyapunov condition of GCM, $\tau = \sqrt{c/\kappa}$ is finite
+whenever $\mu_{\max} < 0$, i.e., precisely when curvature has
+reached $\kappa^*$ and the fold has been completed. Thus
+$\kappa^*$ is the geometric precursor of $\tau$: curvature
+accumulation creates the conditions under which stochastic stability
+becomes meaningful.
+\end{proof}
+
+\subsection{Fold Map vs.\ dm3 Operator}
+
+The folding operator $F$ in this volume is a rank-1 singular map:
+$\operatorname{rank}(dF) = \dim(X_C) - 1$, producing a finite
+branch set classified by $A_1$--$A_3$ singularities.
+
+In GCM, the dm3 operator
+$\mathcal{A}_{\mathrm{dm3}} = \phi^{T^*/4}$
+is the time-$(T^*/4)$ map of a smooth flow on the contact manifold
+$M = S \times \mathbb{R}$, acting discretely along a limit cycle.
+
+\begin{proposition}[Fold--dm3 Correspondence]\label{prop:fold}
+The fold map $F$ is the piecewise-smooth, pre-contact limit of the
+dm3 operator in the following sense.
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item $F$ enforces non-injectivity geometrically via rank loss;
+        $\mathcal{A}_{\mathrm{dm3}}$ enforces recurrence dynamically
+        via orbital stability.
+  \item Under the contact extension $M = X \times \mathbb{R}$
+        \textup{(}the construction of GCM, \S6\textup{)}, the
+        impulsive momentum jump at the fold
+        $p(s_0^+) - p(s_0^-) = \mu\,n(s_0)$
+        corresponds to the contact Hamiltonian correction
+        $H_{\mathrm{diss}} = -\gamma V e^{-\beta z}$,
+        which drives trajectories toward $\Gamma$ off the orbit.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Both the momentum jump and $H_{\mathrm{diss}}$ are corrections
+that vanish on the invariant set and are nonzero off it. The
+momentum jump is a distributional first-order correction in the
+Hamiltonian sense; $H_{\mathrm{diss}}$ is its smooth
+contact-geometric regularization as the contact manifold structure
+is imposed via $M = X \times \mathbb{R}$.
+\end{proof}
+
+\subsection{Operator Grammar Correspondence}
+
+The operator sequence of this volume maps onto the reduced dm3
+operator grammar as follows.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\emph{Principia Orthogona} & \emph{GCM / dm3} \\
+\midrule
+Compression $C$ & Basin contraction via $g_1$ \\
+Curvature flow $K$ & Lyapunov descent $\dot{V} \le -cV$ \\
+Fold $F$ & Contact bifurcation (Hopf, SN, NS) \\
+Unfolding $U$ & Gradient flow to $\Gamma_{\mathrm{syn}}$ via $U_3$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The full dm3 grammar $g \to L \to R \to U$ extends this sequence
+by adding multi-orbit coherence, resonance detection, and categorical
+unification, which are intentionally absent from the present volume.
+
+\subsection{Singularity Classification vs.\ Bifurcation Diagram}
+
+This volume proves that admissible generative transitions are
+precisely the Whitney singularities $A_1$, $A_2$, $A_3$.
+Paper~2 proves that dm3 systems undergo exactly four bifurcations:
+contact Hopf, saddle-node of limit cycles, Neimark--Sacker, and
+slow-fast crossover.
+
+\begin{remark}[Classification Correspondence]
+The $A_1$--$A_3$ singularities classify the local geometry of dm3
+bifurcations under the projection $M = S \times \mathbb{R} \to S$.
+The fold $A_1$ corresponds to the contact Hopf and saddle-node
+bifurcations (local rank loss in the radial direction); the cusp
+$A_2$ corresponds to the Neimark--Sacker (loss of a second
+direction at resonance); the swallowtail $A_3$ to the slow-fast
+crossover (third-order degeneracy in the $z$-direction). Higher
+singularities are excluded in both frameworks: here by the Morse
+condition on $\Phi$; in dm3 by contact normal form rigidity
+(Theorem~C of Paper~1).
+\end{remark}
+
+\subsection{Summary}
+
+The three papers in this series have the following relationship.
+\begin{itemize}[leftmargin=*]
+  \item \textbf{This volume}: explains why folds must occur and
+        classifies their local geometry.
+  \item \textbf{Paper~1 (GCM)}: explains what stable structures
+        exist after they occur, in the contact-geometric setting.
+  \item \textbf{Paper~2 (dm3)}: proves that the resulting dynamics
+        are computable, stable, and structurally closed.
+\end{itemize}
+
+No claim is made that every dm3 system arises from a literal
+curvature fold in a physical manifold. The precise claim is:
+every dm3 system admits a local geometric model whose generative
+event is $\mathcal{A}$-equivalent to a fold-type transition governed
+by a curvature threshold $\kappa^*$. This is supported by
+Propositions~\ref{prop:threshold} and~\ref{prop:fold}.
+
+%-----------------------------------------------------------------------
+\section*{Closing Statement}
+%-----------------------------------------------------------------------
+
+This volume has developed a unified mathematical framework for
+generative transitions. The central results are:
+\begin{itemize}
+\item a geometric foundation based on curvature, injectivity radius,
+  and focal geometry;
+\item a critical curvature threshold $\kappa^*$ defined intrinsically
+  by the focal radius and corrected by the Rauch comparison theorem;
+\item constructive definitions of operators $C$, $K$, $F$, $U$;
+\item a free-discontinuity variational principle;
+\item a Hamiltonian structure with a distributional generator at the
+  fold;
+\item a symplectic discontinuity preserving the canonical form;
+\item a singularity classification restricted to the Whitney
+  $A_1$--$A_3$ hierarchy; and
+\item structural invariants holding across all admissible transitions.
+\end{itemize}
+
+The framework is placed within established mathematical traditions:
+comparison geometry, singularity theory, geometric flows, variational
+mechanics, and impulsive Hamiltonian systems.
+
+This volume is deliberately limited in scope. It provides the
+mathematical substrate on which cross-domain questions can be posed
+rigorously. Volume Two develops discrete variational integrators and
+numerical realisation. Volume Three instantiates the framework in
+specific domains: plasma reconnection, market volatility manifolds,
+and neural embedding geometry.
+
+%-----------------------------------------------------------------------
+\section*{Acknowledgments}
+%-----------------------------------------------------------------------
+
+The author acknowledges with gratitude the foundational influence of
+the teachings of Paramahamsa Nithyananda and the yogic scriptural
+tradition from which this work derives. The mathematical formalization
+presented here is understood by the author as a translation of
+principles encountered through that tradition.
+
+This volume is the first in a series. The dm3 operator framework
+developed in the companion papers \emph{Generative Contact Mechanics}
+(Paper~1) and \emph{The dm3 Operator: Explicit Toy Model} (Paper~2)
+constitutes the full mathematical realization of the generative
+transition theory introduced here.
+
+\end{document}

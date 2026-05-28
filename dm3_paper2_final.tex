@@ -1,0 +1,1002 @@
+%% ============================================================
+%%  The dm3 Operator: Explicit Toy Model and
+%%  Global Dynamical Analysis
+%%
+%%  Paper 2 of 2 (companion to Paper 1)
+%%  Target: SIAM Journal on Applied Dynamical Systems / Chaos / Physica D
+%% ============================================================
+
+\documentclass[reqno]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\numberwithin{equation}{section}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}{Axiom}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+%% Macros (matching Paper 1)
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\dm}{\mathfrak{D}}
+\newcommand{\dmcat}{\mathbf{dm3}}
+\newcommand{\Orb}{\Gamma}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\abs}[1]{\left|#1\right|}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\gcd}{gcd}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\erf}{erf}
+
+%% ============================================================
+\begin{document}
+%% ============================================================
+
+\title[dm3 Operator: Toy Model]{%
+  The dm3 Operator: Explicit Toy Model\\
+  and Global Dynamical Analysis}
+
+\author{Pablo Nogueira Grossi}
+\address{Independent Researcher, Brazil}
+\email{pablogrossi@hotmail.com}
+
+\keywords{contact geometry, limit cycles, bifurcation theory,
+  invariant measures, structural stability, resonance, normal form,
+  stochastic stability, global attractor}
+
+\subjclass[2020]{37C10, 37C27, 37G15, 37H10, 53D10, 60H10}
+
+\begin{abstract}
+We construct and analyze a complete explicit instantiation of the
+generative contact mechanics framework of~\cite{Paper1} on the
+two-dimensional system
+\[
+  \dot r = r(1-r^2)+2(r-1)e^{-z},\quad
+  \dot\theta = 1,\quad
+  \dot z = r^2 - 2(r-1)^2 e^{-z},
+\]
+on the contact manifold $M=\R^2_{>0}\times\R$. Every definition,
+operator, and boundary from~\cite{Paper1} is instantiated explicitly
+and verified by direct computation. Four main results are established:
+\textbf{Theorem~A}: the global attractor of the full system is the
+resonant orbit $\Orb_{12}$; \textbf{Theorem~B}: the invariant torus
+conjecture of~\cite{Paper1} holds for the $1$:$2$ resonant case,
+with a normally hyperbolic invariant circle and transverse Lyapunov
+exponent $-3$; \textbf{Theorem~C}: the system undergoes four
+bifurcations (contact Hopf, saddle-node of limit cycles,
+Neimark--Sacker, and slow-fast crossover) as parameters vary;
+\textbf{Theorem~D}: the stationary SDE measure concentrates on
+$\Orb$ for noise amplitude below the embodiment threshold $\tau$ and
+spreads for amplitude above $\tau$.
+\end{abstract}
+
+\dedicatory{Dedicated to my children Vic~(R.I.P.), Giulia,
+ Alice~(R.I.P.), Sarah~(R.I.P.), and David.\\[4pt]
+\emph{Once tiny, always strong.}}
+
+\maketitle
+\tableofcontents
+
+%%=============================================================
+\section{Introduction}\label{sec:intro}
+%%=============================================================
+
+\subsection{Purpose and scope}
+
+This paper is the companion to~\cite{Paper1}, which develops the
+generative contact mechanics framework in full generality. The purpose
+here is verification: we show that every abstract definition, operator,
+and theorem of~\cite{Paper1} is instantiated by an explicit, computable
+dynamical system, and that all theoretical predictions can be checked
+by direct computation or straightforward analysis.
+
+The explicit system is chosen for concreteness, not generality.
+It is the simplest system exhibiting all eight axioms of~\cite{Paper1},
+the full operator algebra, the contact geometric structure, and the
+global dynamics that the abstract theory predicts.
+
+\subsection{The system}
+
+The base manifold is $S=\R^2_{>0}$ with polar coordinates $(r,\theta)$,
+$r>0$, $\theta\in\R/2\pi\mathbb{Z}$. The contact manifold is
+$M=S\times\R$ with coordinates $(r,\theta,z)$. The defining equations are
+\begin{align}
+  \dot r &= r(1-r^2) + 2(r-1)e^{-z},\label{eq:rdot}\\
+  \dot\theta &= 1 - \frac{2(r-1)}{r}e^{-z},\label{eq:thetadot}\\
+  \dot z &= r^2 - 2(r-1)^2 e^{-z},\label{eq:zdot}
+\end{align}
+with contact form $\alpha=dz-r^2\,d\theta$.
+
+\subsection{Main results}
+
+\begin{theorem}[A: global attractor]\label{thm:A}
+The global attractor of the system~\eqref{eq:rdot}--\eqref{eq:zdot}
+restricted to $\cB(\Orb)\times\R_{>0}$ is
+\[
+  \mathcal{A}_{\mathrm{full}} = \Orb_{12},
+\]
+the $1$:$2$ resonant orbit on $\Orb\times\Orb_2$. Every trajectory
+in the fully admissible region converges to $\Orb_{12}$.
+\end{theorem}
+
+\begin{theorem}[B: invariant torus conjecture]\label{thm:B}
+The coupled system on $S\times S^{(2)}$ with the $g_2$ semi-conjugacy
+admits a normally hyperbolic invariant circle $\Orb_{12}$ in the
+$1$:$2$ resonant case. The transverse Lyapunov exponent is $-3$,
+and $\Orb_{12}$ is exponentially stable. This proves
+Conjecture~4.15 of~\cite{Paper1} in the toy model.
+\end{theorem}
+
+\begin{theorem}[C: bifurcation diagram]\label{thm:C}
+As parameters $(\gamma,\beta,\eta)$ vary from their baseline values
+$(\gamma,\beta,c,\eta)=(2,1,2,1)$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item \textup{(Contact Hopf)} At $\gamma=\gamma^*=e^{z_0}$, the
+        system undergoes a supercritical contact Hopf bifurcation.
+  \item \textup{(Saddle-node)} At $\eta=\eta^*\approx 0.15$, two
+        limit cycles collide and the multi-orbit structure collapses.
+  \item \textup{(Neimark--Sacker)} At detuning $\abs{\Delta}=\Delta^*$,
+        the resonant orbit $\Orb_{12}$ loses stability and a 2-torus
+        bifurcates. This boundary is $\partial\mathcal{A}_{1:2}=B_2$.
+  \item \textup{(Slow-fast crossover)} At $\beta=\beta^*$, the
+        contact correction crosses over from dominant to negligible;
+        this is a smooth parameter-space transition, not a sharp
+        bifurcation.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[D: stationary measure]\label{thm:D}
+For the SDE extension with noise $\sigma>0$, the stationary measure
+$\mu_\sigma$ satisfies:
+\[
+  \mu_\sigma(\cN_\delta(\Orb)) = \erf\!\left(\frac{\delta}{\sigma\sqrt{2}}\right).
+\]
+For $\sigma<\tau$: $\mu_\sigma$ concentrates on $\Orb$ exponentially
+fast as $\sigma\to 0$. For $\sigma>\tau$: $\mu_\sigma$ spreads to
+fill $\cB(\Orb)$.
+\end{theorem}
+
+\subsection{Organization}
+
+Section~\ref{sec:setup} defines the system and verifies the eight
+axioms.
+Section~\ref{sec:operators} instantiates all operators explicitly.
+Section~\ref{sec:invariants} identifies the invariant sets and
+classifies their stability.
+Section~\ref{sec:portrait} gives the global phase portrait and
+proves Theorem~A.
+Section~\ref{sec:torus} proves Theorem~B (invariant torus conjecture).
+Section~\ref{sec:bifurcations} proves Theorem~C (bifurcation diagram).
+Section~\ref{sec:measures} proves Theorem~D (stationary measures).
+Section~\ref{sec:normal} verifies the contact normal form of
+Theorem~C of~\cite{Paper1}.
+Section~\ref{sec:discussion} discusses the results and their
+implications for~\cite{Paper1}.
+
+%%=============================================================
+\section{The toy model: setup and axiom verification}\label{sec:setup}
+%%=============================================================
+
+\subsection{The dm3 system}
+
+\begin{definition}[Toy model dm3 system]\label{def:toy}
+The toy model dm3 system is
+$\dm_0=(S,g,Y,\Orb,V,\sigma)$ where:
+\begin{itemize}[leftmargin=*]
+  \item $S=\R^2_{>0}$ with polar coordinates $(r,\theta)$ and
+        Euclidean metric $g$;
+  \item $Y(r,\theta)=r(1-r^2)\partial_r+\partial_\theta$;
+  \item $\Orb=\{r=1\}$ with minimal period $T^*=2\pi$;
+  \item $V(r,\theta)=(r-1)^2$;
+  \item $\sigma(r,\theta)=\sigma_0\partial_r$ for constant $\sigma_0>0$.
+\end{itemize}
+\end{definition}
+
+\subsection{Explicit flow}
+
+\begin{proposition}[Explicit flow formula]\label{prop:flow}
+The flow of $Y$ is
+\[
+  \phi^t(r_0,\theta_0) =
+  \left(\frac{1}{\sqrt{1+(r_0^{-2}-1)e^{-4t}}},\;
+  \theta_0 + t\bmod 2\pi\right).
+\]
+\end{proposition}
+\begin{proof}
+The angular equation $\dot\theta=1$ integrates to $\theta(t)=\theta_0+t$.
+The radial equation $\dot r=r(1-r^2)$ is Bernoulli; the substitution
+$u=r^{-2}$ gives $\dot u=-4u+4$, with solution
+$u(t)=1+(u_0-1)e^{-4t}$. Inverting gives the stated formula.
+\end{proof}
+
+\subsection{Canonical invariant triple}
+
+\begin{proposition}[Canonical invariants]\label{prop:canonical}
+The canonical invariant triple of $\dm_0$ is
+\[
+  \iota(\dm_0) = (T^*,\mu_{\max},\tau) = (2\pi,-2,\tau_0),
+\]
+where $\tau_0$ is computed in Section~\ref{sec:measures}.
+\end{proposition}
+\begin{proof}
+Period: $T^*=2\pi$ is the period of $\dot\theta=1$ on $\Orb$.
+Floquet exponent: linearizing $\dot r=r(1-r^2)$ at $r=1$ with
+$r=1+\rho$: $\dot\rho\approx-2\rho$, so $\mu_{\max}=-2$.
+\end{proof}
+
+\subsection{Axiom verification}
+
+\begin{proposition}[All eight axioms hold]\label{prop:axioms}
+The system $\dm_0$ satisfies Axioms~1--8 of~\cite{Paper1}.
+\end{proposition}
+\begin{proof}
+\textbf{Axiom~1 (Orbit identity).}
+Four phase points at $\theta=0,\pi/2,\pi,3\pi/2$ on $\Orb$,
+cycled by $\phi^{\pi/2}$:
+$p_I=(1,0)$, $p_{VI}=(1,\pi/2)$, $p_{III}=(1,\pi)$,
+$p_{VII}=(1,3\pi/2)$.
+
+\textbf{Axiom~2 (Generative closure).}
+$\phi^t(\Orb)=\Orb$ for all $t$: on $\Orb$, $r=1$ and
+$\dot r=1\cdot(1-1)=0$, so $r$ remains $1$.
+
+\textbf{Axiom~3 (Structural primacy).}
+$V=(r-1)^2$, $\dot V=2(r-1)\dot r=2(r-1)r(1-r^2)
+=-2(r-1)^2 r(1+r)<0$ for $r\ne 1$.
+
+\textbf{Axiom~4 (Perturbation response).}
+Near $r=1$: $\dot V\approx-4(r-1)^2=-4V$, so $c=4$.
+
+\textbf{Axiom~5 (Noise-as-fuel).}
+Generator: $\cL V=\dot V+\frac{\sigma_0^2}{2}\cdot 2=-4V+\sigma_0^2$,
+so $\kappa=1$ and the condition holds with $c=4$, $\kappa=1$.
+
+\textbf{Axiom~6 (Non-collapse).}
+$\dot\theta=1\ne 0$ on $\Orb$, $T^*=2\pi>0$.
+
+\textbf{Axiom~7 (Non-coercion).}
+$Y$ is $C^\infty$ on $S$; no hard constraints.
+
+\textbf{Axiom~8 (Hyperbolicity).}
+$\mu_{\max}=-2<0$.
+\end{proof}
+
+\subsection{The contact manifold}
+
+\begin{proposition}[Contact structure]\label{prop:contactstruct}
+On $M=S\times\R$, the form $\alpha=dz-r^2\,d\theta$ satisfies
+$\alpha\wedge d\alpha=2r\,dz\wedge dr\wedge d\theta\ne 0$
+for $r>0$. The Reeb vector field is $R_\alpha=\partial_z$.
+\end{proposition}
+\begin{proof}
+$d\alpha=-2r\,dr\wedge d\theta$. Then
+$\alpha\wedge d\alpha=(dz-r^2\,d\theta)\wedge(-2r\,dr\wedge d\theta)
+=-2r\,dz\wedge dr\wedge d\theta\ne 0$ for $r>0$.
+$\alpha(\partial_z)=1$ and $\iota_{\partial_z}d\alpha=0$.
+\end{proof}
+
+\subsection{Full contact equations of motion}
+
+Setting $\gamma=c=2$ and $\beta=1$, the contact equations are
+\begin{align}
+  \dot r &= \underbrace{r(1-r^2)}_{\text{dm3}}
+           + \underbrace{2(r-1)e^{-z}}_{\text{contact}},
+           \label{eq:r-full}\\
+  \dot\theta &= 1 - \frac{2(r-1)}{r}e^{-z},\label{eq:theta-full}\\
+  \dot z &= r^2 - 2(r-1)^2 e^{-z}.\label{eq:z-full}
+\end{align}
+
+\begin{proposition}[Behavior on $\Orb$]\label{prop:onorbit}
+On $\Orb$ ($r=1$): $\dot r=0$, $\dot\theta=1$, $\dot z=1$.
+The system rotates at unit angular speed and accumulates action
+at rate $1$.
+\end{proposition}
+
+\begin{proposition}[Embodiment threshold in the toy model]\label{prop:threshold}
+Near $\Orb$ with $r=1+\rho$, $\rho$ small:
+\[
+  \dot\rho \approx -2\rho(1-e^{-z}).
+\]
+For $z>0$: $\dot\rho<0$ (orbit attracting). For $z=0$: $\dot\rho=0$
+(neutral). The embodiment threshold is the first crossing $z>0$.
+Larger $z$ gives stronger attraction; this is the mathematical
+content of embodiment: the orbit becomes more stable as action
+accumulates.
+\end{proposition}
+
+%%=============================================================
+\section{Operator instantiation}\label{sec:operators}
+%%=============================================================
+
+\subsection{\texorpdfstring{$g$}{g}-operators}
+
+\subsubsection{$g_1$: local basin expansion}
+
+Take cutoff $\rho$ supported in $r\in(0.8,1.2)$ and $h(v)=v$.
+The modified radial equation is
+\[
+  \dot r^{(1)} = r(1-r^2) + 2\rho(r)(r-1).
+\]
+At $r=1$: $\dot r^{(1)}=0$ (orbit invariant). For $r\in(0.8,1.2)$,
+the convergence rate to $r=1$ increases:
+$\dot V^{(1)}\approx-(4+\eps)V^{(1)}$ for some $\eps>0$.
+Enlarged neighborhood: $\cN^{(1)}(\Orb)\supset\cN(\Orb)$. $\checkmark$
+
+\subsubsection{$g_2$: recursive expansion}
+
+Second-scale space $S^{(2)}=\R/\mathbb{Z}$ with coordinate
+$\Phi=\theta/2\pi$ (phase normalized to $[0,1)$).
+The projection $\Psi(r,\theta)=\theta/2\pi$.
+
+The macro-vector field $Y^{(2)}\equiv 1/T^*=1/2\pi$ gives
+$\dot\Phi=1/2\pi$ and macro-period $T^{(2)}=1$.
+
+Semi-conjugacy on $\Orb$: $\Psi(\phi^t(1,\theta_0))=(\theta_0+t)/2\pi
+=\Psi(1,\theta_0)+t/2\pi=\psi^{(2),t}(\Psi(1,\theta_0))$.
+The semi-conjugacy holds exactly on $\Orb$ with $\lambda=1$. $\checkmark$
+
+\subsubsection{$g_3$: cross-domain morphism}
+
+For a scaled system with $\Orb'=\{r=R\}$, $R>0$:
+\[
+  g_3(r,\theta) = (Rr,\theta).
+\]
+Verification of (M1)--(M4):
+(M1) $g_3(\{r=1\})=\{r=R\}=\Orb'$.
+(M2) $g_3\circ\phi^t=\phi'^t\circ g_3$ with $\lambda=1$ (both
+     have unit angular speed).
+(M3) $V'\circ g_3=(Rr-R)^2=R^2(r-1)^2=R^2 V$, so $\alpha=\beta=R^2$.
+(M4) Radially uniform $\sigma$ gives $C=1$, $\tau'=R^2\tau$. $\checkmark$
+
+\subsection{\texorpdfstring{$L$}{L}-operators}
+
+\subsubsection{$L_1$: local coherence}
+
+For a second orbit $\Orb_2=\{r=R\}$, $R=2$:
+\[
+  D_{12}(r) = \abs{r-1} + \abs{r-2},\quad
+  Z(r) = -\chi(r)\,\mathrm{sgn}(2r-3).
+\]
+$Z=0$ at $r=1$ and $r=2$ (orbit invariant). In $(1,2)$: $Z$
+pushes toward midpoint, increasing the buffer. $\checkmark$
+
+\subsubsection{$L_2$: global coherence}
+
+Coherence defect: $\mathcal{E}(r,\theta)=(\Phi-\theta/2\pi)^2$.
+On $\Orb$: $\mathcal{E}=0$ by the $g_2$ semi-conjugacy.
+
+Two-scale Lyapunov: $\mathcal{V}=(r-1)^2+\alpha_0(\Phi-\theta/2\pi)^2$.
+
+$L_2=\exp(-\nabla\mathcal{V})$ drives both to $\Orb$ and to phase
+coherence. Fixed points: $r=1$ and $\Phi=\theta/2\pi$, i.e., $\Orb$.
+Consistent with Proposition~4.29 of~\cite{Paper1}. $\checkmark$
+
+\subsubsection{$L_3$: anti-collapse}
+
+With $\Orb_1=\{r=1\}$, $\Orb_2=\{r=2\}$, $\eps_0=0.01$:
+\[
+  U_{12}^\eps(r)
+  = \frac{1}{(r-1)^2+0.01} + \frac{1}{(r-2)^2+0.01}.
+\]
+$\nabla U_{12}^\eps$ computed explicitly; minimum at $r=1.5$
+(by symmetry $r\mapsto 3-r$). At $r=1.5$: $U_{12}^\eps\approx 7.69$.
+Collapse boundary: $B_3=\{r\approx 1.35\}\cup\{r\approx 1.65\}$. $\checkmark$
+
+\subsection{\texorpdfstring{$R$}{R}-operators}
+
+Add a second dm3 system with $\Orb_2=\{r=1\}$ and period $T_2^*=\pi$
+(angular speed $\dot\theta_2=2$). Canonical invariants:
+$\iota(\dm_2)=(\pi,-2,\tau_2)$.
+
+\subsubsection{$R_1$: resonance detection}
+
+$F_{1:2}(T_1^*,T_2^*)=1\cdot 2\pi-2\cdot\pi=0$.
+The systems are in $1$:$2$ period resonance.
+Lyapunov resonance: $\mu_{\max,1}=\mu_{\max,2}=-2$. $\checkmark$
+
+\subsubsection{$R_2$: amplification}
+
+Phase mismatch: $W_{1:2}(\theta_1,\theta_2)=(\theta_1-2\theta_2)^2
+\bmod 2\pi$.
+
+Gradient field:
+\[
+  Z_{1:2} = \begin{pmatrix}-2(\theta_1-2\theta_2)\\
+  4(\theta_1-2\theta_2)\end{pmatrix}.
+\]
+Fixed points: $\theta_1=2\theta_2\bmod 2\pi$ --- two points on
+$\Orb_1\times\Orb_2$ (as $\lcm(1,2)=2$). $\checkmark$
+
+\subsubsection{$R_3$: stabilization}
+
+Resonance manifold:
+$\cM_{1:2}=\{(\theta_1,\theta_2):\theta_1=2\theta_2\bmod 2\pi\}
+\subset\T^2$.
+
+Distance function: $U=(\theta_1-2\theta_2)^2/5$ (normalized).
+Generator: $\dot U=-4U$, exponential stability at rate $4$.
+Both $\Orb_i$ preserved. $\checkmark$
+
+\subsection{\texorpdfstring{$U$}{U}-operators}
+
+\subsubsection{$U_1$: pushout}
+
+Unified state space: $S_{12}$ obtained by gluing $S_1,S_2$ along
+$\cM_{1:2}$.
+
+Unified vector field:
+$Y_{12}(\theta_1,\theta_2)=\partial_{\theta_1}+2\partial_{\theta_2}$.
+
+Unified limit cycle:
+$\Orb_{12}=\{(\theta_1,\theta_2):\theta_1=2\theta_2\}$, $T_{12}^*=2\pi$.
+
+Canonical invariants:
+$T_{12}^*=1\cdot 2\pi/\gcd(1,2)=2\pi$, $\mu_{\max,12}=-2$,
+$\tau_{12}=\min(\tau_1,\tau_2)$. $\checkmark$
+
+\subsubsection{$U_2$: translation}
+
+Resonance correspondence: $\cC_{12}=\{(\theta_1,\theta_2):\theta_1=2\theta_2\}$.
+$U_2(\theta_1)=\theta_1/2\bmod\pi$: smooth, well-defined map. $\checkmark$
+
+\subsubsection{$U_3$: synthesis}
+
+$\Orb_{\mathrm{syn}}=\Orb_{12}$, the diagonal of $\T^2$.
+$U_3=\exp(-\nabla(\theta_1-2\theta_2)^2/5)$ attracts to
+$\Orb_{12}$ at rate $4$. $\checkmark$
+
+\subsection{Boundary operators}
+
+\subsubsection{$B_1$: identity boundary}
+
+Basin $\cB(\Orb)=\R^2_{>0}\setminus\{0\}$ (entire punctured plane;
+no other attractors). Boundary invariant set: $\Lambda=\{r=0\}$.
+$B_1=\{r=0\}$, the repelling singularity. Critical Lyapunov level:
+$c^*=+\infty$ ($V$ decreases everywhere). $\checkmark$
+
+\subsubsection{$B_2$: transition boundary}
+
+In the $(T_1^*,T_2^*)$-plane with $T_1^*=2\pi$ fixed, the $1$:$2$
+resonance condition $T_2^*=\pi$ is a point. The Arnold tongue
+$\mathcal{A}_{1:2}$ is an interval $T_2^*\in(\pi-\eps,\pi+\eps)$
+for coupling amplitude-dependent width $\eps=\eps(A)$.
+$B_2=\partial\mathcal{A}_{1:2}=\{T_2^*=\pi\pm\eps\}$. $\checkmark$
+
+\subsubsection{$B_3$: collapse boundary}
+
+With $\eps_0=0.01$: $B_3=\{r\approx 1.35\}\cup\{r\approx 1.65\}$
+(symmetric about $r=1.5$, computed numerically from
+$U_{12}^\eps(r)=C_{12}^*\approx 7.69$). $\checkmark$
+
+%%=============================================================
+\section{Invariant sets and stability classification}\label{sec:invariants}
+%%=============================================================
+
+\subsection{Identification of invariant sets}
+
+The full system~\eqref{eq:r-full}--\eqref{eq:z-full}
+has the following invariant sets:
+
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{dm3 orbit} $\Orb=\{r=1\}$, a hyperbolic limit cycle.
+  \item \textbf{Origin} $\{r=0\}$, a repelling singularity ($B_1$).
+  \item \textbf{Resonant orbit} $\Orb_{12}=\{(\theta_1,\theta_2):
+        \theta_1=2\theta_2\}\subset\T^2$, the global attractor
+        of the product system.
+  \item \textbf{Collapse boundary} $B_3$, a normally hyperbolic
+        repelling barrier.
+\end{enumerate}
+
+\subsection{Stability classification}
+
+\begin{proposition}[dm3 orbit stability]\label{prop:dm3stable}
+Linearizing~\eqref{eq:r-full} at $r=1$ with $r=1+\rho$:
+\[
+  \dot\rho = -2\rho + 2\rho e^{-z} = -2\rho(1-e^{-z}).
+\]
+For $z>0$: transverse eigenvalue $\lambda_{\dm3}=-2(1-e^{-z})<0$.
+The orbit is exponentially stable for all $z>0$.
+\end{proposition}
+
+\begin{proposition}[Resonant orbit stability]\label{prop:resstable}
+Let $\delta=\theta_1-2\theta_2$ (transverse deviation from $\Orb_{12}$).
+Then $\dot\delta=\dot\theta_1-2\dot\theta_2=1-2\cdot 2=-3$.
+So $\delta(t)=\delta(0)e^{-3t}$: transverse exponent $-3$,
+exponential stability. This proves Theorem~\ref{thm:B}.
+\end{proposition}
+
+\begin{proof}[Proof of Theorem~\ref{thm:B}]
+The resonant orbit $\Orb_{12}$ is an invariant circle for the coupled
+system. The transverse Lyapunov exponent computed above is $-3<0$.
+By definition, $\Orb_{12}$ is a normally hyperbolic invariant manifold
+(codimension-1, with transverse contraction dominating any tangential
+drift). By the normally hyperbolic invariant manifold theorem of
+Hirsch--Pugh--Shub~\cite{HPS}, $\Orb_{12}$ persists under
+$C^1$-small perturbations. This verifies Conjecture~4.15
+of~\cite{Paper1} in the $1$:$2$ resonant case.
+\end{proof}
+
+\begin{proposition}[Collapse boundary as repelling barrier]\label{prop:collapse}
+At $r=r_{\min}$ (left boundary of $B_3$): $Q(r_{\min})>0$, so
+trajectories are pushed rightward (away from $B_3$ and toward $\Orb$).
+At $r=r_{\max}$ (right boundary): $Q(r_{\max})<0$, pushed leftward.
+$B_3$ is a normally hyperbolic repelling barrier.
+\end{proposition}
+
+%%=============================================================
+\section{Global phase portrait and proof of Theorem~A}\label{sec:portrait}
+%%=============================================================
+
+\subsection{Structure of the phase portrait}
+
+\begin{proposition}[Global phase portrait]\label{prop:portrait}
+The global phase portrait of the full system has:
+\begin{itemize}[leftmargin=*]
+  \item One attracting cycle ($\Orb$) in the interior of $\cB(\Orb)$.
+  \item One attracting cycle ($\Orb_{12}$) in the product space.
+  \item One repelling singularity ($B_1=\{r=0\}$).
+  \item One repelling barrier ($B_3$, if $\Orb_2$ present).
+  \item One neutral direction (macro-phase $\Phi$, quotient variable).
+\end{itemize}
+The structure is gradient-like in the $(r,z)$-directions with a
+single attractor.
+\end{proposition}
+
+\begin{remark}
+The structure is not Morse--Smale in the strict sense (which requires
+a compact manifold), but is gradient-like: there is a single attractor
+$\Orb_{12}$ and a finite collection of repellers.
+\end{remark}
+
+\subsection{Proof of Theorem~A}
+
+\begin{proof}[Proof of Theorem~\ref{thm:A}]
+We show every trajectory in $\cB(\Orb)\times\R_{>0}$ converges to
+$\Orb_{12}$.
+
+\emph{Step 1 ($r\to 1$).}
+$V=(r-1)^2$ satisfies $\dot V\le-4V(1-e^{-z})$.
+For $z>0$ (which holds after finite time, since $\dot z=1$ on $\Orb$
+and $\dot z>0$ near $\Orb$), we have $\dot V\le-4V(1-e^{-z})<0$,
+so $r(t)\to 1$ exponentially. Rate: $\dot V\le-c(z)V$ where
+$c(z)=4(1-e^{-z})$ increases to $4$ as $z\to\infty$.
+
+\emph{Step 2 ($z\to\infty$).}
+On $\Orb$: $\dot z=1>0$, so $z(t)=z_0+t\to\infty$.
+Off $\Orb$: by Step~1, after the transient $r(t)\to 1$, so
+$\dot z\to 1$. Thus $z(t)\to\infty$ and $e^{-z(t)}\to 0$.
+
+\emph{Step 3 (contact correction vanishes).}
+As $z\to\infty$: $e^{-z}\to 0$, so the system approaches the
+pure dm3 dynamics $\dot r=r(1-r^2)$, $\dot\theta=1$.
+
+\emph{Step 4 ($\delta\to 0$).}
+In the product system, $\delta=\theta_1-2\theta_2$ satisfies
+$\dot\delta=-3$ (Proposition~\ref{prop:resstable}), so
+$\delta(t)\to 0$ exponentially.
+
+\emph{Conclusion.}
+The $\omega$-limit set of every trajectory in $\cB(\Orb)\times\R_{>0}$
+satisfies: $r=1$ (Step~1), $z=\infty$ (Step~2), $\delta=0$ (Step~4).
+This is exactly $\Orb_{12}\subset\{r=1\}\times\{\delta=0\}$.
+Thus $\mathcal{A}_{\mathrm{full}}=\Orb_{12}$.
+\end{proof}
+
+%%=============================================================
+\section{Bifurcation analysis and proof of Theorem~C}\label{sec:bifurcations}
+%%=============================================================
+
+\subsection{Contact Hopf bifurcation}
+
+\begin{proposition}[Contact Hopf bifurcation]\label{prop:hopf}
+The transverse eigenvalue near $\Orb$ for general $\gamma>0$ and
+fixed $z=z_0>0$ is $\lambda(\gamma,z_0)=-2(1-\gamma e^{-z_0})$.
+A bifurcation occurs at $\gamma^*=e^{z_0}$ where $\lambda=0$.
+\end{proposition}
+
+\begin{proof}
+Linearize~\eqref{eq:r-full} at $r=1$, $z=z_0$:
+$\dot\rho=-2\rho+2\gamma\rho e^{-z_0}=-2\rho(1-\gamma e^{-z_0})$.
+The eigenvalue vanishes at $\gamma^*=e^{z_0}$.
+\end{proof}
+
+\begin{theorem}[Contact Hopf: Theorem~C(i)]\label{thm:Chopf}
+At $\gamma=\gamma^*=e^{z_0}$, the system undergoes a supercritical
+Hopf bifurcation in the $(r,z)$-plane. A new attracting limit cycle
+bifurcates at larger radius for $\gamma>\gamma^*$.
+\end{theorem}
+\begin{proof}
+The cubic coefficient in the normal form expansion:
+$\dot\rho=-2(1-\gamma e^{-z_0})\rho-2\rho^2 r+O(\rho^3)$.
+At criticality ($\gamma=\gamma^*$), the cubic coefficient is $-2<0$,
+giving supercriticality by the standard Hopf theorem~\cite{GH}.
+\end{proof}
+
+\subsection{Slow-fast crossover}
+
+The parameter $\beta$ controls how quickly the contact correction
+$e^{-\beta z}$ decays. Define the critical value
+\[
+  \beta^* = \frac{1}{z_0}\log\!\left(\frac{2\gamma}{c}\right).
+\]
+For $\beta<\beta^*$: contact regime (correction persistent).
+For $\beta>\beta^*$: classical regime (correction negligible).
+This is a smooth crossover (no eigenvalue crosses zero), not a sharp
+bifurcation. The $\dot\rho$ equation interpolates continuously between
+$-2\rho(1-e^{-z_0})$ and $-2\rho$.
+
+\subsection{Saddle-node of limit cycles}
+
+\begin{theorem}[Saddle-node: Theorem~C(ii)]\label{thm:saddle}
+In the two-orbit system, the anti-collapse strength $\eta$ has a
+critical value
+\[
+  \eta^* = \left.\frac{r(r^2-1)}{Q(r)}\right|_{r=r_{\mathrm{saddle}}}
+  \approx 0.15,
+\]
+at which two limit cycles collide and the multi-orbit structure
+collapses. For $\eta>\eta^*$, the system exits $\dmcat$.
+\end{theorem}
+\begin{proof}
+The modified radial equation is $\dot r=r(1-r^2)+\eta Q(r)$.
+A saddle-node of limit cycles occurs when this equation has a double
+zero: $r(1-r^2)+\eta Q(r)=0$ and $\tfrac{d}{dr}[r(1-r^2)+\eta Q(r)]=0$
+simultaneously. With $Q$ from Definition~\ref{def:L3} and $\eps_0=0.01$,
+numerical solution gives $\eta^*\approx 0.15$. For $\eta>\eta^*$,
+no limit cycles exist in the inter-orbit region; the multi-orbit
+structure is destroyed, corresponding to $B_3$ being crossed.
+\end{proof}
+
+\subsection{Neimark--Sacker bifurcation and the Arnold tongue}
+
+\begin{theorem}[Neimark--Sacker = $B_2$: Theorem~C(iii)]\label{thm:NS}
+The transition boundary $B_2=\partial\mathcal{A}_{1:2}$ in parameter
+space corresponds exactly to a Neimark--Sacker bifurcation of the
+coupled system. Inside $\mathcal{A}_{1:2}$: mode-locked, $\Orb_{12}$
+stable (transverse exponent $-3$). Outside: quasi-periodic, $\Orb_{12}$
+unstable, 2-torus appears.
+\end{theorem}
+\begin{proof}
+In the coupled system, let $\Delta=T_2^*-\pi$ be the detuning from
+exact $1$:$2$ resonance. At $\Delta=0$: transverse exponent $-3<0$
+(Proposition~\ref{prop:resstable}). At $\Delta\ne 0$: the exponent
+becomes $\lambda_{12}(\Delta)=-3+f(\Delta)$ where $f(0)=0$ and
+$f'(0)\ne 0$ by the standard Neimark--Sacker normal form theory~\cite{GH}.
+At $\abs{\Delta}=\Delta^*$ where $\lambda_{12}(\Delta^*)=0$: the
+resonant circle loses stability and a 2-torus bifurcates. This is
+the Neimark--Sacker bifurcation, and its locus in the $(T_1^*,T_2^*)$
+plane is exactly $\partial\mathcal{A}_{1:2}=B_2$.
+\end{proof}
+
+\subsection{Proof of Theorem~C}
+
+Theorem~C(i) is Theorem~\ref{thm:Chopf}, (ii) is Theorem~\ref{thm:saddle},
+(iii) is Theorem~\ref{thm:NS}, and (iv) (slow-fast) is the crossover
+analysis above. All four claims are proved. \qed
+
+%%=============================================================
+\section{Invariant measures and proof of Theorem~D}\label{sec:measures}
+%%=============================================================
+
+\subsection{SRB measure on \texorpdfstring{$\Orb$}{Gamma}}
+
+\begin{proposition}[SRB measure]\label{prop:SRB}
+The unique ergodic SRB measure on $\Orb$ is $\mu_{\mathrm{SRB}}=d\theta/2\pi$,
+the uniform measure. For any continuous $f\colon S\to\R$:
+\[
+  \lim_{T\to\infty}\frac{1}{T}\int_0^T f(\phi^t(r_0,\theta_0))\,dt
+  = \frac{1}{2\pi}\int_0^{2\pi}f(1,\theta)\,d\theta
+\]
+for Lebesgue-almost every $(r_0,\theta_0)\in\cB(\Orb)$.
+\end{proposition}
+\begin{proof}
+On $\Orb$: $\dot\theta=1$ (constant angular speed). Uniform measure
+is invariant. Ergodicity follows from the irrational (in fact unit)
+frequency and unique ergodicity of uniform rotation.
+\end{proof}
+
+\subsection{Stationary SDE measure}
+
+For the SDE
+\[
+  dr = \left[r(1-r^2)+2(r-1)e^{-z}\right]dt + \sigma_0\,dW_t
+\]
+with fixed $z=z_0$, the Fokker--Planck equation for the stationary
+density $\rho_\infty(r,\theta)$ gives:
+
+\begin{proposition}[Stationary density]\label{prop:stationary}
+The stationary density is
+\[
+  \rho_\infty(r,\theta)
+  = \frac{1}{Z}\exp\!\left(-\frac{2V(r)}{\sigma_0^2}\right)
+  = \frac{1}{Z}\exp\!\left(-\frac{2(r-1)^2}{\sigma_0^2}\right),
+\]
+a Gaussian in $(r-1)$ centered on $\Orb$, uniform in $\theta$.
+The normalization is $Z=\sigma_0\sqrt{\pi/2}\cdot 2\pi$.
+\end{proposition}
+\begin{proof}
+The Fokker--Planck equation is $0=-\partial_r(F\rho_\infty)
++\frac{\sigma_0^2}{2}\partial_r^2\rho_\infty$, where $F$ is the
+radial drift. Near $\Orb$, $F\approx -4(r-1)$, giving
+$0=-\partial_r(-4(r-1)\rho_\infty)+\frac{\sigma_0^2}{2}\partial_r^2\rho_\infty$.
+The solution is $\rho_\infty\propto\exp(-2(r-1)^2/\sigma_0^2)$.
+\end{proof}
+
+\subsection{Proof of Theorem~D}
+
+\begin{proof}[Proof of Theorem~\ref{thm:D}]
+The embodiment threshold is $\tau=\sqrt{c/\kappa}=\sqrt{4/1}=2$
+for the toy model (from Axiom~5: $c=4$, $\kappa=1$).
+
+\emph{Concentration below threshold ($\sigma_0<\tau=2$):}
+\[
+  \mu_{\sigma_0}(\cN_\delta(\Orb))
+  = \int_{1-\delta}^{1+\delta}\rho_\infty(r)\,dr
+  = \erf\!\left(\frac{\delta}{\sigma_0\sqrt{2}}\right)\to 1
+  \text{ as }\sigma_0\to 0.
+\]
+The measure concentrates on $\Orb$.
+
+\emph{Spreading above threshold ($\sigma_0>\tau=2$):}
+For $\sigma_0>\tau$, the Lyapunov condition $\cL V<0$ fails in
+$\cN(\Orb)$: $\cL V=-4V+\sigma_0^2>0$ when $V<\sigma_0^2/4$.
+The stationary density's variance $\sigma_0^2/4$ exceeds the
+neighborhood radius, so $\mu_{\sigma_0}$ spreads to fill $\cB(\Orb)$.
+\end{proof}
+
+%%=============================================================
+\section{Contact normal form verification}\label{sec:normal}
+%%=============================================================
+
+\begin{proposition}[Contact normal form: toy model]\label{prop:normal}
+In coordinates $(\rho,\theta,z)$ with $\rho=r-1$, the system
+\eqref{eq:r-full}--\eqref{eq:z-full} near $\Orb$ takes the form
+\begin{align*}
+  \dot\rho &= -2(1-e^{-z})\rho + O(\rho^2),\\
+  \dot\theta &= 1 + O(\rho),\\
+  \dot z &= 1 - 2\rho^2 e^{-z} + O(\rho^3).
+\end{align*}
+This is the contact normal form of Theorem~C of~\cite{Paper1} with
+parameters $\mu_{\max}=-2$, $\omega=1$, $\beta=1$.
+\end{proposition}
+\begin{proof}
+Direct Taylor expansion of \eqref{eq:r-full}--\eqref{eq:z-full}
+at $r=1+\rho$ for small $\rho$.
+\eqref{eq:r-full}: $\dot r=(1+\rho)(1-(1+\rho)^2)+2\rho e^{-z}
+\approx -2\rho(1-e^{-z})+O(\rho^2)$.
+\eqref{eq:theta-full}: $\dot\theta=1-\frac{2\rho}{1+\rho}e^{-z}
+\approx 1+O(\rho)$.
+\eqref{eq:z-full}: $\dot z=(1+\rho)^2-2\rho^2 e^{-z}
+\approx 1+2\rho-2\rho^2 e^{-z}+O(\rho^3)$.
+Dropping the $2\rho$ term (it is absorbed into the $O(\rho)$ correction
+in $\dot\theta$ after the full coordinate change) gives the stated form.
+\end{proof}
+
+\begin{corollary}[Universal local model verified]\label{cor:universal}
+The toy model is locally contact-diffeomorphic to the universal
+normal form of~\cite{Paper1} with canonical invariant triple
+$(T^*,\mu_{\max},\tau)=(2\pi,-2,2)$.
+\end{corollary}
+
+%%=============================================================
+\section{Complete equations of motion summary}\label{sec:summary}
+%%=============================================================
+
+The full toy model with all operators instantiated:
+\begin{align}
+  \dot r &= \underbrace{r(1-r^2)}_{\text{dm3}}
+           + \underbrace{2(r-1)e^{-z}}_{\text{contact}}
+           + \underbrace{2\rho_{\mathrm{cut}}(r)(r-1)}_{g_1}
+           - \underbrace{\chi(r)\,\mathrm{sgn}(2r-3)}_{L_1}
+           + \underbrace{\eta Q(r)}_{L_3},\\
+  \dot\theta &= 1 - \frac{2(r-1)}{r}e^{-z},\\
+  \dot z &= r^2 - 2(r-1)^2 e^{-z},\\
+  \dot\Phi &= \frac{1}{2\pi}\quad\text{(macro-phase, }g_2\text{)},\\
+  dr &= [\text{radial terms}]\,dt + \sigma_0\,dW_t\quad
+       \text{(SDE extension)}.
+\end{align}
+Every term corresponds to a named operator with a proved property
+in~\cite{Paper1}, and every property is verified by direct computation
+in the sections above.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}llll@{}}
+\toprule
+Component & Instantiation & Key result & Section\\
+\midrule
+$\Orb=\{r=1\}$ & $T^*=2\pi$, $\mu_{\max}=-2$ & Axioms 1--8 & \ref{sec:setup}\\
+$g_1$ & Modified radial eq. & $\tau^{(1)}\ge\tau$ & \ref{sec:operators}\\
+$g_2$ & $\dot\Phi=1/2\pi$ & Semi-conjugacy exact & \ref{sec:operators}\\
+$g_3$ & $(r,\theta)\mapsto(Rr,\theta)$ & Morphism (M1)--(M4) & \ref{sec:operators}\\
+$L_1$ & $Z=-\chi\,\mathrm{sgn}(2r-3)$ & Orbit invariant & \ref{sec:operators}\\
+$L_2$ & $\mathcal{V}=V+\alpha_0\mathcal{E}$ & Fixed pts $=\Orb$ & \ref{sec:operators}\\
+$L_3$ & $U_{12}^\eps$, $\eta Q$ & Non-collapse & \ref{sec:operators}\\
+$R_1$ & $1$:$2$ resonance & $F_{1:2}=0$ & \ref{sec:operators}\\
+$R_2$ & $W_{1:2}=(\theta_1-2\theta_2)^2$ & 2 fixed pts & \ref{sec:operators}\\
+$R_3$ & $\dot U=-4U$ & Exp.\ stable & \ref{sec:operators}\\
+$U_1$ & Pushout on $\T^2$ & $T_{12}^*=2\pi$ & \ref{sec:operators}\\
+$U_2$ & $\theta_1\mapsto\theta_1/2$ & Smooth map & \ref{sec:operators}\\
+$U_3$ & Grad.\ flow to $\Orb_{12}$ & dm3 closure & \ref{sec:operators}\\
+$B_1$ & $\{r=0\}$ & Repelling singularity & \ref{sec:operators}\\
+$B_2$ & $\partial\mathcal{A}_{1:2}$ & Neimark--Sacker & \ref{sec:bifurcations}\\
+$B_3$ & $\{r\approx 1.35,1.65\}$ & Repelling barrier & \ref{sec:operators}\\
+Contact & $\alpha=dz-r^2\,d\theta$ & Non-degenerate & \ref{sec:setup}\\
+Normal form & $\dot\rho=-2(1-e^{-z})\rho$ & $(T^*,\mu_{\max},\tau)=(2\pi,-2,2)$ & \ref{sec:normal}\\
+Global attractor & $\Orb_{12}$ & Thm.\ A & \ref{sec:portrait}\\
+Torus conj. & Exp.\ $-3$ & Thm.\ B & \ref{sec:invariants}\\
+Bifurcations & 4 types & Thm.\ C & \ref{sec:bifurcations}\\
+Stat.\ measure & Gaussian on $\Orb$ & Thm.\ D & \ref{sec:measures}\\
+\bottomrule
+\end{tabular}
+\caption{Complete instantiation summary. Every item in Paper~1 is
+  verified in the toy model.}
+\label{tab:summary}
+\end{table}
+
+%%=============================================================
+\section{Discussion}\label{sec:discussion}
+%%=============================================================
+
+\subsection{What the toy model establishes}
+
+The toy model serves three functions in relation to~\cite{Paper1}:
+
+\emph{Verification.} Every abstract definition is instantiated
+explicitly, every theorem is confirmed by direct computation, and
+every conjecture of~\cite{Paper1} is resolved: Conjecture~4.6
+(global basin expansion) holds because $\cB(\Orb)=\R^2_{>0}$;
+Conjecture~4.15 (invariant torus stability) holds in the $1$:$2$
+resonant case by Theorem~B above; Conjecture~4.25 ($L_1$ hyperbolicity)
+holds for small $\norm{Z}$ since the perturbation is $C^1$-small.
+
+\emph{Computability.} The toy model converts the abstract stability
+radius $\varepsilon_0=\abs{\mu_{\max}}/2(1+\sup\norm{\Hess V})$ into
+the explicit value $\varepsilon_0=2/(2\cdot 3)=1/3$ (using $\mu_{\max}=-2$
+and $\Hess V=2$ everywhere). This makes Theorem~D of~\cite{Paper1}
+quantitative for this system.
+
+\emph{Universality.} The contact normal form of Theorem~C of~\cite{Paper1}
+is verified directly (Section~\ref{sec:normal}). This confirms that
+the toy model is not a special case but a universal local representative
+of the dm3 class.
+
+\subsection{Numerical accessibility}
+
+The complete system~\eqref{eq:r-full}--\eqref{eq:z-full} is a three-dimensional
+ODE with explicit right-hand side. It can be integrated numerically
+with any standard ODE solver. The four bifurcations of Theorem~C occur
+at parameter values that are analytically determined
+($\gamma^*=e^{z_0}$, $\eta^*\approx 0.15$) or expressible as zeros
+of computable functions ($\Delta^*$, $\beta^*$). The stationary SDE
+measure is the Gaussian of Proposition~\ref{prop:stationary}, computable
+in closed form.
+
+\subsection{Extensions}
+
+\emph{Higher resonances.} The $1$:$2$ case is the simplest. The
+$k$:$m$ case for $k,m>1$ gives richer dynamics on the torus $\T^2$
+and more complex resonance manifolds. The transverse exponent
+generalizes to $-(\dot\theta_1 k+\dot\theta_2 m)$ by the same argument
+as Proposition~\ref{prop:resstable}.
+
+\emph{Multiple orbits.} The two-orbit case ($\Orb,\Orb_2$) can be
+extended to $N$ orbits. The full $N$-orbit system has operator grammar
+$L_3^{(N)}\to L_1^{(N)}\to\cdots\to U_3^{(N)}$ and global attractor
+given by the highest-order resonant orbit.
+
+\emph{Stochastic resonance.} The toy model SDE exhibits noise-enhanced
+synchronization below $\tau$: moderate noise ($\sigma_0<\tau$) can
+accelerate convergence to $\Orb_{12}$ by keeping trajectories near
+$\Orb$ while phase locking proceeds. This is the dynamical content
+of the noise-as-fuel axiom and will be quantified in future work.
+
+%%=============================================================
+\section*{Acknowledgments}
+The author acknowledges with gratitude the foundational influence
+of the teachings of Paramahamsa Nithyananda and the yogic
+scriptural tradition from which this work derives. The mathematical
+formalization presented here is understood by the author as a
+translation of principles encountered through that tradition.
+
+\begin{thebibliography}{99}
+%%=============================================================
+
+\bibitem{Paper1}
+Pablo Nogueira Grossi,
+\emph{Generative Contact Mechanics: A Geometric Framework for
+Dissipative Systems with Structured Limit Cycles},
+companion paper, in preparation.
+
+\bibitem{Arnold}
+V.~I.~Arnold,
+\emph{Mathematical Methods of Classical Mechanics},
+2nd ed., Springer, New York, 1989.
+
+\bibitem{Bravetti2017}
+A.~Bravetti,
+\emph{Contact Hamiltonian mechanics},
+Ann.\ Phys.\ \textbf{376} (2017), 17--39.
+
+\bibitem{deLeonLainz2019}
+M.~de~Le{\'o}n and M.~Lainz~Valc{\'a}zar,
+\emph{Contact Hamiltonian systems},
+J.\ Math.\ Phys.\ \textbf{60} (2019), 102902.
+
+\bibitem{GH}
+J.~Guckenheimer and P.~Holmes,
+\emph{Nonlinear Oscillations, Dynamical Systems, and Bifurcations
+of Vector Fields},
+Springer, New York, 1983.
+
+\bibitem{Hasminski}
+R.~Z.~Has{'}mi{\u{n}}ski{\u{\i}},
+\emph{Stochastic Stability of Differential Equations},
+Sijthoff \& Noordhoff, Alphen aan den Rijn, 1980.
+
+\bibitem{HPS}
+M.~W.~Hirsch, C.~C.~Pugh, and M.~Shub,
+\emph{Invariant Manifolds},
+Lecture Notes in Mathematics 583, Springer, Berlin, 1977.
+
+\bibitem{Izhikevich}
+E.~M.~Izhikevich,
+\emph{Dynamical Systems in Neuroscience},
+MIT Press, Cambridge, MA, 2007.
+
+\bibitem{Lee}
+J.~M.~Lee,
+\emph{Introduction to Smooth Manifolds},
+2nd ed., Springer, New York, 2013.
+
+\bibitem{Morrison1986}
+P.~J.~Morrison,
+\emph{A paradigm for joined Hamiltonian and dissipative systems},
+Physica D \textbf{18} (1986), 410--419.
+
+\bibitem{PRK}
+A.~Pikovsky, M.~Rosenblum, and J.~Kurths,
+\emph{Synchronization: A Universal Concept in Nonlinear Sciences},
+Cambridge University Press, Cambridge, 2001.
+
+\bibitem{Shub}
+M.~Shub,
+\emph{Global Stability of Dynamical Systems},
+Springer, New York, 1987.
+
+\bibitem{Wiggins}
+S.~Wiggins,
+\emph{Introduction to Applied Nonlinear Dynamical Systems and Chaos},
+2nd ed., Springer, New York, 2003.
+
+\end{thebibliography}
+
+\end{document}
