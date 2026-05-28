@@ -1,0 +1,224 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .wrap { padding: 1.5rem 0; max-width: 660px; }
+  .header { margin-bottom: 1.5rem; }
+  .badge { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: var(--border-radius-md); background: var(--color-background-info); color: var(--color-text-info); margin-bottom: 10px; }
+  h2 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: var(--color-text-secondary); }
+  .video-link { display: flex; align-items: center; gap: 8px; margin: 1rem 0 1.5rem; padding: 10px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); text-decoration: none; color: var(--color-text-primary); font-size: 14px; }
+  .video-link i { color: var(--color-text-info); font-size: 20px; }
+  .video-link span { flex: 1; }
+  .video-link .ext { color: var(--color-text-tertiary); font-size: 12px; }
+  .progress-bar { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+  .progress-fill { height: 100%; background: #378ADD; border-radius: 2px; transition: width 0.4s; }
+  .progress-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 0.5rem; }
+  .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin: 1.5rem 0 0.75rem; }
+  .q-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+  .q-card.correct { border-color: #1D9E75; background: #E1F5EE; }
+  .q-card.wrong { border-color: #D85A30; background: #FAECE7; }
+  .q-num { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 6px; }
+  .q-text { font-size: 15px; color: var(--color-text-primary); margin-bottom: 12px; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 6px; }
+  .opt { display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); cursor: pointer; font-size: 14px; color: var(--color-text-primary); background: var(--color-background-secondary); transition: background 0.15s, border-color 0.15s; user-select: none; }
+  .opt:hover { border-color: var(--color-border-secondary); background: var(--color-background-primary); }
+  .opt.selected { border-color: #378ADD; background: #E6F1FB; color: #0C447C; }
+  .opt.correct-ans { border-color: #1D9E75; background: #E1F5EE; color: #085041; }
+  .opt.wrong-ans { border-color: #D85A30; background: #FAECE7; color: #712B13; }
+  .opt-letter { font-size: 12px; font-weight: 500; min-width: 18px; padding-top: 1px; }
+  .feedback { font-size: 13px; margin-top: 10px; padding: 8px 10px; border-radius: var(--border-radius-md); }
+  .feedback.correct { background: #9FE1CB; color: #04342C; }
+  .feedback.wrong { background: #F5C4B3; color: #4A1B0C; }
+  .open-q { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; width: 100%; min-height: 80px; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); resize: vertical; }
+  .btn-row { display: flex; gap: 10px; margin-top: 1.5rem; }
+  button.primary { padding: 8px 20px; font-size: 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+  button.primary:hover { background: var(--color-background-secondary); }
+  button.submit { background: #185FA5; color: #E6F1FB; border: none; padding: 10px 24px; font-size: 14px; border-radius: var(--border-radius-md); cursor: pointer; font-weight: 500; }
+  button.submit:hover { background: #0C447C; }
+  button.submit:disabled { opacity: 0.5; cursor: default; }
+  .score-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-top: 1.5rem; display: none; }
+  .score-num { font-size: 32px; font-weight: 500; color: var(--color-text-primary); }
+  .score-sub { font-size: 14px; color: var(--color-text-secondary); margin-top: 4px; }
+  hr { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+</style>
+
+<div class="wrap">
+  <h2 sr-only hidden>Listening exercise: The world's most mysterious book</h2>
+  <div class="header">
+    <span class="badge">Listening exercise</span>
+    <h2>The world's most mysterious book</h2>
+    <p class="subtitle">TED-Ed · Stephen Bax · 4:43 min</p>
+  </div>
+
+  <a class="video-link" href="https://www.youtube.com/watch?v=8NS4CbBJQ84" target="_blank">
+    <i class="ti ti-player-play" aria-hidden="true"></i>
+    <span>Watch the video before answering</span>
+    <i class="ti ti-external-link" aria-hidden="true"></i>
+  </a>
+
+  <div class="progress-label" id="prog-label">0 of 8 answered</div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="section-label">Part A — Multiple choice</div>
+
+  <div id="questions"></div>
+
+  <hr>
+  <div class="section-label">Part B — Short answer</div>
+
+  <div class="q-card">
+    <p class="q-num">Question 7</p>
+    <p class="q-text">Why is it difficult for scholars to decode the Voynich manuscript? Give <strong>two</strong> reasons mentioned in the video.</p>
+    <textarea class="open-q" id="open1" placeholder="Write your answer here…"></textarea>
+  </div>
+
+  <div class="q-card">
+    <p class="q-num">Question 8</p>
+    <p class="q-text">Stephen Bax takes a different approach from other researchers. In your own words, describe his method and what he has managed to identify so far.</p>
+    <textarea class="open-q" id="open2" placeholder="Write your answer here…"></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="submit" id="submit-btn" onclick="submitAll()">Check my answers ↗</button>
+    <button class="primary" onclick="resetAll()">Reset</button>
+  </div>
+
+  <div class="score-card" id="score-card">
+    <p class="score-sub">Your score (Part A)</p>
+    <p class="score-num" id="score-num">—</p>
+    <p class="score-sub" id="score-msg"></p>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "Where is the Voynich manuscript currently kept?",
+    opts: ["The British Library in London","Yale's Beinecke Rare Book and Manuscript Library","The Vatican Secret Archives","The Library of Congress"],
+    ans: 1,
+    feedback: "The manuscript is held at Yale's Beinecke Rare Book and Manuscript Library."
+  },
+  {
+    text: "Roughly how many pages does the Voynich manuscript contain?",
+    opts: ["120 pages","180 pages","240 pages","300 pages"],
+    ans: 2,
+    feedback: "The video describes it as a 240-page tome."
+  },
+  {
+    text: "When was the manuscript carbon-dated to?",
+    opts: ["Around 1200","Around 1350","Around 1420","Around 1500"],
+    ans: 2,
+    feedback: "Carbon dating places it at around 1420."
+  },
+  {
+    text: "Which of the following is NOT one of the theories about who wrote the manuscript?",
+    opts: ["Roger Bacon","John Dee","Leonardo da Vinci","Wilfrid Voynich himself"],
+    ans: 2,
+    feedback: "Leonardo da Vinci is not mentioned. Roger Bacon, John Dee, and even Voynich himself are named as possible authors."
+  },
+  {
+    text: "What are 'gallows characters' in the context of this video?",
+    opts: ["Illustrations of medieval executions in the manuscript","Tall, distinctive letters in the manuscript's script","Code names used by the original owner","Symbols borrowed from the Hebrew alphabet"],
+    ans: 1,
+    feedback: "Gallows characters are the tall, distinctive letters found in the manuscript's unusual script."
+  },
+  {
+    text: "Stephen Bax's approach to decoding the manuscript is best described as:",
+    opts: ["Running the text through a supercomputer to find statistical patterns","Comparing it entirely with known medieval Latin texts","Starting with proper nouns and plant names to identify individual words","Hiring a team of cryptographers to break the cipher"],
+    ans: 2,
+    feedback: "Bax starts with identifiable proper nouns (like plant and star names) to anchor his decoding, similar to how the Rosetta Stone was used."
+  }
+];
+
+let selected = new Array(questions.length).fill(null);
+let submitted = false;
+
+function renderQuestions() {
+  const container = document.getElementById('questions');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + qi;
+    const letters = ['A','B','C','D'];
+    card.innerHTML = `<p class="q-num">Question ${qi+1}</p><p class="q-text">${q.text}</p><div class="options">${q.opts.map((o,oi)=>`<div class="opt" id="opt-${qi}-${oi}" onclick="choose(${qi},${oi})"><span class="opt-letter">${letters[oi]}</span><span>${o}</span></div>`).join('')}</div><div class="feedback" id="fb-${qi}" style="display:none"></div>`;
+    container.appendChild(card);
+  });
+}
+
+function choose(qi, oi) {
+  if (submitted) return;
+  selected[qi] = oi;
+  const letters = ['A','B','C','D'];
+  questions[qi].opts.forEach((_,i) => {
+    const el = document.getElementById('opt-'+qi+'-'+i);
+    el.className = 'opt' + (i===oi ? ' selected' : '');
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = selected.filter(v => v !== null).length + countOpenAnswered();
+  const total = questions.length + 2;
+  document.getElementById('prog-label').textContent = answered + ' of ' + total + ' answered';
+  document.getElementById('prog-fill').style.width = Math.round(answered/total*100) + '%';
+}
+
+function countOpenAnswered() {
+  let c = 0;
+  if (document.getElementById('open1').value.trim().length > 10) c++;
+  if (document.getElementById('open2').value.trim().length > 10) c++;
+  return c;
+}
+
+document.getElementById('open1').addEventListener('input', updateProgress);
+document.getElementById('open2').addEventListener('input', updateProgress);
+
+function submitAll() {
+  if (submitted) return;
+  submitted = true;
+  let score = 0;
+  questions.forEach((q, qi) => {
+    const card = document.getElementById('card-'+qi);
+    const fb = document.getElementById('fb-'+qi);
+    const s = selected[qi];
+    questions[qi].opts.forEach((_,i) => {
+      const el = document.getElementById('opt-'+qi+'-'+i);
+      el.classList.remove('selected');
+      if (i === q.ans) el.classList.add('correct-ans');
+      else if (i === s && s !== q.ans) el.classList.add('wrong-ans');
+    });
+    if (s === q.ans) {
+      score++;
+      card.classList.add('correct');
+      fb.className = 'feedback correct';
+      fb.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i> Correct! ' + q.feedback;
+    } else {
+      card.classList.add('wrong');
+      fb.className = 'feedback wrong';
+      fb.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i> ' + (s === null ? 'Not answered. ' : 'Not quite. ') + q.feedback;
+    }
+    fb.style.display = 'block';
+  });
+  const scoreCard = document.getElementById('score-card');
+  scoreCard.style.display = 'block';
+  document.getElementById('score-num').textContent = score + ' / ' + questions.length;
+  const msgs = ['Keep watching — try again!','Good effort — review the video!','Nice work!','Very good!','Excellent!','Perfect score!'];
+  document.getElementById('score-msg').textContent = msgs[Math.min(score, msgs.length-1)];
+  document.getElementById('submit-btn').disabled = true;
+}
+
+function resetAll() {
+  submitted = false;
+  selected = new Array(questions.length).fill(null);
+  renderQuestions();
+  document.getElementById('open1').value = '';
+  document.getElementById('open2').value = '';
+  document.getElementById('score-card').style.display = 'none';
+  document.getElementById('submit-btn').disabled = false;
+  updateProgress();
+}
+
+renderQuestions();
+</script>
