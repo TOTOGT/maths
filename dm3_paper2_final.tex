@@ -65,7 +65,8 @@
   and Global Dynamical Analysis}
 
 \author{Pablo Nogueira Grossi}
-\address{Independent Researcher, Brazil}
+\address{Academic Coordinator, UCEDA School (ESL), Elizabeth, NJ\\
+Newark, NJ, USA}
 \email{pablogrossi@hotmail.com}
 
 \keywords{contact geometry, limit cycles, bifurcation theory,
@@ -252,42 +253,102 @@ Floquet exponent: linearizing $\dot r=r(1-r^2)$ at $r=1$ with
 $r=1+\rho$: $\dot\rho\approx-2\rho$, so $\mu_{\max}=-2$.
 \end{proof}
 
-\subsection{Axiom verification}
+\subsection{Axiom verification}\label{subsec:axioms}
+
+The eight dm3 axioms of~\cite{Paper1} are verified explicitly
+for the toy model on $M=\R^2_{>0}\times\R$ with
+equations~\eqref{eq:rdot}--\eqref{eq:zdot}. Each axiom is checked
+with explicit derivations and cross-references to the global results
+of Sections~\ref{sec:invariants}--\ref{sec:measures}.
 
 \begin{proposition}[All eight axioms hold]\label{prop:axioms}
 The system $\dm_0$ satisfies Axioms~1--8 of~\cite{Paper1}.
 \end{proposition}
+
 \begin{proof}
 \textbf{Axiom~1 (Orbit identity).}
-Four phase points at $\theta=0,\pi/2,\pi,3\pi/2$ on $\Orb$,
-cycled by $\phi^{\pi/2}$:
-$p_I=(1,0)$, $p_{VI}=(1,\pi/2)$, $p_{III}=(1,\pi)$,
-$p_{VII}=(1,3\pi/2)$.
+The four phase points $p_I=(1,0)$, $p_{VI}=(1,\pi/2)$,
+$p_{III}=(1,\pi)$, $p_{VII}=(1,3\pi/2)$ lie on $\Orb=\{r=1\}$
+and are cycled by $\phi^{\pi/2}$ (Proposition~\ref{prop:flow}).
 
 \textbf{Axiom~2 (Generative closure).}
-$\phi^t(\Orb)=\Orb$ for all $t$: on $\Orb$, $r=1$ and
-$\dot r=1\cdot(1-1)=0$, so $r$ remains $1$.
+On $\Orb$: $\dot r = 1\cdot(1-1)+0=0$, so $r$ remains $1$
+under the flow. $\Orb$ is compact, connected, and invariant.
 
 \textbf{Axiom~3 (Structural primacy).}
-$V=(r-1)^2$, $\dot V=2(r-1)\dot r=2(r-1)r(1-r^2)
-=-2(r-1)^2 r(1+r)<0$ for $r\ne 1$.
+$V=(r-1)^2$. Computing:
+\[
+  \dot V = 2(r-1)\dot r
+  = 2(r-1)\bigl[r(1-r^2)+2(r-1)e^{-z}\bigr]
+  = -2(r-1)^2\bigl[r(1+r)-2e^{-z}\bigr].
+\]
+For $r$ near $1$ and $z>0$: $r(1+r)\approx 2>2e^{-z}$,
+so $\dot V<0$ for $r\ne 1$. Stability is encoded in $Y$ and $V$,
+not in external constraints (consistent with Axiom~7).
 
 \textbf{Axiom~4 (Perturbation response).}
-Near $r=1$: $\dot V\approx-4(r-1)^2=-4V$, so $c=4$.
+Near $\Orb$ with $\rho=r-1$ small, expanding to first order in
+$\rho$:
+\[
+  \dot\rho = -2(1-e^{-z})\rho + O(\rho^2).
+\]
+For $z>0$: the transverse eigenvalue
+$\lambda(z)=-2(1-e^{-z})<0$, so $\dot V\le -c(z)V$ with
+$c(z)=4(1-e^{-z})>0$.
 
 \textbf{Axiom~5 (Noise-as-fuel).}
-Generator: $\cL V=\dot V+\frac{\sigma_0^2}{2}\cdot 2=-4V+\sigma_0^2$,
-so $\kappa=1$ and the condition holds with $c=4$, $\kappa=1$.
+For the It\^{o} SDE $dr=\dot r\,dt+\sigma\,dW_t$, the generator
+applied to $V=(r-1)^2$ gives
+\[
+  \cL V = \dot V + \tfrac{\sigma^2}{2}\cdot 2
+  \le -4V(1-e^{-z}) + \sigma^2.
+\]
+With $c=4(1-e^{-z})$ and $\kappa=1$: asymptotically ($z\to\infty$),
+$c\to 4$ and $\tau=\sqrt{c/\kappa}\to 2$.
 
 \textbf{Axiom~6 (Non-collapse).}
-$\dot\theta=1\ne 0$ on $\Orb$, $T^*=2\pi>0$.
+$\dot\theta=1\ne 0$ on $\Orb$; minimal period $T^*=2\pi>0$.
 
 \textbf{Axiom~7 (Non-coercion).}
-$Y$ is $C^\infty$ on $S$; no hard constraints.
+The vector field is $C^\infty$ on $M$; no discontinuous
+projection or hard boundary enforcement appears.
 
 \textbf{Axiom~8 (Hyperbolicity).}
-$\mu_{\max}=-2<0$.
+From the linearization above: $\mu_{\max}=-2<0$ (asymptotic
+rate). All non-trivial Floquet multipliers satisfy $|\mu_j|<1$.
 \end{proof}
+
+\begin{lemma}[Transverse stability and embodiment]\label{lem:transverse}
+The transverse eigenvalue $\lambda(z)=-2(1-e^{-z})$ satisfies:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item $\lambda(0)=0$: the orbit is neutrally stable at $z=0$,
+  \item $\lambda(z)<0$ for all $z>0$: the orbit is exponentially
+        stable once action has accumulated,
+  \item $\lambda(z)\to -2$ as $z\to\infty$: full dm3 attraction
+        is recovered asymptotically.
+\end{enumerate}
+\end{lemma}
+
+\begin{remark}[Embodiment threshold in the linearization]
+The neutral stability at $z=0$ is not a deficiency --- it is
+the precise dynamical content of the embodiment threshold.
+The orbit earns its stability by accumulating action $z>0$.
+This is the contact-geometric mechanism: the action variable $z$
+mediates the transition from neutral to exponentially stable
+behavior. The asymptotic embodiment threshold is
+$\tau=2$ (from $c=4$, $\kappa=1$), and the structural stability
+radius is
+\[
+  \varepsilon_0
+  = \frac{|\mu_{\max}|}{2(1+\sup_\Orb\|\Hess V\|_\infty)}
+  = \frac{2}{2(1+2)}
+  = \frac{1}{3}.
+\]
+\end{remark}
+
+The canonical invariant triple is therefore
+$\iota(\dm_0)=(T^*,\mu_{\max},\tau)=(2\pi,-2,2)$,
+consistent with Proposition~\ref{prop:canonical}.
 
 \subsection{The contact manifold}
 

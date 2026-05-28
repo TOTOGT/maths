@@ -1,0 +1,67 @@
+
+% Ultra-minimal Overleaf project with NO BibTeX (thebibliography only)
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=purple,urlcolor=teal]{hyperref}
+\usepackage{enumitem}
+
+% Soften line breaking to reduce overfull warnings
+\emergencystretch=1em
+
+% ===== Macros =====
+\newcommand{\g}{\boldsymbol{g}}
+\newcommand{\K}{\boldsymbol{K}}
+\newcommand{\Top}{\mathsf{Top}}
+\newcommand{\Stat}{\mathsf{Stat}}
+\newcommand{\Dyn}{\mathsf{Dyn}}
+\newcommand{\Q}{\mathcal{Q}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\Comp}{\mathcal{C}\!omp}
+\newcommand{\Konst}{\mathcal{K}\!onst}
+\newcommand{\Fold}{\mathcal{F}\!old}
+\newcommand{\Unfold}{\mathcal{U}\!nfold}
+
+\title{Topographical Orthogonal Generative Theory (TOGT):\\A Computable Higher-Order Logic and Category-Theoretic Framework}
+\author{Pablo Grossi}
+\date{March 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present TOGT, a computable higher-order logic and category-theoretic framework unifying generative processes across domains. The core is a four-operator algebra (Compression, Constraint, Folding, Unfolding) organized in an algorithmically closed pipeline $S(L)\to\Phi\to\g\to\K(L)\to\text{Space}$. We formalize $\g=\nabla\Phi$, its sixfold composition $\g^{6}$ with a testable invariant (33 under constraints), and outline $\g^{64}$ (Kether Orthogon) as a 4-functor yielding a 4D crystalline spine.
+\end{abstract}
+
+\section{Background}
+Complex systems exhibit directional, constrained, recursive generation. TOGT supplies a computable logic and category semantics to map patterns across scales.
+
+\section{Framework}
+Sorts: $\Top,\Stat,\Dyn$; potentials $\Phi$, flows $\g=\nabla\Phi$, curvature $\K$; operators $\{\Comp,\Konst,\Fold,\Unfold\}$. Aims include formal proofs, software, and validations across domains.
+
+\section{Minimal Model}
+$\Phi(x;\lambda)=\tfrac14 x^4-\tfrac12\lambda x^2$, $\dot{x}=\lambda x-x^3$.
+
+\section{Notes}
+See \cite{castelvecchi2025microsoft,ismail2022ewsph} for context; toolchains include TTK \cite{ttk}.
+
+% ==== Manual bibliography (no BibTeX) ====
+\begin{thebibliography}{9}
+\bibitem{castelvecchi2025microsoft}
+D. Castelvecchi. Microsoft claims quantum-computing breakthrough---but some physicists are sceptical. \emph{Nature}, 2025.
+
+\bibitem{ismail2022ewsph}
+M. M. S. Ismail et al. Early Warning Signals of Financial Crises Using Persistent Homology. \emph{Frontiers in Applied Mathematics and Statistics}, 2022.
+
+\bibitem{ttk}
+Topology ToolKit (TTK). Project site and repository, 2019--2026.
+\end{thebibliography}
+
+\end{document}

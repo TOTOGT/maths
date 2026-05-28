@@ -1,0 +1,189 @@
+%-----------------------------------------------------------------------
+\section{Connection to Generative Contact Mechanics}
+\label{sec:connection}
+%-----------------------------------------------------------------------
+
+This section makes precise the relationship between the
+singularity-theoretic framework developed in this volume and the
+contact-geometric framework of \emph{Generative Contact Mechanics}
+(Paper~1) and \emph{The dm3 Operator: Explicit Toy Model}
+(Paper~2). We show that the operator sequence
+$C \to K \to F \to U$
+is the geometric precursor of the dm3 operator algebra, and that the
+curvature threshold $\kappa^*$ corresponds canonically to the
+embodiment threshold $\tau$.
+
+%-----------------------------------------------------------------------
+\subsection{From Trajectories to Limit Cycles}
+
+In this volume the central object is a trajectory
+$\gamma : [0,T] \to (X,g)$ undergoing a localized generative
+transition driven by curvature, injectivity loss, and stabilization.
+
+In GCM the central object is a hyperbolic limit cycle
+$\Gamma \subset S$ embedded in a dissipative dynamical system
+satisfying Axioms~1--8 of the dm3 framework.
+
+The conceptual shift is:
+\begin{itemize}[leftmargin=*]
+  \item \emph{Principia Orthogona}: analyzes single transitions
+        along trajectories.
+  \item \emph{GCM}: studies persistent post-transition attractors
+        and their algebraic interactions.
+\end{itemize}
+
+The mathematical link is that every admissible generative transition
+induces a locally attracting invariant set, and conversely, every
+dm3 limit cycle admits a neighborhood whose formation is governed by
+a fold-type transition.
+
+%-----------------------------------------------------------------------
+\subsection{Curvature Threshold vs.\ Embodiment Threshold}
+
+In this volume, folding is triggered when curvature reaches the
+intrinsic geometric threshold
+\[
+  \kappa^*(x) = \frac{1}{\operatorname{foc}(x)},
+\]
+corrected by sectional curvature via the Rauch comparison theorem
+(Section~\ref{sec:metric}).
+
+In GCM, stochastic stability is governed by the embodiment threshold
+\[
+  \tau = \sqrt{c/\kappa},
+\]
+defined by the stochastic Lyapunov condition
+$\mathcal{L}V \le -cV + \kappa\|\sigma\|^2$.
+
+\begin{proposition}[Threshold Correspondence]\label{prop:threshold}
+Let a generative transition produce a post-fold stabilized orbit
+$\Gamma$ with Lyapunov function $V = d_g(\cdot,\Gamma)^2$. Then
+the geometric condition $\kappa \uparrow \kappa^*$ is equivalent to
+the dynamical condition that transverse contraction becomes dominant
+over noise, yielding a finite embodiment threshold $\tau$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+As $\kappa \to \kappa^*$, the folding operator $F$ introduces
+rank-1 loss and the post-fold unfolding $U$ selects a stable branch.
+The resulting orbit $\Gamma$ has Floquet exponent
+$\mu_{\max} < 0$ (transverse contraction). By the stochastic
+Lyapunov condition of GCM, $\tau = \sqrt{c/\kappa}$ is finite
+whenever $\mu_{\max} < 0$, i.e., precisely when curvature has
+reached $\kappa^*$ and the fold has been completed. Thus
+$\kappa^*$ is the geometric precursor of $\tau$: curvature
+accumulation creates the conditions under which stochastic stability
+becomes meaningful.
+\end{proof}
+
+%-----------------------------------------------------------------------
+\subsection{Fold Map vs.\ dm3 Operator}
+
+The folding operator $F$ in this volume is a rank-1 singular map:
+$\operatorname{rank}(dF) = \dim(X_C) - 1$, producing a finite
+branch set classified by $A_1$--$A_3$ singularities.
+
+In GCM, the dm3 operator
+$\mathcal{A}_{\mathrm{dm3}} = \phi^{T^*/4}$
+is the time-$(T^*/4)$ map of a smooth flow on the contact manifold
+$M = S \times \mathbb{R}$, acting discretely along a limit cycle.
+
+\begin{proposition}[Fold--dm3 Correspondence]\label{prop:fold}
+The fold map $F$ is the piecewise-smooth, pre-contact limit of the
+dm3 operator in the following sense.
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item $F$ enforces non-injectivity geometrically via rank loss;
+        $\mathcal{A}_{\mathrm{dm3}}$ enforces recurrence dynamically
+        via orbital stability.
+  \item Under the contact extension $M = X \times \mathbb{R}$
+        \textup{(}the construction of GCM, \S6\textup{)}, the
+        impulsive momentum jump at the fold
+        $p(s_0^+) - p(s_0^-) = \mu\,n(s_0)$
+        corresponds to the contact Hamiltonian correction
+        $H_{\mathrm{diss}} = -\gamma V e^{-\beta z}$,
+        which drives trajectories toward $\Gamma$ off the orbit.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Both the momentum jump and $H_{\mathrm{diss}}$ are corrections
+that vanish on the invariant set ($\Gamma$ or the post-fold branch)
+and are nonzero off it. The momentum jump is a distributional
+first-order correction in the Hamiltonian sense; $H_{\mathrm{diss}}$
+is its smooth contact-geometric regularization as $\mu \to 0$ and
+the contact manifold structure is imposed.
+\end{proof}
+
+%-----------------------------------------------------------------------
+\subsection{Operator Grammar Correspondence}
+
+The operator sequence of this volume maps onto the reduced dm3
+operator grammar as follows.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\emph{Principia Orthogona} & \emph{GCM / dm3} \\
+\midrule
+Compression $C$ & Basin contraction via $g_1$ \\
+Curvature flow $K$ & Lyapunov descent $\dot{V} \le -cV$ \\
+Fold $F$ & Contact bifurcation (Hopf, SN, NS) \\
+Unfolding $U$ & Gradient flow to $\Gamma_{\mathrm{syn}}$ via $U_3$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The full dm3 grammar $g \to L \to R \to U$ extends this sequence by
+adding multi-orbit coherence, resonance detection, and categorical
+unification, which are intentionally absent from the present volume.
+
+%-----------------------------------------------------------------------
+\subsection{Singularity Classification vs.\ Bifurcation Diagram}
+
+This volume proves that admissible generative transitions are
+precisely the Whitney singularities $A_1$, $A_2$, $A_3$.
+Paper~2 proves that dm3 systems undergo exactly four bifurcations:
+contact Hopf, saddle-node of limit cycles, Neimark--Sacker, and
+slow-fast crossover.
+
+\begin{remark}[Classification Correspondence]
+The $A_1$--$A_3$ singularities classify the local geometry of dm3
+bifurcations under the projection $M = S \times \mathbb{R} \to S$.
+The fold $A_1$ corresponds to the contact Hopf and saddle-node
+bifurcations (local rank loss in the radial direction); the cusp
+$A_2$ corresponds to the Neimark--Sacker (loss of a second
+direction at resonance); the swallowtail $A_3$ to the slow-fast
+crossover (third-order degeneracy in the $z$-direction). Higher
+singularities are excluded in both frameworks: here by the Morse
+condition on $\Phi$; in dm3 by contact normal form rigidity
+(Theorem~C of Paper~1).
+\end{remark}
+
+%-----------------------------------------------------------------------
+\subsection{Summary and Interpretation}
+
+The three papers in this series have the following relationship.
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{This volume}: explains why folds must occur and
+        classifies their local geometry.
+  \item \textbf{Paper~1 (GCM)}: explains what stable structures
+        exist after they occur, in the contact-geometric setting.
+  \item \textbf{Paper~2 (dm3)}: proves that the resulting dynamics
+        are computable, stable, and structurally closed, by explicit
+        global analysis of the toy model.
+\end{itemize}
+
+No claim is made that every dm3 system arises from a literal
+curvature fold in a physical manifold. The precise claim is:
+
+\begin{quote}
+Every dm3 system admits a local geometric model whose generative
+event is $\mathcal{A}$-equivalent to a fold-type transition governed
+by a curvature threshold $\kappa^*$.
+\end{quote}
+
+This claim is supported by
+Propositions~\ref{prop:threshold} and~\ref{prop:fold}, which
+establish the threshold correspondence and the fold--dm3
+correspondence respectively.

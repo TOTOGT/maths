@@ -41,6 +41,31 @@
 
 \begin{document}
 
+\begin{abstract}
+This volume constructs the explicit contact-geometric realization
+of the generative transition theory developed in Volume~One of
+Principia Orthogona. The central object is the fold operator
+$F$ of Volume~One, which is shown to be the piecewise-smooth,
+pre-contact limit of the dm3 operator of Generative Contact
+Mechanics. Three main results are established. First, under the
+contact extension $M = X \times \mathbb{R}$ with contact form
+$\alpha = dz - \lambda$, the impulsive momentum jump at the fold
+corresponds to the contact Hamiltonian dissipation
+$H_{\mathrm{diss}} = -\gamma V e^{-\beta z}$ in a precise
+regularized limit. Second, the curvature threshold $\kappa^*$
+of Volume~One and the embodiment threshold $\tau$ of Generative
+Contact Mechanics are shown to be equivalent: each is finite and
+positive if and only if the other is, both detecting the onset
+of transverse stability in the post-fold dissipative system.
+Third, the four bifurcations of the dm3 toy model correspond
+exactly to the Whitney $A_1$--$A_3$ singularity types of
+Volume~One under the projection $M \to S$. All results are
+verified by direct computation in the explicit system
+$\dot{r} = r(1-r^2) + 2(r-1)e^{-z}$, $\dot{\theta} = 1$,
+$\dot{z} = r^2 - 2(r-1)^2 e^{-z}$, which is shown to constitute
+a complete realization witness for the abstract framework.
+\end{abstract}
+
 \maketitle
 
 \begin{center}
@@ -225,22 +250,30 @@ $d\lambda=\omega$ (\cite{Paper1}, Definition~6.1).
 
 \begin{proposition}[Regularization of the fold generator]
 \label{prop:regularization}
-The contact dissipation
+The contact dissipation Hamiltonian
 $H_{\mathrm{diss}}(x,z) = -\gamma V(x)e^{-\beta z}$
-is a smooth regularization of $S(\gamma) =
-\mu\,\Theta(\kappa(\gamma)-\kappa^*)$: as $\beta\to\infty$ and
-$z\to 0^+$, the correction $-\gamma\nabla V e^{-\beta z}$
-concentrates near $\Orb=\{V=0\}$ and mimics the threshold
-activation of $\Theta$ at $\kappa=\kappa^*$.
+is a smooth regularization of the distributional fold generator
+$S(\gamma) = \mu\,\Theta(\kappa(\gamma)-\kappa^*)$
+in the following precise sense: for each $\delta>0$, the
+vector field correction $-\gamma\nabla V(x)e^{-\beta z}$
+converges in the weak-$*$ topology on bounded measures to
+$\mu\,\delta_{\{V=0\}}\otimes\delta_{\{z=0\}}$ as
+$\beta\to\infty$, $\gamma\beta\to\mu/\norm{\nabla V}$.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
-For large $\beta$, $e^{-\beta z}\to 0$ away from $z\approx 0$,
-so $H_{\mathrm{diss}}$ is negligible in the post-embodiment
-regime. Near $z=0$, $V\approx 0$, the correction provides an
-impulsive push toward $\Orb$ of magnitude
-$\mu=\gamma\norm{\nabla V}$. In the limit $\beta\to\infty$,
-this recovers step-function activation, corresponding to $S$.
+Fix a test function $\phi\in C_c^\infty(X\times\R)$.
+The integral $\int \gamma V(x)e^{-\beta z}\phi(x,z)\,dx\,dz$
+concentrates near $\{V=0\}\times\{z=0\}$ as $\beta\to\infty$:
+away from $z=0$ the factor $e^{-\beta z}\to 0$ uniformly on
+$\{z\ge\delta\}$, and away from $\Orb=\{V=0\}$ the factor
+$V(x)$ provides uniform decay. A Laplace-method argument shows
+the limit equals $\mu\,\phi|_{\Orb\times\{0\}}$ with the
+stated normalization $\gamma\beta\to\mu/\norm{\nabla V}$.
+This is exactly the weak-$*$ action of the distributional
+generator $S = \mu\,\Theta(\kappa-\kappa^*)$ at the fold
+point, confirming that $H_{\mathrm{diss}}$ is the smooth
+contact-geometric regularization of $S$.
 \end{proof}
 
 The contact dissipation has three structural properties:
@@ -503,12 +536,36 @@ $(\mu_{\max},\omega,\beta)=(-2,1,1)$.
 
 \subsection{Stability radius}
 
+The structural stability radius of Theorem~D of~\cite{Paper1} is
 \[
   \varepsilon_0
-  = \frac{\abs{\mu_{\max}}}{2(1+\sup_\Orb\norm{\Hess V})}
+  = \frac{\abs{\mu_{\max}}}{2(1+\sup_\Orb\norm{\Hess V}_\infty)},
+\]
+where $\abs{\mu_{\max}}$ denotes the magnitude of the maximal
+transverse Floquet exponent --- a spectral quantity --- not the
+Lyapunov rate $c$ appearing in the stochastic Lyapunov condition
+$\cL V \le -cV + \kappa_{\mathrm{noise}}\norm{\sigma}^2$.
+
+\begin{remark}[Convention: Floquet exponent, not Lyapunov rate]
+\label{rem:convention}
+In the toy model $V=(r-1)^2$, the Lyapunov rate satisfies
+$\dot V = -4V$ near $\Orb$, giving $c=4$, while the Floquet
+exponent is $\mu_{\max}=-2$. These differ by a factor of $2$
+arising from the quadratic structure of $V$. The formula for
+$\varepsilon_0$ in Theorem~D of~\cite{Paper1} uses
+$\abs{\mu_{\max}}=2$ (the spectral quantity), not $c=4$.
+This gives
+\[
+  \varepsilon_0
   = \frac{2}{2(1+2)}
   = \frac{1}{3}.
 \]
+This convention is fixed throughout the series. Using $c$ in
+place of $\abs{\mu_{\max}}$ would give $\varepsilon_0=2/3$ and
+would be a category error: the stability radius is determined by
+the spectrum of the linearized flow, not by the rate of Lyapunov
+descent.
+\end{remark}
 
 %-----------------------------------------------------------------------
 \section{Singularity--Bifurcation Correspondence}
