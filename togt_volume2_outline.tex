@@ -1,0 +1,495 @@
+% ============================================================
+%  TOGT --- Volume Two: Outline
+%  Renormalization, Topological Invariants, and the Crystalline Spine
+%  Author: Pablo Grossi
+%  Date:   March 2026
+% ============================================================
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=purple,urlcolor=teal]{hyperref}
+\usepackage{enumitem}
+
+\emergencystretch=1em
+
+% Status markers
+\newcommand{\provable}{\textcolor{blue!70!black}{\textbf{[Provable target]}}}
+\newcommand{\conjectural}{\textcolor{purple}{\textbf{[Conjectural]}}}
+\newcommand{\depends}[1]{\smallskip\noindent\textit{Depends on (V1):} #1.\smallskip}
+
+\newcommand{\g}{\boldsymbol{g}}
+\newcommand{\Comp}{\mathcal{C}\!omp}
+\newcommand{\Konst}{\mathcal{K}\!onst}
+\newcommand{\Fold}{\mathcal{F}\!old}
+\newcommand{\Unfold}{\mathcal{U}\!nfold}
+
+\title{Topographical Orthogonal Generative Theory (TOGT)\\[4pt]
+\large Volume Two: Renormalization, Topological Invariants,\\
+and the Crystalline Spine\\[6pt]
+\normalsize \emph{Structural Outline}}
+\author{Pablo Grossi}
+\date{March 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document is a structural outline for Volume Two of TOGT. It organises
+the four open research directions identified in Volume One into a coherent
+sequence of sections, specifying dependencies, provable targets, and
+conjectural directions. No proofs or mathematical claims are made here;
+the purpose is architectural scaffolding only.
+
+Two typographic markers are used throughout:
+\provable{} marks goals for which a proof strategy is in view and the
+mathematical prerequisites are in place;
+\conjectural{} marks directions that require new definitions, external
+formalisation, or unresolved foundational questions before a proof can be
+attempted.
+\end{abstract}
+
+\tableofcontents
+\bigskip
+
+% ============================================================
+\part{Function-Space Foundations for the Renormalization Operator}
+% ============================================================
+
+%---------------------------------------------------------------
+\section{Unimodal Map Spaces and Their Norms}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+This section establishes the precise function space in which the
+renormalization operator $\mathcal{R}$ will be defined. The two natural
+candidates --- analytic unimodal maps on a complex neighbourhood of
+$[-1,1]$, and $C^3$ unimodal maps with negative Schwarzian derivative ---
+are compared, and the relevant Banach or Fr\'{e}chet norms are recorded.
+The section closes by fixing one setting as the working hypothesis for the
+rest of Volume Two, with a justification based on the regularity of the
+Euler-discretized gradient flow $f_{\lambda,h}$.
+
+\subsection*{Status}
+\provable{} The definitions and norm comparisons are standard material from
+the Collet--Eckmann and Sullivan--McMullen literature and require no new
+mathematics; they are imported and specialised to the TOGT setting.
+
+\depends{Proposition~3.2 (V1, \S3.3): the Euler discretization
+$f_{\lambda,h}$ is a $C^\infty$ unimodal map with cubic critical point,
+hence lies in both candidate spaces for $h$ small enough}
+
+%---------------------------------------------------------------
+\section{The Renormalization Operator as a Map on Function Space}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+Having fixed the function space, this section defines $\mathcal{R}$ as a
+rigorous operator
+\[
+  \mathcal{R} : \mathcal{U} \to \mathcal{U},
+  \qquad
+  \mathcal{R}(f) = \alpha^{-1} \circ f^2 \circ \alpha,
+\]
+where $\mathcal{U}$ is the chosen space of unimodal maps and $\alpha$ is
+the Feigenbaum rescaling. Domain invariance --- the question of whether
+$\mathcal{R}(f)$ remains unimodal when $f$ is --- is verified. Basic
+continuity and compactness properties are established.
+
+\subsection*{Status}
+\provable{} Domain invariance and continuity follow from the classical theory
+(Collet--Eckmann~\cite{collet1980}); the contribution here is specialising
+those results to the TOGT operator family and verifying that
+$f_{\lambda,h}$ lies in the domain.
+
+\depends{Section~1 of this volume (function-space choice);
+Proposition~3.2 (V1): regularity of $f_{\lambda,h}$}
+
+%---------------------------------------------------------------
+\section{Relation Between the Gradient Flow and Its Discretization}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The gradient flow $\g_\lambda$ itself is not a unimodal map and does not
+lie in $\mathcal{U}$; Volume One states this explicitly (\S3.3). This
+section makes the relationship precise: it characterises the map
+$h \mapsto f_{\lambda,h}$ and studies whether the renormalization orbit of
+$f_{\lambda,h}$ converges as $h \to 0$ to a well-defined limit that can be
+attributed to the continuous flow. This is the key step needed to connect
+$\mathcal{R}$ to the TOGT pipeline proper.
+
+\subsection*{Status}
+\conjectural{} The $h \to 0$ limit of the renormalization orbit is not
+covered by existing results. A rigorous treatment requires either a
+continuous-time renormalization theory (non-standard) or a controlled
+discretisation argument. This is the primary new mathematical challenge of
+Part~I.
+
+\depends{Definition of $\g_\lambda$ (V1, \S3.1);
+Proposition~3.2 (V1): domain membership of $f_{\lambda,h}$;
+Section~2 of this volume: $\mathcal{R}$ well-defined on $\mathcal{U}$}
+
+% ============================================================
+\part{Dynamics of the Renormalization Operator}
+% ============================================================
+
+%---------------------------------------------------------------
+\section{The Feigenbaum Fixed Point: Existence and Uniqueness}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+This section imports the Feigenbaum--Coullet--Tresser fixed-point theorem
+(as proved analytically by Lanford, and later by Lyubich) into the TOGT
+setting. The fixed point $\g_\infty \in \mathcal{U}$ of $\mathcal{R}$ is
+identified, and its basic properties --- symmetry, analyticity, and the
+values of the universal constants $\alpha \approx 2.5029$ and
+$\delta \approx 4.6692$ --- are recorded. The section does not re-prove
+the fixed-point theorem; it establishes that the TOGT operator
+$f_{\lambda,h}$ lies in the basin of attraction.
+
+\subsection*{Status}
+\provable{} The fixed-point theorem is established in the literature;
+the work here is verifying the basin condition for $f_{\lambda,h}$, which
+follows from Proposition~3.2 (V1) and the universality class membership.
+
+\depends{Proposition~3.2 (V1): $f_{\lambda,h}$ lies in the
+period-doubling universality class;
+Section~2 of this volume: $\mathcal{R}$ well-defined}
+
+%---------------------------------------------------------------
+\section{Hyperbolicity of the Renormalization Horseshoe}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The renormalization operator $\mathcal{R}$ has a hyperbolic fixed point
+$\g_\infty$ with a one-dimensional unstable manifold (corresponding to
+the quadratic family parameter) and an infinite-codimensional stable
+manifold (the space of infinitely renormalizable maps of the same
+combinatorial type). This section states the Avila--Lyubich hyperbolicity
+theorem precisely and identifies its implications for the TOGT pipeline:
+in particular, which parameters $(\lambda, h)$ yield infinitely
+renormalizable maps.
+
+\subsection*{Status}
+\provable{} Hyperbolicity is established by Avila--Lyubich~\cite{avila2011};
+the contribution is computing or bounding the set of $(\lambda, h)$
+for which $f_{\lambda,h}$ is infinitely renormalizable.
+
+\depends{Section~4 of this volume: fixed-point identification;
+the contraction and pitchfork results (V1, \S\S5--6): they constrain
+the parameter range of interest}
+
+%---------------------------------------------------------------
+\section{Stable Manifolds and the Basin of the Universal Fixed Point}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The stable manifold of $\g_\infty$ under $\mathcal{R}$ consists of all
+infinitely renormalizable maps with the same combinatorial type (period
+doubling). This section characterises this manifold within $\mathcal{U}$,
+identifies which maps $f_{\lambda,h}$ lie on it, and studies the geometry
+of the foliation of $\mathcal{U}$ by stable leaves. This is the
+renormalization-theoretic underpinning of universality: two maps on the
+same leaf are asymptotically indistinguishable under $\mathcal{R}^n$.
+
+\subsection*{Status}
+\conjectural{} The foliation theorem is known in the analytic category
+(Lyubich~\cite{lyubich1999}); its extension to the specific family
+$\{f_{\lambda,h}\}$ and the identification of which leaf this family
+belongs to require explicit computation.
+
+\depends{Section~5 of this volume: hyperbolicity;
+Section~3 of this volume: $h \to 0$ limit}
+
+%---------------------------------------------------------------
+\section{Scale-Invariance of the TOGT Pipeline Under Renormalization}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+This section assembles the results of Part~II into a statement about the
+TOGT pipeline: under iterated renormalization, the operator $\g_\lambda$
+(via its discretization) converges to the universal fixed point $\g_\infty$,
+and the large-scale structure of the pipeline
+$S(L) \to \Phi \to \g \to \mathcal{K}(L) \to \text{Space}$
+becomes independent of $\lambda$. This is the TOGT analogue of universality
+in the classical sense. The extended pipeline
+$S(L) \to \Phi \to \g_\lambda \xrightarrow{\mathcal{R}^n} \g_\infty \to
+\mathcal{K}(L) \to \text{Space}$
+proposed in Volume One (\S3.3) is given its first rigorous content here.
+
+\subsection*{Status}
+\conjectural{} Full rigour requires resolving the $h \to 0$ problem of
+Section~3. The result is provable conditional on that resolution.
+
+\depends{The full extended pipeline (V1, \S3.3);
+Sections~4--6 of this volume: fixed point, hyperbolicity, stable manifolds}
+
+% ============================================================
+\part{The Topological Invariant 33}
+% ============================================================
+
+%---------------------------------------------------------------
+\section{Candidate Definitions of the Topological Invariant}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The scalar $m(\mathcal{M}(g^6(X))) = 33$ is stated as a conjecture in
+Volume One (\S13) but the readout $m$ is not yet precisely defined.
+This section surveys three candidate definitions: (i)~the sum of Betti
+numbers of the sublevel-set filtration of the iterated state; (ii)~the
+total persistence (sum of lifetimes in the persistence diagram); and
+(iii)~a Morse-theoretic count of critical points of a smooth functional
+associated to $g^6(X)$. Each candidate is evaluated against the
+reproducibility protocol of Volume One (\S13.2) and the robustness data
+(Table~1, V1).
+
+\subsection*{Status}
+\provable{} The definitions themselves require no new mathematics; the
+contribution is selecting the one that matches the experimental data and
+verifying that the selection is well-posed.
+
+\depends{The Betti-sum protocol and robustness table (V1, \S\S13.2--13.3);
+the honest-status remark (V1, \S13): $m$ requires a precise definition
+before the conjecture is fully stated}
+
+%---------------------------------------------------------------
+\section{The Morse Complex of Iterated States}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+Given a chosen definition of $m$, this section constructs the Morse complex
+$\mathcal{M}(g^k(X))$ for the iterated states produced by the TOGT
+pipeline. It studies how the complex evolves under iteration --- how many
+critical points appear or merge at each step --- and whether there is a
+stabilisation phenomenon consistent with $m = 33$ at $k = 33$. The TTK
+pipeline described in Volume One (\S13.2) is the computational model;
+this section provides the mathematical framework it implicitly uses.
+
+\subsection*{Status}
+\conjectural{} The stabilisation at $m = 33$ is the empirical claim of
+Volume One; whether it holds rigorously for the specific pipeline operators
+$(\Comp, \Konst, \Fold, \Unfold)$ and any admissible $X$ is open. Proving
+it would require control over the topology of the image of $g^k$ for all
+admissible $X$.
+
+\depends{The four-operator pipeline (V1, \S2);
+the TTK protocol (V1, \S13.2);
+Section~8 of this volume: candidate definition of $m$}
+
+%---------------------------------------------------------------
+\section{The Algebraic--Topological Separation, Revisited}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The General Separation Theorem (V1, Theorem~12.2) proves that $33$ cannot
+arise as an algebraic trace $\operatorname{Tr}(M_n^6)$ for any stable
+$n < 33$ representation. This section revisits that result in light of the
+topological invariant defined in Section~8: it asks whether $m = 33$ is
+genuinely topological in the sense of being outside every algebraic
+invariant of the linearized pipeline, and whether the separation is sharp
+(i.e., whether there exists an $n = 33$ representation achieving the
+bound). This sharpens the bridge between the two tiers of the theory.
+
+\subsection*{Status}
+\provable{} (sharpness of the bound) The bound $|\operatorname{Tr}(M^6)| \le n$
+is attained when all eigenvalues equal $1$ (V1, Corollary~11.1); the
+$n = 33$ case is therefore already provable from Volume One. The genuine
+topological content of $m = 33$ is conjectural pending Section~9.
+
+\depends{Theorem~12.2 and Corollary~11.1 (V1):
+algebraic trace bound and separation;
+Section~9 of this volume: the Morse complex}
+
+%---------------------------------------------------------------
+\section{Behaviour of the Topological Invariant Under Renormalization}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+This section addresses open problem~(ii) from Volume One (\S3.3): whether
+the topological invariant $m(\mathcal{M}(g^6(X))) = 33$ is preserved,
+transformed, or destroyed under $\mathcal{R}^n$. The heuristic computation
+of Volume One (\S3.4) identified the degree-doubling assumption as the
+critical gap; this section formulates that assumption precisely in terms of
+the chosen definition of $m$ (Section~8) and states what a proof would
+require.
+
+\subsection*{Status}
+\conjectural{} No proof strategy is currently available. The section
+records the precise mathematical content of the open problem and the
+conditions under which invariance, covariance, or transformation could be
+established.
+
+\depends{Section~8 of this volume: definition of $m$;
+Sections~4--7 of this volume: renormalization dynamics;
+The heuristic argument (V1, \S3.4): identifies the degree-doubling gap}
+
+% ============================================================
+\part{The $g^{64}$ Crystalline Spine}
+% ============================================================
+
+%---------------------------------------------------------------
+\section{The $n = 64$ Operator Algebra}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The Kether Orthogon conjecture (V1, Conjecture~14.1) posits that $g^{64}$
+achieves a terminal crystalline fixed point with topological readout $33$.
+A prerequisite is the $64$-dimensional operator algebra: the matrix
+$M_{64}$ satisfying $\rho(M_{64}) = 1$, one contractive block, and one
+expansive direction. This section constructs $M_{64}$ as a natural
+extension of the canonical matrix $M_c$ (V1, \S11.1), verifies that the
+algebraic trace bound gives $|\operatorname{Tr}(M_{64}^{64})| \le 64$, and
+identifies which eigenvalue configurations would make $33 < 64$ a
+consistent reading across both the algebraic and topological layers.
+
+\subsection*{Status}
+\provable{} The construction of $M_{64}$ and the trace bound follow
+directly from Theorem~12.1 (V1) with $n = 64$; no new mathematics is
+required beyond specifying the block structure.
+
+\depends{Theorem~12.1 (V1): algebraic trace bound for general $n$;
+the canonical matrix $M_c$ (V1, \S11.1);
+Corollary~11.1 (V1): attainability of the bound}
+
+%---------------------------------------------------------------
+\section{Is $g^{64}$ a Fixed Point of $\mathcal{R}$?}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The Kether Orthogon conjecture requires $g^{64}$ to be an attractor or
+fixed point of the renormalization flow. This section formulates that
+question precisely: does the renormalization orbit $\mathcal{R}^n(f_{\lambda,h})$
+converge to $g^{64}$ (or to a map whose $64$-fold iterate has the conjectured
+topological structure), or does it converge to $g_\infty$ (the Feigenbaum
+fixed point) independently of iteration count? The two conjectures are
+shown to be compatible only under specific conditions on the relationship
+between $g_\infty$ and $g^{64}$.
+
+\subsection*{Status}
+\conjectural{} The relationship between $g_\infty$ (Feigenbaum fixed point)
+and $g^{64}$ (crystalline spine) is not currently understood. This section
+records the compatibility conditions as a precise open problem.
+
+\depends{Conjecture~14.1 (V1): Kether Orthogon;
+Sections~4--7 of this volume: renormalization dynamics;
+Section~12 of this volume: $n = 64$ algebra}
+
+%---------------------------------------------------------------
+\section{The Orthogonality Condition}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+The Kether Orthogon conjecture also posits an orthogonality condition
+$\langle \mathcal{M}(g^{64}(X)),\, g^{64}(X) \rangle_{\mathrm{TTK}} = 0$
+(V1, \S14). Before this can be studied, the TTK inner product
+$\langle \cdot, \cdot \rangle_{\mathrm{TTK}}$ on persistence modules must
+be defined. This section surveys candidate inner products on the space of
+persistence diagrams (e.g., the Wasserstein-based pairing, the kernel
+inner product of Reininghaus et al.), evaluates each against the
+orthogonality condition, and selects a working definition.
+
+\subsection*{Status}
+\conjectural{} The TTK inner product is explicitly listed as undefined in
+Volume One (\S14); this section is the first step toward resolving that
+gap. No orthogonality claim is made until a definition is fixed.
+
+\depends{Conjecture~14.1 (V1): orthogonality condition;
+Section~9 of this volume: Morse complex construction;
+Section~10 of this volume: topological invariant under renormalization}
+
+%---------------------------------------------------------------
+\section{The $g^{64}$ Spine as Terminal Attractor: Synthesis}
+%---------------------------------------------------------------
+
+\subsection*{Description}
+This closing section assembles the results of Part~IV into a unified
+statement --- conditional on the conjectures of Sections~13 and~14 --- about
+the terminal behaviour of the TOGT pipeline. It states what a complete
+proof of the Kether Orthogon conjecture would require, which components
+are now within reach (the trace bound, the $n = 64$ algebra), and which
+remain genuinely open (the orthogonality condition, the relationship to
+$g_\infty$). It also identifies the Lean~4 formalisation targets that
+would close the remaining \texttt{sorry}s in the Volume~One nucleus.
+
+\subsection*{Status}
+\conjectural{} This section is explicitly synthetic; no new results are
+claimed. It serves as a research agenda for the parts of Volume Two not
+yet resolved.
+
+\depends{All proved results in Volume One;
+Sections~12--14 of this volume;
+The Lean nucleus (V1, \S7): identifies the two scoped \texttt{sorry}s
+that formalisation of this section would discharge}
+
+% ============================================================
+\section*{Summary of Dependencies and Status}
+\addcontentsline{toc}{section}{Summary of Dependencies and Status}
+% ============================================================
+
+The table below summarises each section of Volume Two, its status, and
+its primary dependency in Volume One.
+
+\medskip
+\noindent
+\begin{tabular}{clll}
+\hline
+\S & Title (abbreviated) & Status & Primary V1 dependency \\
+\hline
+1  & Unimodal map spaces          & \textcolor{blue!70!black}{Provable}     & Prop.~3.2 \\
+2  & $\mathcal{R}$ on function space & \textcolor{blue!70!black}{Provable}  & Prop.~3.2, \S3.3 \\
+3  & Flow vs.\ discretization     & \textcolor{purple}{Conjectural} & Prop.~3.2, \S3.1 \\
+4  & Feigenbaum fixed point       & \textcolor{blue!70!black}{Provable}     & Prop.~3.2 \\
+5  & Hyperbolicity                & \textcolor{blue!70!black}{Provable}     & \S\S5--6 \\
+6  & Stable manifolds             & \textcolor{purple}{Conjectural} & \S\S5--6, V2~\S5 \\
+7  & Scale-invariance             & \textcolor{purple}{Conjectural} & \S3.3, V2~\S\S4--6 \\
+8  & Candidate definitions of $m$ & \textcolor{blue!70!black}{Provable}     & \S\S13.2--13.3 \\
+9  & Morse complex                & \textcolor{purple}{Conjectural} & \S2, \S13.2 \\
+10 & Separation revisited         & \textcolor{blue!70!black}{Provable}     & Thm.~12.2, Cor.~11.1 \\
+11 & $m$ under renormalization    & \textcolor{purple}{Conjectural} & \S3.4, V2~\S\S4--7 \\
+12 & $n=64$ operator algebra      & \textcolor{blue!70!black}{Provable}     & Thm.~12.1 \\
+13 & $g^{64}$ as fixed point      & \textcolor{purple}{Conjectural} & Conj.~14.1 \\
+14 & Orthogonality condition      & \textcolor{purple}{Conjectural} & Conj.~14.1 \\
+15 & Terminal attractor synthesis & \textcolor{purple}{Conjectural} & All of V1 \\
+\hline
+\end{tabular}
+
+\medskip
+\noindent
+Of the fifteen sections, six have clear proof strategies using results
+already established in Volume One (\S\S1, 2, 4, 5, 8, 10, 12). The
+remaining nine depend on new definitions, external formalisation, or
+unresolved foundational questions. The provable sections should be
+completed first; they form the scaffold on which the conjectural sections
+can be attempted.
+
+\begin{thebibliography}{9}
+
+\bibitem{collet1980}
+P.~Collet and J.-P.~Eckmann.
+\emph{Iterated Maps on the Interval as Dynamical Systems}.
+Birkh\"{a}user, Boston, 1980.
+
+\bibitem{lyubich1999}
+M.~Lyubich.
+Feigenbaum--Coullet--Tresser universality and Milnor's hairiness conjecture.
+\emph{Ann.\ of Math.}\ \textbf{149} (1999), 319--420.
+
+\bibitem{avila2006}
+A.~Avila and G.~Forni.
+Weak mixing for interval exchange transformations and translation flows.
+\emph{Ann.\ of Math.}\ \textbf{165} (2006), 637--664.
+
+\bibitem{avila2011}
+A.~Avila and M.~Lyubich.
+The full renormalization horseshoe for unimodal maps of higher degree:
+exponential contraction along hybrid classes.
+\emph{Publ.\ Math.\ Inst.\ Hautes \'Etudes Sci.}\ \textbf{114} (2011),
+171--223.
+
+\end{thebibliography}
+
+\end{document}
